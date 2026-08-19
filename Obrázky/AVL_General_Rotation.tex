@@ -1,0 +1,154 @@
+% AVL rotace: pravá rotace (y,x,A,B,C) <-> levá rotace
+\usetikzlibrary{shapes.geometric,calc,arrows.meta,bending}
+
+\begin{tikzpicture}[
+    scale=1.15,
+    every node/.style={
+        circle,
+        draw,
+        fill=white,
+        inner sep=0pt,
+        minimum size=22pt,
+        font=\Large\itshape
+    },
+    line width=0.9pt
+]
+
+% ============================================================
+% GLOBÁLNÍ PARAMETRY
+% ============================================================
+
+\def\SiblingDist{1.15}  % vzdálenost sourozeneckých uzlů/trojúhelníků
+\def\LevelDist{1.1}     % vertikální vzdálenost mezi úrovněmi
+\def\SubtreeLabelOffset{0.30} % svislá mezera mezi trojúhelníkem a popiskem
+\def\TriW{30pt}         % šířka trojúhelníku (podstromu)
+\def\TriH{55pt}         % výška trojúhelníku (podstromu)
+
+% ============================================================
+% LEVÝ STROM  (kořen y, levý potomek x, pravý podstrom C)
+% ============================================================
+
+\node (Ly) at (0,0) {$y$};
+
+\node (Lx) at (-\SiblingDist,-\LevelDist) {$x$};
+
+\node[
+    isosceles triangle,
+    shape border rotate=90,
+    anchor=apex,
+    draw,
+    fill=white,
+    minimum height=\TriH,
+    minimum width=\TriW,
+    inner sep=0pt
+] (LC) at ({0.9*\SiblingDist},-{1.15*\LevelDist}) {$C$};
+
+\node[
+    isosceles triangle,
+    shape border rotate=90,
+    anchor=apex,
+    draw,
+    fill=white,
+    minimum height=\TriH,
+    minimum width=\TriW,
+    inner sep=0pt
+] (LA) at ({-\SiblingDist-0.75*\SiblingDist},-{2.15*\LevelDist}) {$A$};
+
+\node[
+    isosceles triangle,
+    shape border rotate=90,
+    anchor=apex,
+    draw,
+    fill=white,
+    minimum height=\TriH,
+    minimum width=\TriW,
+    inner sep=0pt
+] (LB) at ({-\SiblingDist+0.75*\SiblingDist},-{2.15*\LevelDist}) {$B$};
+
+\draw (Ly) -- (Lx);
+\draw (Ly) -- (LC.apex);
+\draw (Lx) -- (LA.apex);
+\draw (Lx) -- (LB.apex);
+
+
+
+
+% ============================================================
+% PRAVÝ STROM  (kořen x, levý podstrom A, pravý potomek y)
+% ============================================================
+
+\def\XShift{6.5}
+
+\node (Rx) at (\XShift,0) {$x$};
+
+\node[
+    isosceles triangle,
+    shape border rotate=90,
+    anchor=apex,
+    draw,
+    fill=white,
+    minimum height=\TriH,
+    minimum width=\TriW,
+    inner sep=0pt
+] (RA) at ({\XShift-0.9*\SiblingDist},-{1.15*\LevelDist}) {$A$};
+
+\node (Ry) at ({\XShift+\SiblingDist},-\LevelDist) {$y$};
+
+\node[
+    isosceles triangle,
+    shape border rotate=90,
+    anchor=apex,
+    draw,
+    fill=white,
+    minimum height=\TriH,
+    minimum width=\TriW,
+    inner sep=0pt
+] (RB) at ({\XShift+\SiblingDist-0.75*\SiblingDist},-{2.15*\LevelDist}) {$B$};
+
+\node[
+    isosceles triangle,
+    shape border rotate=90,
+    anchor=apex,
+    draw,
+    fill=white,
+    minimum height=\TriH,
+    minimum width=\TriW,
+    inner sep=0pt
+] (RC) at ({\XShift+\SiblingDist+0.75*\SiblingDist},-{2.15*\LevelDist}) {$C$};
+
+\draw (Rx) -- (RA.apex);
+\draw (Rx) -- (Ry);
+\draw (Ry) -- (RB.apex);
+\draw (Ry) -- (RC.apex);
+
+
+
+
+% ============================================================
+% ŠIPKY ROTACÍ + POPISKY
+% ============================================================
+
+% velké šipky mezi kořeny (Ly = y vlevo) a (Rx = x vpravo)
+% pomocné body pro stabilní centrování popisků
+\coordinate (RTopL) at ([yshift=2mm]Ly.east);
+\coordinate (RTopR) at ([yshift=2mm]Rx.west);
+\coordinate (RBotL) at ([yshift=-2mm]Ly.east);
+\coordinate (RBotR) at ([yshift=-2mm]Rx.west);
+
+\draw[thick, -{Stealth[length=5mm,width=3.2mm]}]
+    (RTopL) to[bend left=18] (RTopR);
+\path (RTopL) -- (RTopR)
+    node[midway, above=3mm,
+         shape=rectangle, draw=none, fill=white,
+         inner sep=1pt, font=\normalsize,
+         text height=1.7ex, text depth=.3ex] {Pravá rotace};
+
+\draw[thick, -{Stealth[length=5mm,width=3.2mm]}]
+    (RBotR) to[bend left=18] (RBotL);
+\path (RBotL) -- (RBotR)
+    node[midway, below=3mm,
+         shape=rectangle, draw=none, fill=white,
+         inner sep=1pt, font=\normalsize,
+         text height=1.7ex, text depth=.3ex] {Levá rotace};
+
+\end{tikzpicture}

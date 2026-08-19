@@ -1,0 +1,189 @@
+% pro tvar "isosceles triangle" a anchor .apex + výpočty souřadnic
+\usetikzlibrary{shapes.geometric,calc}
+
+\begin{tikzpicture}[
+    scale=1.35,
+    every node/.style={
+        circle,
+        draw,
+        fill=white,
+        inner sep=0pt,
+        minimum size=7pt
+    },
+    line width=0.7pt
+]
+
+% ============================================================
+% GLOBÁLNÍ PARAMETRY
+% ============================================================
+
+% Vzdálenost sourozeneckých vrcholů
+\def\SiblingDist{0.65}
+
+% Vertikální vzdálenost mezi úrovněmi
+\def\LevelDist{0.60}
+
+\def\SubtreeLabelOffset{0.28} % svislá mezera mezi trojúhelníkem a popiskem
+
+
+% ============================================================
+% A_1
+% ============================================================
+
+\node (A1) at (0,0) {};
+
+\node[draw=none, fill=none, circle] at (0,0.45)
+    {$A_1=1$};
+
+
+% ============================================================
+% A_2
+% ============================================================
+
+\node (A2root) at (1.7,0) {};
+
+\node (A2child) at
+    ({1.7-\SiblingDist/2},-\LevelDist) {};
+
+\draw (A2root) -- (A2child);
+
+\node[draw=none, fill=none, circle] at (1.7,0.45)
+    {$A_2=2$};
+
+
+% ============================================================
+% A_3
+% ============================================================
+
+\node (A3root) at (3.4,0) {};
+
+\node (A3left) at
+    ({3.4-\SiblingDist/2},-\LevelDist) {};
+
+\node (A3right) at
+    ({3.4+\SiblingDist/2},-\LevelDist) {};
+
+\node (A3leftchild) at
+    ({3.4-\SiblingDist},-{2*\LevelDist}) {};
+
+\draw (A3root) -- (A3left);
+\draw (A3root) -- (A3right);
+\draw (A3left) -- (A3leftchild);
+
+\node[draw=none, fill=none, circle] at (3.4,0.45)
+    {$A_3=4$};
+
+
+% ============================================================
+% A_4
+% ============================================================
+
+\node (A4root) at (5.35,0) {};
+
+% druhá úroveň
+\node (A4left) at
+    ({5.35-\SiblingDist/2},-\LevelDist) {};
+
+\node (A4right) at
+    ({5.35+\SiblingDist/2},-\LevelDist) {};
+
+% třetí úroveň
+\node (A4leftleft) at
+    ({5.35-\SiblingDist},-{2*\LevelDist}) {};
+
+\node (A4leftright) at
+    (5.35,-{2*\LevelDist}) {};
+
+\node (A4rightright) at
+    ({5.35+\SiblingDist},-{2*\LevelDist}) {};
+
+% čtvrtá úroveň
+\node (A4bottom) at
+    ({5.35-1.5*\SiblingDist},-{3*\LevelDist}) {};
+
+% hrany
+\draw (A4root) -- (A4left);
+\draw (A4root) -- (A4right);
+
+\draw (A4left) -- (A4leftleft);
+\draw (A4left) -- (A4leftright);
+
+\draw (A4right) -- (A4rightright);
+
+\draw (A4leftleft) -- (A4bottom);
+
+\node[draw=none, fill=none, circle] at (5.35,0.45)
+    {$A_4=7$};
+
+
+% ============================================================
+% Rekurence A_h
+% ============================================================
+
+\node[
+    draw=none,
+    fill=none,
+    circle,
+    anchor=west
+] at (6.55,0.45)
+    {$A_h=A_{h-1}+A_{h-2}+1$};
+
+
+% ============================================================
+% kořen
+% ============================================================
+
+\node (Ahroot) at (7.9,0) {};
+
+
+% ============================================================
+% levý podstrom h-1
+% ============================================================
+
+\node[
+    isosceles triangle,
+    shape border rotate=90, % špička nahoru (místo doprava)
+    anchor=apex,            % zarovnávej podle horní špičky
+    draw,
+    fill=white,
+    minimum height=44pt,
+    minimum width=26pt,
+    inner sep=0pt
+] (Ahleft) at
+    ({7.9-\SiblingDist},-{1.25*\LevelDist})
+    {};
+
+% hrana do špičky trojúhelníku
+\draw (Ahroot) -- (Ahleft.apex);
+
+
+% ============================================================
+% pravý podstrom h-2
+% ============================================================
+
+\node[
+    isosceles triangle,
+    shape border rotate=90, % špička nahoru (místo doprava)
+    anchor=apex,            % zarovnávej podle horní špičky
+    draw,
+    fill=white,
+    minimum height=26pt,
+    minimum width=16pt,
+    inner sep=0pt
+] (Ahright) at
+    ({7.9+\SiblingDist},-{1.25*\LevelDist})
+    {};
+
+% hrana do špičky trojúhelníku
+\draw (Ahroot) -- (Ahright.apex);
+
+
+% ============================================================
+% popisky podstromů
+% ============================================================
+
+% umísti popisky vždy pod trojúhelník (nezávisle na jeho velikosti)
+\node[draw=none, fill=none] at ($(Ahleft.south)+(0,-\SubtreeLabelOffset)$) {$h-1$};
+\node[draw=none, fill=none] at ($(Ahright.south)+(0,-\SubtreeLabelOffset)$) {$h-2$};
+    
+\end{tikzpicture}

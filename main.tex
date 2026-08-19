@@ -19,6 +19,7 @@
 
 \usepackage{bm}                 % tučné matematické symboly
 \usepackage{tikz}               % kreslení grafů a stromů
+\usetikzlibrary{shapes.geometric} % trojúhelníky (isosceles triangle)
 
 % Pozn.: pokud budeš později chtít obrázky/diagramy stromů,
 % přidej \usepackage{tikz} (kreslení) nebo \usepackage{graphicx}
@@ -147,7 +148,7 @@ Každý strom $T$ s alespoň $2$ vrcholy obsahuje alespoň dva listy.
 Důkaz provedeme sporem.
 
 \medskip
-\noindent\textbf{Myšlenka důkazu:} Vybereme si nějakou nejdelší cestu ve stromě a tvrdíme, že její krajní vrcholy jsou listy. Pokud si představíte, jak taková cesta vypadá, dává tato myšlenka smysl. Spor získáme jednoduše tak, že tuto nejdelší cestu prodloužíme. Prodlužování nejdelších cest je velmi časté v důkazech sporem a jistě se vám bude ještě hodit.
+\noindent\textbf{Myšlenka důkazu:} Vybereme si nějakou nejdelší cestu ve stromě a tvrdíme, že její krajní vrcholy jsou listy. Pokud si představíte, jak taková cesta musí vypadat, mělo by být vidět, jak jsme k tomuto tvrzení dospěli. Spor získáme jednoduše tak, že tuto nejdelší cestu prodloužíme. Prodlužování nejdelších cest je velmi časté v důkazech sporem a jistě se vám bude ještě hodit.
 
 \medskip
 \noindent\textbf{Důkaz:} Pro spor nechť je graf $G$ strom a $P$ je nějaká nejdelší cesta v grafu $G$ s krajními vrcholy $u$ a $v$. Předpokládejme, že alespoň jeden z nich není list v grafu $G$.
@@ -289,7 +290,7 @@ existuje-li, jinak $\emptyset$. \newline
 \noindent Poslední operací je BVSDelete, ten slouží k odstranění vrcholu $v$ z BVS dle zadaného klíče. Zde máme 3 možnosti. První je pokud vrchol $v$ nemá žádného syna neboli je listem. V tom případě ho prostě odstraníme a vše funguje dále. Další případ je kdy má právě jednoho syna vrchol $w$. Ani zde neni problém, rodiči vrcholu $v$, $p(v)$ nahradíme syna $v$ za vrchol $w$. Vrchol $v$ poté bezproblému odstraníme. Posledním případem je kdy vrchol $v$ má oba syny. V tomto případě nemůžeme vrchol $v$ odstranit jinak by jsme rozbili strukturu. Pomůžeme si trikem a to pomocí nahrazení vrcholu $v$ za jeho následníka nebo předchůdce (ti musí existovat jelikož má vrchol $v$ oba syny a zároveň jsou to maxima/minima těch podstromů, takže problém se nerekurzí dále). Také jsme nemohli rozbít definici BVS, jelikož jsme nahradili bezprostředním následníkem/předchůdcem a stále jsou vlevo menší klíče a vpravo větší. Hledáme vrchol jako při BVSFind, k tomu hledáme Minimum podstromu pomocí BVSMin a v každém vrcholu provedeme konstantě mnoho operací tedy celkem $\bigO{h(T(v)}$. \bigskip
 
 \noindent \textbf{Vstup}: Ukazatel na kořen libovolného BVS $T(v)$ a klíč $x$. \newline
-\noindent \textbf{Výstup}: kazatel na kořen BVS, ze kterého byl odstraněn vrchol s
+\noindent \textbf{Výstup}: Ukazatel na kořen BVS, ze kterého byl odstraněn vrchol s
 klíčem $x$, existoval-li. \newline
 \funkce{BVSDelete}{Ukazatel na kořen $v$ BVS a mazaný klíč $x$}
 \begin{pseudocode}
@@ -323,16 +324,22 @@ BVS nazveme \textbf{dokonale vyvážený}, pokud pro každý jeho vrchol $v$ pla
 Dokonale vyvážený BVS o velikosti $n$ má $1 + \floor{\log n}$ hladin. Operace na takovém stromě mají tedy optimální časovou složitost $\bigO{\log n}$.
 \end{remark} \bigskip
 
-\noindent Dokonalé vyvážení nám krásně zajišťuje logaritmicou hloubku BVS. Bohužel se ukazuje, že udržet tuto strukturu stromu současně s přidáváním a mazáním prvků, je příliš nákladné. Alespoň jedna z operací BVSInsert a BVSDelete zdegradují na lineární složitost $\bigO{n}$. \bigskip
+\noindent Dokonalé vyvážení nám krásně zajišťuje logaritmicou hloubku BVS. Bohužel se ukazuje, že udržet tuto strukturu stromu současně s přidáváním a mazáním prvků, je příliš nákladné. Alespoň jedna z operací BVSInsert a BVSDelete zdegradují na lineární složitost $\bigO{n}$. \medskip
 
 \begin{theorem}[O složitosti operací nad dokonale vyváženým BVS]
 Pokud má BVS zůstávat po provedení operací BVSInsert a BVSDelete dokonale vyvážený, potom ať použijeme jakoukoli implementaci zmíněných operací, bude časová složitost aspoň jedné z nich $\bigOmega{n}$ pro nekonečně mnoho různých $n$.
 \end{theorem} \bigskip
 
-\noindent Myšlenka důkazu. Stačí nám ukázat že existuje dokonale vyvážený BVS a nějaká posloupnost operací BVSInsert a BVSDelete kde alespoň jedna bude mít složitost $\bigO{n}$. \bigskip
+\noindent\textbf{Myšlenka důkazu:} Stačí nám ukázat že existuje dokonale vyvážený BVS a nějaká posloupnost operací BVSInsert a BVSDelete kde alespoň jedna bude mít složitost $\bigOmega{n}$. \bigskip
 
 \begin{proof}
-    
+    Použíjeme důkaz přímý
+    \begin{enumerate}
+    \item Uvažujme dokonale vyvážený BVS s klíči 1,2,...,n, kde n = $2^k - 1$.
+    \item Všimneme si, že celý tento strom je určen jednoznačně a všechna lichá čísla jsou v listech tohoto stromu.
+    \item Nyní provedeme dvojice operací BVSInsert(n + 1) a BVSDelete(1), pak BVSInsert(n + 2) a BVSDelete(2), ...
+    \item Po provedení $i$-té dvojice operací bude strom obsahovat hodnoty $i + 1,..., i$ + n. V závislosti na tom jestli je $i$ liché nebo sudé se vždy listech budou nacházet sudé nebo liché hodnoty. To ale znamená že všem vrcholům se změní zda jsou listem nebo nejsou. Proto musíme upravit alespoň $\bigOmega{n}$ ukazatelů. Tedy alespoň jedna z operací BVSInsert nebo BVSDelete trvá $\bigOmega{n}$.
+    \end{enumerate}
 \end{proof}
 
 % ============================================================
@@ -341,5 +348,101 @@ Pokud má BVS zůstávat po provedení operací BVSInsert a BVSDelete dokonale v
 
 \section{Avl strom}
 
+\noindent U úplně vyváženého BVS jsme kvůli přílišnému omezení narazili na degradaci rychlostí operací BVSInsert a BVSDelete. Proto musíme zvolit jinou cestu a to pomocí hloubkového vyvážení. \bigskip
+
+\begin{definition}
+    BVS je \textbf{hloubkově vyvážený}, pokud pro každý jeho vrchol $v$ platí 
+    \[ \left| h(L(v)) - h(R(v)) \right| \leq 1 \]
+\end{definition} \bigskip
+
+\noindent Řešení jak toto provést je více. Zde v AG1 si představíme AVL stromy. Prvně ale musíme ukázat, že opravdu toto řešení dosáhne logaritmické hloubky stromu, jinak by nemělo smysl používat. \bigskip
+
+\begin{theorem}[o hloubce hloubkově vyvážených stromů]
+    Hloubkově vyvážený strom s $n$ vrcholy má hloubku $\bigTheta{log(n)}$.
+\end{theorem}
+
+\noindent \textbf{Myšlenka důkazu:} ukážeme že nejmenší možný strom (dle počtů vrcholů) stále zachovává logaritmickou hloubku což nám dá $\bigOmega{n}$. Poté díky tomu, že je binární víme, že pro největší možný strom platí $\bigO{n}$. Tedy celkem $\bigTheta{n}$.
+
+\begin{proof}
+    Důkaz provedeme indukcí.
+
+    \begin{enumerate}
+        \item Označíme si $A_h$ jako minimální počet vrcholů hloubkově vyváženého stromu hloubky h
+        \item Ukážeme že počet vrcholů roste exponencionálně s hloubkou. Tedy hloubka roste logaritmicky díky inverzi těchto funkcí
+        \item Pro h = 1 je strom s jedním vrcholem. Pro h = 2 je to strom s 2 vrcholy ...\\[-4\baselineskip]
+        \input{Obrázky/Min_Avl_Proof_Image}
+        \item Obecně platí vztah $A_h = A_{h-1} + A_{h-2} + 1$
+        \item Nyní dokážeme indukcí, že $A_{h+1} \geq 2^{h/2}$
+        \item Základní krok $A_1 = 1 \geq 2^{0/2} = 1$ a $A_2 = 2 \geq 2^{1/2} = \sqrt{2}$
+        \item Indukční krok:
+        \begin{align*}
+            A_{h+1} &= A_h + A_{h-1} + 1 \\
+                    &> A_h + A_{h-1} \\
+                    &= 2^{(h-1)/2} + 2^{(h-2)/2} \\
+                    &= 2^{h/2}\cdot\bigl(2^{-1/2} + 2^{-1}\bigr) \\
+                    &> 2^{h/2}\cdot\Bigl(\tfrac12 + \tfrac12\Bigr) \\
+                    &= 2^{h/2}
+        \end{align*}
+        \item Hloubkově vyvážený strom hloubky h+1 má tedy nejméně ${2^{h/2}}$ vrcholů. Proto HV strom o $n$ vrcholech má hloubku nejvýše $\log_{\sqrt{2}}(n) + 1$
+
+        \item Protože je binární, tak nemůže mít hloubu menší než $\floor{\log_{2}(n)}$
+        \item Tedy hloubka HV stromu o n vrcholech je $\bigTheta{\log(n)}$
+    \end{enumerate}
+\end{proof}
+
+\begin{remark}
+    \noindent Detaily k důkazu:
+    \begin{enumerate}
+        \item V indukčním kroku využíváme $A_{h+1}$ místo $A_h$ je to kvůli případu kdy $h = 0$. V případě kdyby jsme použili $A_h$ museli by jsme explicitně vyřešit tento případ.
+        \item V indukčním kroku využíváme exponencionálu $2^{h/2}$ ta se využívá jelikož to hezky vyjde. Ale je možné využít i jiný exponent. Jelikož exponencionály o stejném základu se liší pouze o konstantu.
+        \item Argument "protože je binární, tak nemůže mít hloubu menší než $\floor{\log_{2}(n)}$". Lze nahradit tím stejným důkazem. Pouze nyní s největším možným stromem, aby jsme ukázali, že platí $\bigO{n}$.
+    \end{enumerate}
+\end{remark} \bigskip
+
+\begin{definition}
+    Znaménkem vrcholu $v$ nazveme funkci
+    \[
+        \delta(v) = h(R(v)) - h(L(v)).
+    \]
+\end{definition} \bigskip
+
+\begin{definition}
+    AVL strom je hloubkově vyvážený strom, kde pro každý vrchol $v$ platí, že $\delta(v) \in \{-1,0,1\}$
+\end{definition} \bigskip
+
+\noindent V případě kdy $\delta(v) \notin \{-1, 0, 1\}$, pak musíme strom opravit pomocí jednoduchých či dvojitých rotací. Obecně rotace vypadá takto: \bigskip
+
+\input{Obrázky/AVL_General_Rotation} \bigskip
+
+\noindent Obrázek může prvně vypadat matoucí, ale je to kompletní návod jak je provést. Např. u pravé rotace. Vrchol $y$ zavěsíme jako pravého syna vrcholu $x$. Jejich podstromy zůstanou stejné pouze podstrom B se přesune z pravého syna vrcholu $x$ jako levý syn vrcholu $y$. Analogicky levá rotace. \bigskip
+
+\noindent Rotaci provádíme vždy kdy $|\delta(v)| >= 2$ pro nějaký vrchol. Existuje spousta možných případů kdy se jaká provádí. Nejlehčí je si napsat pár příkladů na zkoušku. Je to velmi mechanická záležitost. Pro detailní popis koukněte do přednášky.\bigskip
+
+\noindent \textbf{Vstup}: Vrchol $x$ v BVS \newline
+\funkce{RotateLeft}{vrchol $x$}
+\begin{pseudocode}
+    \item $y := r(x)$
+    \item $r(x) := \ell(y)$
+    \item $\ell(y) := x$
+    \item $p(r(x)) := x;\ p(y) := p(x);\ p(x) := y;$
+    \item $h(T(x)) := \max(h(L(x)),\, h(R(x))) + 1$
+    \item $h(T(y)) := \max(h(R(y)),\, h(T(x))) + 1$
+\end{pseudocode} \bigskip
+
+\noindent Samotná rotace nemusí vrátit ještě AVL strom, jelikož změnou hloubky v hloubce $h$ můžeme rozbít hloubkové vyvážení někde výše. Proto je potřeba jít vnější funkcí rekurentně až do kořene. To přesně poté dělá operace AVLInsert a AVLDelete. Nejlehčí je implementovat při návratu z rekurze \bigskip
+
+\begin{theorem}
+    AVLInsert a AVLDelete trvají $\bigO{log(n)}$.
+\end{theorem}
+
+\begin{proof}
+    Důkaz provedeme přímo
+    \begin{enumerate}
+        \item Již víme že hloubka AVL stromu je vždy $\bigTheta{log(n)}$.
+        \item Operace na BVS byli závislé na hloubce. Tedy určitě nebudou pracovat v lepším čase než logaritmickém tedy $\bigOmega{log(n)}$.
+        \item Zároveň ale samotná rotace provede $\bigTheta{1}$ operací v každém vrcholu a to nejhůře na celé cestě do kořene. Což je celkem $\bigO{log(n)}$.
+        \item Tedy celkem $\bigTheta{log(n)}$.
+    \end{enumerate}
+\end{proof}
 
 \end{document}
