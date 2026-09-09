@@ -1,0 +1,262 @@
+% ============================================================
+\section{Souvislost grafu a souvislé komponenty}
+% ============================================================
+
+Souvislost je jednou ze základních vlastností grafů. Díky ní víme, že z libovolného vrcholu $v$ se dostaneme do libovolného vrcholu $u$. \bigskip
+
+\begin{definition}[Souvislý graf]
+Neorientovaný graf $G$ je \textbf{souvislý}, jestliže v něm pro každé jeho dva vrcholy $u, v \in V(G)$ existuje $u$-$v$-cesta. Jinak je graf $G$ \textbf{nesouvislý}.
+\end{definition} \bigskip
+
+\noindent V případě, že je graf $G$ nesouvislý. Nás ale mohou zajímat jeho podgrafy, které již jsou souvislé. Ty se nazývají souvislé komponenty grafu $G$. \bigskip
+
+\begin{definition}[Souvislá komponenta]
+Indukovaný podgraf $H$ grafu $G$ je \textbf{souvislou komponentou}, pokud je souvislý a neexistuje žádný souvislý podgraf $F$ grafu $G$ takový, že $H \subseteq F$ a $H \neq F$.
+\end{definition}
+
+\noindent Souvislá komponenta je tedy v inkluzi \textbf{maximální souvislý podgraf} grafu $G$. \bigskip
+
+\begin{remark}[Pozorování]
+Graf je souvislý právě tehdy, když obsahuje jedinou souvislou komponentu.
+\end{remark} \bigskip
+
+\noindent Souvislost lze také popsat pomocí relace ekvivalence na vrcholech grafu.
+
+\begin{theorem}
+Binární relace $\leftrightsquigarrow$ nad vrcholy grafu $G = (V, E)$ definovaná předpisem:
+$$u \leftrightsquigarrow v \iff \text{existuje } u\text{-}v\text{-cesta v } G$$
+je relací ekvivalence. Třídy ekvivalence této relace indukují souvislé komponenty grafu $G$.
+\end{theorem} \bigskip
+
+\begin{center}
+    \input{Obrázky/SouvislostGraf}
+\end{center} \bigskip
+
+\noindent V přednáškách sice důkaz není, ale je velmi přímočarý. Doporučuju si vyzkoušet a v pohodě ho vymyslíte na místě. Stačí nám ověřit reflexivitu, symetrii a transitivitu (viz. DML), tím dokážeme ekvivalenci. \bigskip
+
+\begin{proof}
+    Mějme graf $G$ a nějaké jeho 3 vrcholy $u, v, w \in G$.
+
+    \begin{enumerate}
+        \item Reflexivita - Z vrcholu $v$ určitě existuje cesta do vrcholu $v$. Je to    přesně cesta délky 0.
+        \item Symetrie - Pokud existuje $u$-$v$-cesta, tak využitím stejný hran a          vnitřních vrcholů. Pouze nyní směrem z vrcholu $u$ do vrcholu $v$. Získáme hledanou $v$-$u$-cestu.
+        \item Transitivita - Pokud existuje $u$-$v$-cesta a $v$-$w$-cesta, tak poté spojením těchto dvou cest nám vznikne sled z $u$ do $w$. Ten lze ale zkrátit na cestu (to je netriviální, důkaz v 10. přednášce).
+    \end{enumerate}
+\end{proof}
+
+\newpage
+
+% ==================================================================
+\section{Rozklad grafu na souvislé komponenty (BFS\_Graf)}
+% ==================================================================
+
+Algoritmus \texttt{BFS\_Graf} prochází celý graf $G$ a postupně spouští algoritmus BFS pro každý dosud nenalezený vrchol $s \in V(G)$. Tímto způsobem postupně projde všechny souvislé komponenty grafu a spočítá vzdálenosti $D$ i strom nejkratších cest $P$ pro každou komponentu zvlášť. Nemůže tak zůstat vrchol do, kterého by se algoritmus nedostal, jelikož bude provolán vnější smyčkou a sám najde všechny ze svojí komponenty. \bigskip
+
+\begin{remark}
+    Je více způsobů jak tohoto dosáhnout. Např. pomocí DFS
+\end{remark} \bigskip
+
+\noindent \textbf{Vstup}: Neorientovaný graf $G = (V, E)$. \newline
+\noindent \textbf{Výstup}: 
+\begin{itemize}[itemsep=-0.2em, topsep=0.1em]
+    \item Pole vzdáleností $D$ pro všechny vrcholy $v \in V(G)$ od startovních vrcholů jejich příslušných souvislých komponent.
+    \item Pole předchůdců $P$ určující stromy nejkratších cest v jednotlivých komponentách.
+\end{itemize}
+
+\bigskip
+\funkce{BFS\_Graf}{graf $G$}
+\begin{pseudocode}
+\item Pro každý vrchol $u \in V(G)$:
+\item \tab $\text{stav}[u] := \text{nenalezený}$
+\item \tab $D[u] := \text{undef}$
+\item \tab $P[u] := \text{undef}$
+\item Pro každý vrchol $s \in V(G)$:
+\item \tab Pokud $\text{stav}[s] = \text{nenalezený}$:
+\item \tab \tab Zavolej \textcolor{blue}{BFS}($G, s$)
+\item Vrať $(D, P)$
+\end{pseudocode} \bigskip
+
+\begin{proof}[Důkaz Korektnosti algoritmu BFS\_Graf]
+    Dokážeme přímo
+    \begin{enumerate}
+        \item U algoritmus BFS jsme již dokázali, že správně vyplní pole předchůdců, pole vzdáleností a nevynechá žádný vrchol.
+        
+        \item Algoritmus BFS\_Graf nejprve nastaví všechny vrcholy na stav \textit{nenalezený}. Poté postupně prochází všechny vrcholy $s \in V(G)$. Pokud je vrchol $s$ stále nenalezený, zavolá na něm algoritmus BFS.
+
+        \item Uvažujme libovolnou komponentu souvislosti $C$ grafu $G$. Pokud ještě žádný vrchol z $C$ nebyl nalezen, algoritmus při průchodu vrcholů narazí na některý vrchol $s \in C$ ve stavu \textit{nenalezený} a zavolá BFS$(G,s)$. Protože všechny vrcholy v $C$ jsou ze $s$ dosažitelné, algoritmus BFS nalezne všechny vrcholy komponenty $C$.
+        
+        \item Po dokončení tohoto volání jsou všechny vrcholy komponenty $C$ označeny jako nalezené. Když tedy algoritmus později narazí na další vrchol z této komponenty, podmínka $\text{stav}[s] = \text{nenalezený}$ již nebude splněna a další volání BFS nebude provedeno.
+        
+        \item Každá komponenta souvislosti je tedy zpracována právě jedním voláním algoritmu BFS a žádná komponenta není vynechána. Jelikož je BFS korektní, jsou pro všechny vrcholy správně určeny hodnoty $D$ a $P$.
+
+        \item Algoritmus BFS\_Graf je proto korektní.
+    \end{enumerate}
+\end{proof}
+
+\newpage
+
+% ============================================================
+\section{Výpočetní model RAM}
+% ============================================================
+
+Z PAx jistě znáte časovou a paměťovou složitost programu. Aby jsme mohli správně definovat co vlastně znamená, potřebujeme si zavést teoretický model počítače. Nazveme ho modelem RAM. Je potřeba říci, že z high level pohledu počítače přibližně takto fungují. \medskip
+
+\begin{remark}
+    Celý tento model je zde spíše kvůli úplnosti. Ve zkoušce je na to jedna otázka. Rozhodně se neučte nazpaměť spíše obecně jako koncept
+\end{remark} \bigskip
+
+\begin{definition}[Model RAM]
+Výpočetní model \textbf{RAM} se skládá ze dvou hlavních částí:
+\begin{itemize}
+    \item \textbf{Paměť}: Je tvořena adresovatelným polem celočíselných paměťových buněk. Adresy jsou celá čísla, paměťové buňky mají neomezenou velikost (lze do nich ukládat libovolně velká celá čísla).
+    \item \textbf{Program}: Je konečná posloupnost sekvenčně prováděných instrukcí. Instrukce dělíme na:
+    \begin{enumerate}
+        \item \textbf{Aritmeticko-logické}: Mají dva vstupní argumenty a jeden výstupní. Vstupem může být přímá konstanta, přímo adresovaná buňka, nebo nepřímo adresovaná buňka (adresa je uložena v jiné přímo adresované buňce).
+        \item \textbf{Řídicí}: Zahrnují nepodmíněné skoky, podmíněné skoky a instrukci pro zastavení programu (halt).
+    \end{enumerate}
+\end{itemize}
+\end{definition} \medskip
+
+\noindent Na začátku výpočtu jsou vstupní data uložena v určených paměťových buňkách a procesor v každém kroku provede právě jednu instrukci. Po zastavení se obsah určených buněk interpretuje jako výstup. \bigskip
+
+\noindent Nyní se konečně dostáváme k tomu co je časová a paměťová složitost. Je to ten nejhorší případ, ze všech vstupů až do velikosti $N$ včetně. \bigskip
+
+\begin{definition}[Složitost programu v modelu RAM]
+Složitost algoritmu v nejhorším případě pro vstup velikosti $N$ definujeme následovně:
+\begin{itemize}
+    \item \textbf{Velikost vstupu $N$} je počet paměťových buněk, které vstup zabírá.
+    \item \textbf{Časová složitost} je maximum z počtu vykonaných instrukcí přes všechny povolené vstupy velikosti nejvýše $N$.
+    \item \textbf{Paměťová (prostorová) složitost} je maximum z počtu použitých paměťových buněk přes všechny povolené vstupy velikosti nejvýše $N$.
+\end{itemize}
+\end{definition}
+
+\newpage
+
+% ============================================================
+\section{Reprezentace grafů v paměti počítače}
+% ============================================================
+
+Samotný graf můžeme v modelu RAM reprezentovat různými způsoby. Některé způsoby jsou lepší na rychlejší vyhledávání, jiné třeba víc spoří pamětí. Při programování zvolte způsob dle vašich požadavků. Zde si představíme dva možné a to matici sousednosti a seznam sousedů. \bigskip
+
+\subsection{Matice sousednosti}
+\begin{definition}[Matice sousednosti]
+Nechť $G = (V, E)$ je neorientovaný graf s množinou vrcholů $V = \{v_1, v_2, \dots, v_n\}$. \textbf{Matice sousednosti} grafu $G$ je čtvercová matice $A_G = (a_{i,j})_{i,j=1}^n$ typu $n \times n$ definovaná předpisem:
+$$a_{i,j} = \begin{cases} 1 & \text{pokud } \{v_i, v_j\} \in E, \\ 0 & \text{jinak.} \end{cases}$$
+\end{definition} \bigskip
+
+\begin{remark}
+Pro neorientovaný graf je matice $A_G$ vždy symetrická podle hlavní diagonály. Diagonální prvky $a_{i,i}$ jsou nulové (neorientovaný graf nemá smyčky). Paměťová složitost této reprezentace je vždy \textbf{$\bigO{n^2}$}, což je nevýhodné pro řídké grafy ($m \ll n^2$). Výhodou je zarovnaný přístup do paměti a díky tomu i dobrá cache.
+\end{remark} \bigskip
+
+\subsection{Seznam sousedů}
+\begin{definition}[Seznam sousedů]
+V reprezentaci \textbf{seznamem sousedů} uchováváme pro každý vrchol $v \in V(G)$ jednosměrně či obousměrně vázaný seznam všech jeho sousedů (tedy vrcholů $w$, pro které $\{v, w\} \in E$).
+\end{definition} \bigskip
+
+\begin{remark}
+Paměťová složitost se skládá z pole o velikosti $|V| = n$ pro začátky seznamů a z celkem $2|E| = 2m$ prvků v seznamech (každá neorientovaná hrana je uložena dvakrát -- u obou svých koncových vrcholů). Celková paměťová složitost je tedy \textbf{$\bigO{n + m}$}, což je optimální a velmi efektivní pro řídké grafy. V progtestech jsem volil tento způsob a prošel mi naprosto v pohodě:D
+\end{remark} \bigskip
+
+\subsection{Reprezentace orientovaného grafu}
+U orientovaných grafů reprezentujeme hrany jako uspořádané dvojice:
+\begin{itemize}
+    \item \textbf{Matice sousednosti} obsahuje $a_{i,j} = 1$ právě tehdy, když v grafu existuje orientovaná hrana $(v_i, v_j) \in E$. Tato matice obecně \textbf{není symetrická}.
+    \item \textbf{Seznam sousedů} nahrazujeme \textbf{seznamem následníků}: pro každý vrchol $v$ ukládáme pouze seznam vrcholů $w$ takových, že do nich vede orientovaná hrana $(v, w) \in E$. Celkový počet prvků v seznamech je právě $|E| = m$.
+\end{itemize} \bigskip
+
+\begin{center}
+    \input{Obrázky/GrafSousednosti}
+\end{center}
+
+\newpage
+
+% ============================================================
+\section{Časová složitost algoritmu BFS}
+% ============================================================
+
+Díky zavedení modelu RAM nyní můžeme konečně dokázat časovou složitost algoritmu BFS
+Na základě definovaného modelu RAM a reprezentace grafu můžeme exaktně dokázat časovou složitost algoritmu BFS. \bigskip
+
+\begin{theorem}[O časové složitosti algoritmu BFS]
+Algoritmus $BFS(G, s)$ má při reprezentaci grafu $G$ seznamem sousedů časovou složitost $\bigO{|V| + |E|}$.
+\end{theorem} \medskip
+
+\begin{proof}
+Časovou složitost můžeme rozdělit na analýzu jednotlivých fází algoritmu:
+\begin{enumerate}
+    \item \textbf{Inicializace} (řádky 1--3 a 5--6 v neorientované verzi):
+    \begin{itemize}
+        \item Procházíme všechny vrcholy a na každém provedeme konstantě mnoho práce. Nastavujeme jejich stav na \textit{nenalezený}, vzdálenost na \textit{undef} a předchůdce na \textit{undef}. Celkem to stihneme za $\bigO{|V|}$.
+    \end{itemize}
+    \item \textbf{Práce s frontou $Q$} (hlavní cyklus na řádcích 7--15):
+    \begin{itemize}
+        \item Každý vrchol $v \in V(G)$ je do fronty $Q$ přidán nejvýše jednou, protože se jeho stav bezprostředně před vložením změní na \textit{otevřený}. Vrchol v tomto stavu již nemůže splnit podmínku na řádku 10 a do fronty se podruhé nedostane.
+        \item V každé iteraci hlavního cyklu je právě jeden vrchol z fronty odebrán. Hlavní cyklus se tedy provede nejvýše $|V|$-krát. Každá operace s frontou zabere konstantní množství času. Tedy celkem $\bigO{|V|}$.
+    \end{itemize}
+    \item \textbf{Prohledávání sousedů} (vnitřní cyklus na řádcích 9--14):
+    \begin{itemize}
+        \item Když je vrchol $v$ vyjmut z fronty, projdeme celý jeho seznam sousedů. Což je nejhůře až $\bigO{|E|}$.
+        \item V neorientovaném grafu se na každou hranu podíváme nejvýše dvakrát (jednou z každého jejího koncového vrcholu). Celkový počet zpracování hran je tedy nejvýše $2|E|$, což je $\bigO{|E|}$.
+    \end{itemize}
+\end{enumerate}
+Celkem tedy dostáváme $\bigO{|V| + |E|}$.
+\end{proof} \bigskip
+
+\begin{theorem}[O časové složitosti algoritmu BFS\_Graf]
+Algoritmus $BFS\_graf(G)$, má při reprezentaci grafu seznamem sousedů celkovou časovou složitost $\bigO{|V| + |E|}$.
+\end{theorem} \medskip
+
+\begin{proof}
+Algoritmus vnějším cyklem projde všechny vrcholy $v \in V(G)$ postupně. Zvolme si libovolnou komponentu souvislosti $C$ grafu $G$. V jednom z vrcholů zacněme BFS a projdeme jí za $\bigO{|V(C)| + |E(C)|}$. Jelikož komponenty nemají žádnou společnou část. Tedy průchodem nic neopakujeme. Tak projdeme celý graf za sumu přes všechny komponenty. Což je právě celý graf. Tedy $\bigO{|V| + |E|}$.
+\end{proof}
+
+\newpage
+
+% ============================================================
+\section{Slabá a silná souvislost orientovaných grafů}
+% ============================================================
+
+Pro orientované grafy je potřeba pojem souvislosti trochu rozšířit. A to na slabou a silnou souvislost. Slabá souvislo ignoruje směr šipek a stačí jí že jsou všechny vrcholy spojeny (i klidně protisměrně). Silná naopak respektuje šipky a požaduje, aby existovala cesta mezi libovolnými dvěma vrcholy. Prvně si zavedeme pomocnou definici a to symetrizaci grafu neboli vlastně zapomenutím šipek. \bigskip
+
+\begin{definition}[Symetrizace orientovaného grafu]
+Nechť $G = (V, E)$ je orientovaný graf. \textbf{Symetrizace} grafu $G$ je neorientovaný graf $sym(G) = (V, E')$, kde pro každé dva vrcholy $u, v \in V$ platí:
+$$\{u, v\} \in E' \iff (u, v) \in E \lor (v, u) \in E$$
+\end{definition} \bigskip
+
+\begin{definition}[Slabá souvislost]
+Orientovaný graf $G$ je \textbf{slabě souvislý}, pokud je jeho symetrizace $sym(G)$ souvislý neorientovaný graf.
+\end{definition} \bigskip
+
+\begin{definition}[Silná souvislost]
+Orientovaný graf $G = (V, E)$ je \textbf{silně souvislý}, pokud pro každé dva vrcholy $u, v \in V$ existuje v $G$ orientovaná cesta z $u$ do $v$ a zároveň orientovaná cesta z $v$ do $u$.
+\end{definition} \bigskip
+
+\begin{center}
+    \input{Obrázky/SlabaSilnaSouvislost}
+\end{center}
+
+\newpage
+
+% ============================================================
+\section{Izomorfismus a automorfismus grafů}
+% ============================================================
+
+Často se může stát, kdy se bavíme o dvou grafem, které jsou strukturou identické. Ale mají například lehce jinak nakreslené/pojmenované. V tomto případě mluvíme o izomorfismu grafů. \bigskip
+
+\begin{definition}[Izomorfismus grafů]
+Nechť $G$ a $H$ jsou dva grafy. Zobrazení $f : V(G) \to V(H)$ nazveme \textbf{izomorfismem grafů} $G$ a $H$, pokud platí:
+\begin{enumerate}
+    \item $f$ je bijekce (vzájemně jednoznačné zobrazení),
+    \item pro každou dvojici vrcholů $u, v \in V(G)$ platí:
+    $$\{u, v\} \in E(G) \iff \{f(u), f(v)\} \in E(H)$$
+\end{enumerate}
+Pokud takové zobrazení existuje, říkáme, že grafy $G$ a $H$ jsou \textbf{izomorfní} and značíme $G \simeq H$.
+\end{definition} \bigskip
+
+\begin{definition}[Automorfismus grafu]
+\textbf{Automorfismus} grafu $G$ je izomorfismus grafu $G$ se sebou samým, tedy bijekce $f : V(G) \to V(G)$ zachovávající relaci sousedství.
+\end{definition} \bigskip
+
+\begin{remark}[Počty grafů]
+Na pevné $n$-prvkové množině vrcholů $V$ existuje právě $2^{\binom{n}{2}}$ různých grafů. Počet navzájem neizomorfních grafů je však výrazně nižší. Například pro $n=3$ existuje $2^3 = 8$ různých grafů, které se však dělí do pouhých 4 tříd izomorfismu. Ty je zrovna potřeba napočítat manuálně. Binoimiální číslo $\binom{n}{k}$ udává počet podmnožin velikosti k z dané množiny velikosti n.
+\end{remark} \bigskip
