@@ -1,0 +1,22 @@
+\begin{tikzpicture}[
+  node distance=0mm,
+  cell/.style={rectangle, draw, minimum size=8mm, font=\ttfamily}
+]
+  % Pole
+  \node[cell, fill=red!15] (c1) {3};
+  \node[cell, right=of c1] (c2) {5};
+  \node[cell, right=of c2] (c3) {7};
+  \node[cell, right=of c3] (c4) {11};
+  \node[cell, right=of c4] (c5) {6};
+  \node[cell, right=of c5] (c6) {9};
+  
+  % Indexy
+  \node[above=1mm of c1, font=\scriptsize\sffamily] {1};
+  \node[above=1mm of c2, font=\scriptsize\sffamily] {2};
+  \node[above=1mm of c3, font=\scriptsize\sffamily] {3};
+  \node[above=1mm of c4, font=\scriptsize\sffamily] {4};
+  \node[above=1mm of c5, font=\scriptsize\sffamily] {5};
+  \node[above=1mm of c6, font=\scriptsize\sffamily] {6};
+\end{tikzpicture}
+\par\medskip
+\textit{Obrázek 4.1: Reprezentace haldy z Obrázku 2.1 v poli $H[1 \dots 6]$. Například uzel na indexu $i=2$ s hodnotou $5$ má levého syna na indexu $2\cdot 2 = 4$ (hodnota 11) a pravého syna na indexu $2\cdot 2 + 1 = 5$ (hodnota 6).}

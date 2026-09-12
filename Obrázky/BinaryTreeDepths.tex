@@ -1,0 +1,22 @@
+\begin{tikzpicture}[
+  vnode/.style={circle, draw, minimum size=7mm, inner sep=0pt, fill=blue!10},
+  thick, level distance=12mm,
+  level 1/.style={sibling distance=30mm},
+  level 2/.style={sibling distance=16mm}
+]
+  \node[vnode, fill=red!20] (r) {$r$}
+    child { node[vnode] (a) {$a$}
+      child { node[vnode] (c) {$c$} }
+      child { node[vnode] (d) {$d$} }
+    }
+    child { node[vnode] (b) {$b$}
+      child { node[vnode] (e) {$e$} }
+      child[missing]
+    };
+    
+  \node[right=20mm of r, gray] {0. hladina (kořen $r$)};
+  \node[right=35mm of a, gray] {1. hladina (synové $a, b$)};
+  \node[right=43mm of c, gray] {2. hladina (synové $c, d, e$)};
+\end{tikzpicture}
+\par\medskip
+\textit{Obrázek 1.1: Ukázka zakořeněného binárního stromu s hloubkou 3.}
