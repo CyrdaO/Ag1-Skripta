@@ -66,21 +66,12 @@ Má-li cesta $P$ v grafu $G$ koncové vrcholy $s = v_0$ a $t = v_k$, mluvíme o 
 
 \section{Algoritmus BFS (Breadth-First Search)}
 
-\noindent Nyní si představíme velmi důležitý algoritmus BFS neboli Breath-First search. Ten slouží pro nalezení nejkratší cesty mezi dvěma vrcholy. S jeho znalostí, pokud převedeme náš problém na graf, tak zvládneme najít nejkratší řešení. Velmi doporučuju mini progtest na BFS, díky kteréru se vám to velmi ucelí. \bigskip
-
-\noindent \textbf{Jak funguje BFS}: Začneme v počátečním vrcholu s. Poté vezmeme všechny jeho ještě nenalezené sousedy a umístíme je do fronty. Na závěr vrchol s uzavřeme a jeho práce končí. Následně opakujeme:
-\begin{enumerate}
-    \item Vezmeme první prvek ve frontě, nějaký vrchol $v$
-    \item Přidáme hodnotu do pole vzdáleností a pole předchůdců pro vrchol $v$
-    \item Přidáme do fronty všechny zatím nenalezené sousedy vrcholu $v$ a nastavíme je jako otevřené
-    \item Označíme $v$ jako uzavřený
-\end{enumerate}
-Jakmile již neni možné vzít další prvek z fronty (fronta je prázdná) algoritmus končí. Výstupem jsou naplněná pole vzdáleností a předchůdců. Pro ilustraci průběhu koukněte do přednášky. Pseudokód vypadá takto: \bigskip
+\noindent Nyní si představíme velmi důležitý algoritmus BFS neboli Breath-First search. Ten slouží pro nalezení nejkratší cesty mezi vrcholy. S jeho znalostí, pokud převedeme náš problém na graf, tak zvládneme najít nejkratší řešení.
 
 \noindent \textbf{Vstup}: Neorientovaný graf $G = (V, E)$ a počáteční vrchol $s \in V$. \newline
 \noindent \textbf{Výstup}:
 \begin{itemize}[itemsep=-0.2em, topsep=0.1em]
-    \item Pole vzdáleností $D$ takové, že:
+    \item Pole vzdáleností $D$ od vrcholu $s$ takové, že:
     \begin{itemize}[itemsep=-0.15em, label=$\bullet$]
         \item $D[v] = k$, kde $k$ je délka nejkratší $s$-$v$-cesty v $G$,
         \item $D[v] = \text{undef}$, pokud neexistuje žádná $s$-$v$-cesta v $G$.
@@ -91,6 +82,18 @@ Jakmile již neni možné vzít další prvek z fronty (fronta je prázdná) alg
         \item $P[v] = \text{undef}$, pokud neexistuje žádná $s$-$v$-cesta v $G$.
     \end{itemize}
 \end{itemize}
+
+Tedy algoritmus má najít délky nejkratších cest mezi počátčním vrcholem $s$ a všemi ostatními. Pokud se ptáte, jak získat samotnou nejkratší cestu (tedy posloupnost vrcholů a hran), tak tu lze jednoduše získat díky poli předchůdců $P$, stačí se podívat na předchůdce posledního vrcholu a následně jeho předchůdce a toto opakovat dokud se nedostaneme do samotného vrcholu $s$. Hledaná cesta je pak poslou, TODO:
+
+
+\noindent \textbf{Jak funguje BFS}: Začneme v počátečním vrcholu s. Poté vezmeme všechny jeho ještě nenalezené sousedy a umístíme je do fronty. Na závěr vrchol s uzavřeme a jeho práce končí. Následně opakujeme:
+\begin{enumerate}
+    \item Vezmeme první prvek ve frontě, nazvěmě ho $v$.
+    \item Přidáme hodnotu do pole vzdáleností a pole předchůdců pro vrchol $v$
+    \item Přidáme do fronty všechny zatím nenalezené sousedy vrcholu $v$ a nastavíme je jako otevřené
+    \item Označíme $v$ jako uzavřený
+\end{enumerate}
+Jakmile již neni možné vzít další prvek z fronty (fronta je prázdná) algoritmus končí. Výstupem jsou naplněná pole vzdáleností a předchůdců. Pro ilustraci průběhu koukněte do přednášky. Pseudokód vypadá takto: \bigskip
 
 \funkce{BFS}{graf $G$, vrchol $s$}
 \begin{pseudocode}
@@ -194,7 +197,7 @@ To je ovšem spor s tím, že sousední vrcholy na cestě mustí ležet v soused
 Tento spor dokazuje, že žádná kratší cesta neexistuje, a tedy $d(s, v) = i = D[v]$.
 \end{proof}
 
-\newpage
+Na závěr bychom ještě rádi doporučili vyřešit si miniprogtest na BFS, nejenže díky tomu BFS lépe pochopíte, ale také vám usnadní řešení progtestu velkého.
 
 \section{Speciální třídy grafů a vlastnosti}
 
