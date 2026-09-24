@@ -1,6 +1,7 @@
 % pro tvar "isosceles triangle" a anchor .apex + výpočty souřadnic
-\usetikzlibrary{shapes.geometric,calc}
 
+\begin{figure}[H]
+\centering
 \begin{tikzpicture}[
     scale=1.35,
     every node/.style={
@@ -187,3 +188,5 @@
 \node[draw=none, fill=none] at ($(Ahright.south)+(0,-\SubtreeLabelOffset)$) {$h-2$};
     
 \end{tikzpicture}
+\caption{Rekurentní konstrukce minimálního AVL stromu $A_h = A_{h-1} + A_{h-2} + 1$.}
+\end{figure}

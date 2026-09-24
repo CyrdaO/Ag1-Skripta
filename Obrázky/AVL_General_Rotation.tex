@@ -1,6 +1,7 @@
 % AVL rotace: pravá rotace (y,x,A,B,C) <-> levá rotace
-\usetikzlibrary{shapes.geometric,calc,arrows.meta,bending}
 
+\begin{figure}[H]
+\centering
 \begin{tikzpicture}[
     scale=1.15,
     every node/.style={
@@ -130,10 +131,10 @@
 
 % velké šipky mezi kořeny (Ly = y vlevo) a (Rx = x vpravo)
 % pomocné body pro stabilní centrování popisků
-\coordinate (RTopL) at ([yshift=2mm]Ly.east);
-\coordinate (RTopR) at ([yshift=2mm]Rx.west);
-\coordinate (RBotL) at ([yshift=-2mm]Ly.east);
-\coordinate (RBotR) at ([yshift=-2mm]Rx.west);
+\path (Ly.east) ++(0,2mm) coordinate (RTopL);
+\path (Rx.west) ++(0,2mm) coordinate (RTopR);
+\path (Ly.east) ++(0,-2mm) coordinate (RBotL);
+\path (Rx.west) ++(0,-2mm) coordinate (RBotR);
 
 \draw[thick, -{Stealth[length=5mm,width=3.2mm]}]
     (RTopL) to[bend left=18] (RTopR);
@@ -152,3 +153,5 @@
          text height=1.7ex, text depth=.3ex] {Levá rotace};
 
 \end{tikzpicture}
+\caption{AVL rotace: pravá rotace (y,x,A,B,C) a levá rotace.}
+\end{figure}
