@@ -8,7 +8,7 @@ Graf $G$ je uspořádaná dvojice $(V, E)$, kde:
     \item $V$ je neprázdná konečná množina \textbf{vrcholů},
     \item $E$ je množina \textbf{hran}, přičemž každá hrana je dvouprvková podmnožina $V$ (čili neuspořádaná dvojice vrcholů), značíme $\{u, v\}$.
 \end{itemize} \medskip
-Množinu všech dvouprvkových podmnožin množiny $V$ (tedy všech možných hran) označujeme $\binom{V}{2}$. \medskip
+Množinu všech dvouprvkových podmnožin množiny $V$ (tedy všech možných hran) značíme $\binom{V}{2}$. \medskip
 \end{definition}
 
 \begin{center}
@@ -83,7 +83,7 @@ Má-li cesta $P$ v grafu $G$ koncové vrcholy $s = v_0$ a $t = v_k$, mluvíme o 
     \end{itemize}
 \end{itemize}
 
-Tedy algoritmus má najít délky nejkratších cest mezi počátčním vrcholem $s$ a všemi ostatními. Pokud se ptáte, jak získat samotnou nejkratší cestu (tedy posloupnost vrcholů a hran), tak tu lze jednoduše získat díky poli předchůdců $P$, stačí se podívat na předchůdce posledního vrcholu a následně jeho předchůdce a toto opakovat dokud se nedostaneme do samotného vrcholu $s$. Hledaná cesta je pak poslou, TODO:
+Tedy algoritmus má najít délky nejkratších cest mezi počátčním vrcholem $s$ a všemi ostatními. Pokud se ptáte, jak získat samotnou nejkratší cestu (tedy posloupnost vrcholů a hran), tak tu lze jednoduše získat díky poli předchůdců $P$, stačí se podívat na předchůdce posledního vrcholu a následně jeho předchůdce a toto opakovat dokud se nedostaneme do samotného vrcholu $s$. Hledaná cesta je pak posloupnost těchto předchůdců.
 
 
 \noindent \textbf{Jak funguje BFS}: Začneme v počátečním vrcholu s. Poté vezmeme všechny jeho ještě nenalezené sousedy a umístíme je do fronty. Na závěr vrchol s uzavřeme a jeho práce končí. Následně opakujeme:
@@ -93,7 +93,7 @@ Tedy algoritmus má najít délky nejkratších cest mezi počátčním vrcholem
     \item Přidáme do fronty všechny zatím nenalezené sousedy vrcholu $v$ a nastavíme je jako otevřené
     \item Označíme $v$ jako uzavřený
 \end{enumerate}
-Jakmile již neni možné vzít další prvek z fronty (fronta je prázdná) algoritmus končí. Výstupem jsou naplněná pole vzdáleností a předchůdců. Pro ilustraci průběhu koukněte do přednášky. Pseudokód vypadá takto: \bigskip
+Jakmile již neni možné vzít další prvek z fronty (fronta je prázdná) algoritmus končí. Výstupem jsou naplněná pole vzdáleností a předchůdců. Pro ilustraci se můžete podívat do slidů z přednášky, nebo na některé z mnoha videí dostupných na internetu. Pseudokód pak vypadá takto: \bigskip
 
 \funkce{BFS}{graf $G$, vrchol $s$}
 \begin{pseudocode}
@@ -149,16 +149,15 @@ Po skončení algoritmu $BFS(G, s)$ platí následující vlastnosti pro každý
 \end{itemize}
 \end{theorem} \bigskip
 
-\newpage
-
 \subsection{Důkazy správnosti BFS}
 
-\begin{proof}[Důkaz Vlastnosti 1 (Dosáhnoutelnost)]
-Prvním otevřeným a následně uzavřeným vrcholem je startovní vrchol $s$. Algoritmus otevírá všechny dosud nenalezené sousedy právě zpracovávaného vrcholu.
+\begin{proof}[Důkaz Vlastnosti 1]
+Připomínáme, že prvním otevřeným a následně uzavřeným vrcholem je startovní vrchol $s$. Algoritmus otevírá všechny dosud nenalezené sousedy právě zpracovávaného vrcholu. Zmiňme ještě, že dosažitelný vrchol říkáme vrcholu, do kterého existuje cesta z vrcholu $s$ (tedy samotný $s$ toto také splňuje).
+
+Jedná se o ekvivalenci, musíme proto ukázat platnost dvou implikací.
+
 \begin{itemize}
-    \item Vrchol $v$ je dosažitelný z $s \implies$ vrchol $v$ bude otevřen. \\
-    Jelikož $v$ je dosažitelný z $s$, tak nutně existuje $s$-$v$-cesta.
-    Tvrzení dokážeme indukcí podle délky této cesty.
+    \item Vrchol $v$ je dosažitelný z $s \implies$ vrchol $v$ bude uzavřen. \\
 
     \textbf{Základní krok}: Pro cestu délky $0$ platí $v=s$.
     Startovní vrchol $s$ algoritmus otevře na začátku, takže tvrzení platí.
@@ -175,7 +174,7 @@ Prvním otevřeným a následně uzavřeným vrcholem je startovní vrchol $s$. 
     již nalezen byl, byl otevřen dříve. V obou případech tedy bude
     $v$ během algoritmu otevřen.
 
-    \item Vrchol $v$ bude otevřen. $\implies$ vrchol $v$ je dosažitelný z $s$ \\
+    \item Vrchol $v$ je uzavřený $\implies$ vrchol $v$ je dosažitelný z $s$ \\
     Tvrzení dokážeme indukcí podle pořadí ve kterém BFS vrcholy otevírá.
     
     \textbf{Základní krok}: Prvním otevřeným vrcholem je vrchol s. Vrchol s je dosažitelný z s cestou délky 0.
@@ -197,17 +196,26 @@ To je ovšem spor s tím, že sousední vrcholy na cestě mustí ležet v soused
 Tento spor dokazuje, že žádná kratší cesta neexistuje, a tedy $d(s, v) = i = D[v]$.
 \end{proof}
 
-Na závěr bychom ještě rádi doporučili vyřešit si miniprogtest na BFS, nejenže díky tomu BFS lépe pochopíte, ale také vám usnadní řešení progtestu velkého.
+
+\begin{proof}[Důkaz Vlastnosti 3]
+Přeneháváme na cvičení.
+\end{proof}
+
+Na závěr této části bychom ještě rádi doporučili vyřešit si miniprogtest na BFS, nejenže díky tomu BFS lépe pochopíte, ale také vám usnadní řešení progtestu velkého.
 
 \section{Speciální třídy grafů a vlastnosti}
 
 Nyní si zavedeme pár speciálních grafů o kterých se často budeme bavit. Důležité je jejich značení. Úplný graf je $K_n$, Úplný bipartnitní graf je $K_{n,m}$, Kružnice je $C_n$ a Cesta je $P_n$. Kde n značí počet vrcholů.
 
 \begin{definition}[Úplný graf]
-Nechť $n \ge 1$. \textbf{Úplný graf} na $n$ vrcholech, značný $K_n$, je graf $(V, \binom{V}{2})$, kde $|V| = n$. V úplném grafu jsou každé dva různé vrcholy spojené hranou.
+Nechť $n \ge 1$. \textbf{Úplný graf} na $n$ vrcholech, značný $K_n$, je graf $(V, \binom{V}{2})$, kde $|V| = n$. V úplném grafu jsou každé dva různé vrcholy spojené hranou. Někdy se úplné grafy také nazývají klika.
 \end{definition}
 
 \input{Obrázky/K_n Graph}
+
+\begin{observation}
+ Úplný graf o $n$ vrcholech je $n-1$ regulární. 
+\end{observation}
 
 \bigskip
 
@@ -246,7 +254,7 @@ $V = \{1, \dots, n\}$ a množinou hran $E = \{ \{i, i+1\} \mid i \in \{1, \dots,
 \begin{definition}[Okolí a stupně]
 Nechť $G = (V, E)$ je graf a $v \in V$ jeho vrchol.
 \begin{itemize}
-    \item Symbolem $\deg_G(v)$ označíme \textbf{stupeň} vrcholu $v$ v grafu $G$, což je počet hran incidentních s $v$.
+    \item Stupněm vrcholu $v$ v grafu $G$ nazveme počet hran incidentních s ním. Značeno: $\deg_G(v)$.
     \item Symbolem $N_G(v)$ označíme \textbf{otevřené okolí} vrcholu $v$, tj. množinu všech sousedů $v$. Platí $\deg_G(v) = |N_G(v)|$.
     \item Symbolem $N_G[v] = N_G(v) \cup \{v\}$ označíme \textbf{uzavřené okolí} vrcholu $v$.
 \end{itemize}
@@ -260,6 +268,7 @@ Nechť $G = (V, E)$ je graf a $v \in V$ jeho vrchol.
 \end{definition}
 
 \input{Obrázky/C3}
+\input{Obrázky/3Regular_8vertices.tex}
 
 \begin{definition}[Izolovaný vrchol]
 \textbf{Izolovaný vrchol} je vrchol stupně $0$, tedy vrchol, který nemá žádné sousedy.
@@ -269,7 +278,7 @@ Nechť $G = (V, E)$ je graf a $v \in V$ jeho vrchol.
 
 \section{Věta o principu sudosti}
 
-Princip sudosti nám říká, že každý graf musí mít dohromady sudý počet stupňů. Proč je to pravda? No každá hrana má dva vrcholy a každý z těchto vrcholů si započítá 1 stupeň. Tedy za každou hranu máme 2 stupně. Toto využijeme pokud nalezneme graf s lichým počtem stupňů o něm můžeme ihned říci že neexistuje. Díky tomuto principu.
+Princip sudosti nám říká, že každý graf musí mít dohromady sudý počet stupňů. Proč je to pravda? Každá hrana má dva vrcholy a každý z těchto vrcholů si započítá 1 stupeň. Tedy za každou hranu máme 2 stupně. \newline
 
 \begin{theorem}[O principu sudosti / Handshaking lemma]
 Pro každý graf $G = (V, E)$ platí:
@@ -296,6 +305,8 @@ Z věty o principu sudosti plynou tyto důležité vlastnosti:
     \item Každý regulární graf lichého stupně musí mít sudý počet vrcholů.
 \end{enumerate}
 \end{corollary}
+
+Princip sudosti nám dává nutnou podmínku která se, jak už to jistě znáte, skvěle hodí pro vyvracení existence grafů. Pokud byste například dostali za úkol sestrojit graf tak, aby obsahoval vrcholy se zadanými stupni, pokud součet stupňů bude lichý hned víte, že to nelze (nemusíte sčítat samotné stupně, stačí se jen podívat na počet vrcholů s lichým stupněm a pokud jich nebude sudě tak víte, že součet stupňů musí být taky lichý). Také se tato věta velmi hodí u důkazů sporem, kde často můžete nalézt spor právě s touto větou.
 
 \bigskip
 

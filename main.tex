@@ -21,6 +21,8 @@
 \usepackage{tikz}               % kreslení grafů a stromů
 \usetikzlibrary{shapes.geometric} % trojúhelníky (isosceles triangle)
 \usetikzlibrary{positioning}
+\usetikzlibrary{calc,arrows.meta,bending}
+\usepackage{float}              % [H] float placement
 
 % Pozn.: pokud budeš později chtít obrázky/diagramy stromů,
 % přidej \usepackage{tikz} (kreslení) nebo \usepackage{graphicx}
@@ -52,6 +54,7 @@
 \newtheorem{theorem}{Věta}[section]
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{corollary}[theorem]{Důsledek}
+\newtheorem{observation}[theorem]{Pozorování}
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definice}
 \theoremstyle{remark}
@@ -69,7 +72,7 @@
 %  DOKUMENT
 % ============================================================
 \title{AG1 skripta}
-\author{Cyril Ovečka}
+\author{Cyril Ovečka, Lukáš Vesecký}
 
 \begin{document}
 
