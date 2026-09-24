@@ -1,6 +1,15 @@
+
+\section*{Motivace a úvod}
+
+Vítame vás u studijního textu k předmětu BI-AG1. Tento text je neoficiální materiál pro tento předmět. Pokud byste narazili na jakoukoli chybu, prosím kontaktujte nás ať ji můžeme opravit.
+
+Jak jistě víte, svět se mění (a to nejen v IT). Díky pokročilým LLM již často není programování "jednoduchých" funkcí už úkolem pro vás, ale pro jazykový model. Proto je ale o to důležitější umět navrhovat a pochopit algoritmy, proč a jak fungují a jak jejich korektnost ověřit jinak, než velkým počtem testovacích dat (ty někdy nemusí stačit, také chybu nemusí vůbec odhalit, nebo ji odhalí až potom, co celý algoritmus dokončíte a zjistíte, že musíte začít znovu). \\
+
+Tento předmět se také věnuje grafům. Je možné, že jste na ně už při studiu narazili, byť možná jen v omezené míře. Ať už v BI-PA2 nebo jako diagram relace v BI-DML. Ale to není zdaleka vše kde se s grafy potkáte. Grafy jsou opravdu všude. Mapa pražského metra? Model počítačové sítě? Hledání cesty v bludišti? Rodokmen? Ano to vše jsou grafy. Tím, že nějaký problém v životě budete reprezentovat grafem a nad ním provádět operace/pouštět algoritmus ho můžete mnohem jednodušeji vyřešit. Například hledání trasy v navigaci je jen hledání nejkratší cesty v grafu. Dají se tím ale řešit i problémy které s grafem zdánlivě nemají ale vůbec nic společného. Například převozníkův problém se dá řešit pomocí reprezentace v grafu a hledáním cesty mezi dvěma vrcholy.
+
 \section{Základy teorie grafů}
 
-\noindent Jak už z názvu předmetu vyplývá, budeme se zde zabývat grafy. Proto si nyní první z nich zavedeme.
+\noindent Jak už jsme zmiňovali, budeme se zde zabývat grafy. Proto si nyní první z nich zavedeme.
 
 \begin{definition}[Neorientovaný graf]
 Graf $G$ je uspořádaná dvojice $(V, E)$, kde:
@@ -294,7 +303,7 @@ Vyjádříme-li příslušnost vrcholů k hranám pomocí indikátorové sumy, d
 $$\sum_{v \in V} \sum_{\substack{e \in E \\ v \in e}} 1$$
 Prohozením pořadí sumace (přesčítáním přes všechny hrany a jejich konce):
 $$\sum_{e \in E} \sum_{v \in e} 1 = \sum_{e \in E} 2 = 2|E|$$
-\end{proof}
+  \end{proof}
 
 \bigskip
 
