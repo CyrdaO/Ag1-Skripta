@@ -5,7 +5,9 @@ Vítame vás u studijního textu k předmětu BI-AG1. Tento text je neoficiáln�
 
 Jak jistě víte, svět se mění (a to nejen v IT). Díky pokročilým LLM již často není programování "jednoduchých" funkcí už úkolem pro vás, ale pro jazykový model. Proto je ale o to důležitější umět navrhovat a pochopit algoritmy, proč a jak fungují a jak jejich korektnost ověřit jinak, než velkým počtem testovacích dat (ty někdy nemusí stačit, také chybu nemusí vůbec odhalit, nebo ji odhalí až potom, co celý algoritmus dokončíte a zjistíte, že musíte začít znovu). \\
 
-Tento předmět se také věnuje grafům. Je možné, že jste na ně už při studiu narazili, byť možná jen v omezené míře. Ať už v BI-PA2 nebo jako diagram relace v BI-DML. Ale to není zdaleka vše kde se s grafy potkáte. Grafy jsou opravdu všude. Mapa pražského metra? Model počítačové sítě? Hledání cesty v bludišti? Rodokmen? Ano to vše jsou grafy. Tím, že nějaký problém v životě budete reprezentovat grafem a nad ním provádět operace/pouštět algoritmus ho můžete mnohem jednodušeji vyřešit. Například hledání trasy v navigaci je jen hledání nejkratší cesty v grafu. Dají se tím ale řešit i problémy které s grafem zdánlivě nemají ale vůbec nic společného. Například převozníkův problém se dá řešit pomocí reprezentace v grafu a hledáním cesty mezi dvěma vrcholy.
+Tento předmět se také věnuje grafům. Je možné, že jste na ně už při studiu narazili, byť možná jen v omezené míře. Ať už v BI-PA2 nebo jako diagram relace v BI-DML. Ale to není zdaleka vše kde se s grafy potkáte. Grafy jsou opravdu všude. Mapa pražského metra? Model počítačové sítě? Hledání cesty v bludišti? Rodokmen? Ano to vše jsou grafy. Tím, že nějaký problém v životě budete reprezentovat grafem a nad ním provádět operace/pouštět algoritmus ho můžete mnohem jednodušeji vyřešit. Například hledání trasy v navigaci je jen hledání nejkratší cesty v grafu. Dají se tím ale řešit i problémy které s grafem zdánlivě nemají ale vůbec nic společného. Například převozníkův problém se dá řešit pomocí reprezentace v grafu a hledáním cesty mezi dvěma vrcholy. \\
+
+Toto se tedy v tomto kurzu naučíte, pojďme ale k věci a konečně si přesně zadefinovat co to takový graf je.
 
 \section{Základy teorie grafů}
 
@@ -19,6 +21,8 @@ Graf $G$ je uspořádaná dvojice $(V, E)$, kde:
 \end{itemize} \medskip
 Množinu všech dvouprvkových podmnožin množiny $V$ (tedy všech možných hran) značíme $\binom{V}{2}$. \medskip
 \end{definition}
+
+Všimněte si, že díky vlastnosti množin, nemůže být více hran mezi dvěma vrcholy a nezáleží na pořadí vrcholů v množině hrany. 
 
 \begin{center}
 \input{Obrázky/UnorientedGraphImage}
