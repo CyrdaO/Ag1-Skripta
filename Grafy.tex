@@ -200,7 +200,7 @@ Jedná se o ekvivalenci, musíme proto ukázat platnost dvou implikací.
 
 \noindent Myšlenka důkazu. Zvolíme fázi $F_i$. Z konstrukce BFS víme, že každý vrchol $v \in H_i$ má vzdálenost od $s$ nejvýše $i$, protože existuje cesta z $s$ do $v$ právě přes $i$ hladin. Zbývá ukázat, že nemůže existovat kratší cesta. Kdyby existovala cesta z $s$ do $v$ kratší než $i$, musela by při průchodu z $H_0$ do $H_i$ přeskočit alespoň jednu hladinu. To ale není možné, protože každé dva sousední vrcholy leží buď ve stejné hladině, nebo v hladinách s rozdílem nejvýše 1.
 
-\begin{proof}[Důkaz Vlastnosti 2 (Nejkratší cesty)]
+\begin{proof}[Důkaz Vlastnosti 2]
 Důkaz provedeme indukcí dle fáze. \\
 \textbf{Základní krok}: Tvrzení triviálně platí pro fázi $F_0$, kde $D[s] = 0 = d(s, s)$. \\
 \textbf{Indukční krok}: Uvažujme indukční krok pro fázi $F_i$ kde $i > 0$. Pokud $v \in H_i$, pak podle konstrukce $D[v] = i$ a z $s$ do $v$ existuje cesta o $i$ hranách. Tedy skutečná vzdálenost $d(s, v) \le i$. \\
@@ -303,10 +303,18 @@ Při sečtení stupňů všech vrcholů započítáme každý konec každé hran
 \par
 Formálně to můžeme vyjádřit následujícím řetězcem rovností:
 $$\sum_{v \in V} \deg_G(v) = \sum_{v \in V} |N_G(v)| = \sum_{v \in V} |\{u \in V \mid \{u, v\} \in E\}|$$
-Vyjádříme-li příslušnost vrcholů k hranám pomocí indikátorové sumy, dostáváme:
+Tedy součet stupňů všech vrcholů je roven počtu jeho sousedů (přímo definice). \\
+
+To vyjádříme dvěma sumami:
+
 $$\sum_{v \in V} \sum_{\substack{e \in E \\ v \in e}} 1$$
-Prohozením pořadí sumace (přesčítáním přes všechny hrany a jejich konce):
+
+Vnější suma je přes všechny vrcholy $v \in V(G)$ a vnitřní suma sčítá přes všechny hrany současného vrcholu $v$.
+
+Prohozením pořadí sumace (přesčítáním přes všechny hrany a jejich konce, tedy vždy 2 vrcholy):
 $$\sum_{e \in E} \sum_{v \in e} 1 = \sum_{e \in E} 2 = 2|E|$$
+
+Dostáváme požadovaný počet.
   \end{proof}
 
 \bigskip

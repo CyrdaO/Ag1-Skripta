@@ -14,10 +14,14 @@ Neorientovaný graf $G$ je \textbf{souvislý}, jestliže v něm pro každé jeho
 Indukovaný podgraf $H$ grafu $G$ je \textbf{souvislou komponentou}, pokud je souvislý a neexistuje žádný souvislý podgraf $F$ grafu $G$ takový, že $H \subseteq F$ a $H \neq F$.
 \end{definition}
 
-\noindent Souvislá komponenta je tedy v inkluzi  \textbf{maximální souvislý podgraf} grafu $G$. \bigskip
+\noindent Souvislé komponenty jsou tedy největší možné podgrafy grafu $G$ takové, že jsou souvislé. \bigskip
 
 \begin{remark}[Pozorování]
 Graf je souvislý právě tehdy, když obsahuje jedinou souvislou komponentu.
+\end{remark} \bigskip
+
+\begin{remark}[Pozorování]
+Graf o $n$ vrcholech a 0 hranách má $n$ souvislých komponent.
 \end{remark} \bigskip
 
 \noindent Souvislost lze také popsat pomocí relace ekvivalence na vrcholech grafu.
@@ -32,9 +36,12 @@ je relací ekvivalence. Třídy ekvivalence této relace indukují souvislé kom
     \input{Obrázky/SouvislostGraf}
 \end{center} \bigskip
 
-\noindent V přednáškách sice důkaz není, ale je velmi přímočarý. Doporučuju si vyzkoušet a v pohodě ho vymyslíte na místě. Stačí nám ověřit reflexivitu, symetrii a transitivitu (viz. DML), tím dokážeme ekvivalenci. \bigskip
+\noindent Předtím, než se podíváte na důkaz přoč je tato relace ekvivalencí, zkuste si to jako cvičení dokázat sami, u prvních dvou vlastností se jedná se o velmi přímočarý důkaz a velmi dobré cvičení na ověření si, zda jste tuto definici správně pochopili. U třetí vlastnosti si pak musíte uvědomit, že složením dvou cest nemusí vzniknout cesta, ale sled (ten pak lze zkrátit na cestu, na tento důkaz narazíme v druhé půlce semestru).
 
 \begin{proof}
+
+    Stačí nám ověřit reflexivitu, symetrii a transitivitu (viz. DML), tím dokážeme ekvivalenci. \bigskip
+
     Mějme graf $G$ a nějaké jeho 3 vrcholy $u, v, w \in G$.
 
     \begin{enumerate}
@@ -44,16 +51,16 @@ je relací ekvivalence. Třídy ekvivalence této relace indukují souvislé kom
     \end{enumerate}
 \end{proof}
 
-\newpage
-
 % ==================================================================
 \section{Rozklad grafu na souvislé komponenty (BFS\_Graf)}
 % ==================================================================
 
+Pokud graf tedy není souvislý, nemůžeme jednodušše pustit algoritmus BFS na libovolném vrcholu a očekávat, že nalezne všechny vrcholy, jak to tedy zařídit? Zařídí to tato mírně modifikovaná verze algoritmu.
+
 Algoritmus \texttt{BFS\_Graf} prochází celý graf $G$ a postupně spouští algoritmus BFS pro každý dosud nenalezený vrchol $s \in V(G)$. Tímto způsobem postupně projde všechny souvislé komponenty grafu a spočítá vzdálenosti $D$ i strom nejkratších cest $P$ pro každou komponentu zvlášť. Nemůže tak zůstat vrchol do, kterého by se algoritmus nedostal, jelikož bude provolán vnější smyčkou a sám najde všechny ze svojí komponenty. \bigskip
 
 \begin{remark}
-    Je více způsobů jak tohoto dosáhnout. Např. pomocí DFS
+    Toto není jediný způsob prohledání grafu, algoritmus BFS lze v tomto případě například zaměnit za DFS.
 \end{remark} \bigskip
 
 \noindent \textbf{Vstup}: Neorientovaný graf $G = (V, E)$. \newline
@@ -92,6 +99,9 @@ Algoritmus \texttt{BFS\_Graf} prochází celý graf $G$ a postupně spouští al
         \item Algoritmus BFS\_Graf je proto korektní.
     \end{enumerate}
 \end{proof}
+
+%TODO: Finish this paragraph
+Jak ověřit souvislost grafu? Jak najít jeho souvislé komponenty? Dostaneme-li vrchol $s$ jak najít jeho souvislou komponentu? K tomuto nám stačí algoritmus který jsme si právě ukázali, stačí jen přidat jedno pole identifikátorů které pro každý vrchol držet identifikátor komponenty souvislosti ve které se vrchol nachází, to algoritmus vyplní vrcholem ve kterém začalo prohledávání současné komponenty.
 
 \newpage
 
