@@ -39,7 +39,6 @@ je relací ekvivalence. Třídy ekvivalence této relace indukují souvislé kom
 \noindent Předtím, než se podíváte na důkaz přoč je tato relace ekvivalencí, zkuste si to jako cvičení dokázat sami, u prvních dvou vlastností se jedná se o velmi přímočarý důkaz a velmi dobré cvičení na ověření si, zda jste tuto definici správně pochopili. U třetí vlastnosti si pak musíte uvědomit, že složením dvou cest nemusí vzniknout cesta, ale sled (ten pak lze zkrátit na cestu, na tento důkaz narazíme v druhé půlce semestru).
 
 \begin{proof}
-
     Stačí nám ověřit reflexivitu, symetrii a transitivitu (viz. DML), tím dokážeme ekvivalenci. \bigskip
 
     Mějme graf $G$ a nějaké jeho 3 vrcholy $u, v, w \in G$.
@@ -100,8 +99,9 @@ Algoritmus \texttt{BFS\_Graf} prochází celý graf $G$ a postupně spouští al
     \end{enumerate}
 \end{proof}
 
-%TODO: Finish this paragraph
-Jak ověřit souvislost grafu? Jak najít jeho souvislé komponenty? Dostaneme-li vrchol $s$ jak najít jeho souvislou komponentu? K tomuto nám stačí algoritmus který jsme si právě ukázali, stačí jen přidat jedno pole identifikátorů které pro každý vrchol držet identifikátor komponenty souvislosti ve které se vrchol nachází, to algoritmus vyplní vrcholem ve kterém začalo prohledávání současné komponenty.
+Teď tedy víme, jak prohledat celý graf i pokud předem nevíme, zda je souvislý. Můžete se ale ptát, jak ověřit souvislost grafu? Jak najít jeho souvislé komponenty? Pokud dostanu zadaný vrchol jak najít jeho komponentu souvislosti? Na tyto otázky nyní odpovíme malým "vylepšením" algoritmu, který jsme si právě ukázali. \\
+
+Dostaneme-li vrchol $s$ jak najít jeho souvislou komponentu? K tomuto nám stačí algoritmus který jsme si právě ukázali, stačí jen přidat jedno pole identifikátorů které pro každý vrchol držet identifikátor komponenty souvislosti ve které se vrchol nachází, to algoritmus vyplní vrcholem ve kterém začalo prohledávání současné komponenty.
 
 \newpage
 
@@ -109,11 +109,7 @@ Jak ověřit souvislost grafu? Jak najít jeho souvislé komponenty? Dostaneme-l
 \section{Výpočetní model RAM}
 % ============================================================
 
-Z PAx jistě znáte časovou a paměťovou složitost programu. Aby jsme mohli správně definovat co vlastně znamená, potřebujeme si zavést teoretický model počítače. Nazveme ho modelem RAM. Je potřeba říci, že z high level pohledu počítače přibližně takto fungují. \medskip
-
-\begin{remark}
-    Celý tento model je zde spíše kvůli úplnosti. Ve zkoušce je na to jedna otázka. Rozhodně se neučte nazpaměť spíše obecně jako koncept
-\end{remark} \bigskip
+Z PAx jistě znáte časovou a paměťovou složitost programu. Abychom ale mohli analyzovat složitosti algoritmu, musíme si zadefinovat nějaký model počítače. Počítače se často hodně liší, různé istrukce trvají jinak dlouho, atd. Proto si zavedeme teoretický model počítače, který modeluje to, co všichni přibližně od běžného počítače očekáváme.
 
 \begin{definition}[Model RAM]
 Výpočetní model \textbf{RAM} se skládá ze dvou hlavních částí:
@@ -121,7 +117,7 @@ Výpočetní model \textbf{RAM} se skládá ze dvou hlavních částí:
     \item \textbf{Paměť}: Je tvořena adresovatelným polem celočíselných paměťových buněk. Adresy jsou celá čísla, paměťové buňky mají neomezenou velikost (lze do nich ukládat libovolně velká celá čísla).
     \item \textbf{Program}: Je konečná posloupnost sekvenčně prováděných instrukcí. Instrukce dělíme na:
     \begin{enumerate}
-        \item \textbf{Aritmeticko-logické}: Mají dva vstupní argumenty a jeden výstupní. Vstupem může být přímá konstanta, přímo adresovaná buňka, nebo nepřímo adresovaná buňka (adresa je uložena v jiné přímo adresované buňce).
+        \item \textbf{Aritmeticko-logické}(sčítání, násobení, porovnávání, ...): Mají dva vstupní argumenty a jeden výstupní. Vstupem může být přímá konstanta, přímo adresovaná buňka, nebo nepřímo adresovaná buňka (adresa je uložena v jiné přímo adresované buňce).
         \item \textbf{Řídicí}: Zahrnují nepodmíněné skoky, podmíněné skoky a instrukci pro zastavení programu (halt).
     \end{enumerate}
 \end{itemize}
@@ -129,18 +125,19 @@ Výpočetní model \textbf{RAM} se skládá ze dvou hlavních částí:
 
 \noindent Na začátku výpočtu jsou vstupní data uložena v určených paměťových buňkách a procesor v každém kroku provede právě jednu instrukci. Po zastavení se obsah určených buněk interpretuje jako výstup. \bigskip
 
-\noindent Nyní se konečně dostáváme k tomu co je časová a paměťová složitost. Je to ten nejhorší případ, ze všech vstupů až do velikosti $N$ včetně. \bigskip
+\noindent Nyní se konečně dostáváme k tomu co je časová a paměťová složitost. Je to ten nejhorší případ, ze všech vstupů až do velikosti $n$ včetně. \bigskip
 
 \begin{definition}[Složitost programu v modelu RAM]
-Složitost algoritmu v nejhorším případě pro vstup velikosti $N$ definujeme následovně:
+Složitost algoritmu v nejhorším případě pro vstup velikosti $n$ definujeme následovně:
 \begin{itemize}
-    \item \textbf{Velikost vstupu $N$} je počet paměťových buněk, které vstup zabírá.
-    \item \textbf{Časová složitost} je maximum z počtu vykonaných instrukcí přes všechny povolené vstupy velikosti nejvýše $N$.
-    \item \textbf{Paměťová (prostorová) složitost} je maximum z počtu použitých paměťových buněk přes všechny povolené vstupy velikosti nejvýše $N$.
+    \item \textbf{Velikost vstupu $n$} je počet paměťových buněk, které vstup zabírá.
+    \item \textbf{Časová složitost} je maximum z počtu vykonaných instrukcí přes všechny povolené vstupy velikosti nejvýše $n$.
+    \item \textbf{Paměťová (prostorová) složitost} je maximum z počtu použitých paměťových buněk přes všechny povolené vstupy velikosti nejvýše $n$.
 \end{itemize}
 \end{definition}
 
-\newpage
+
+\noindent Co nás bude u algoritmů zajímat je, jak budou složitosti programu škálovat s velikostí vstupu, tedy nebudeme počítat přesný počet instrukcí, ale spíše zda algoritmus vykoná za jeho běh $\mathcal{O}(n)$ instrukcí nebo třeba $\mathcal{O}(n^2) \text{ či dokonce } \mathcal{O}(2^n)$.
 
 % ============================================================
 \section{Reprezentace grafů v paměti počítače}
@@ -178,8 +175,6 @@ U orientovaných grafů reprezentujeme hrany jako uspořádané dvojice:
     \input{Obrázky/GrafSousednosti}
 \end{center}
 
-\newpage
-
 % ============================================================
 \section{Časová složitost algoritmu BFS}
 % ============================================================
@@ -212,6 +207,8 @@ Algoritmus $BFS(G, s)$ má při reprezentaci grafu $G$ seznamem sousedů časovo
 Celkem tedy dostáváme $\bigO{|V| + |E|}$.
 \end{proof} \bigskip
 
+Je důležité opravdu psát $\bigO{|V| + |E|}$ a ne jen $\bigO{|V|} \text{ nebo } \bigO{|E|}$, protože nevíme, zda je v grafu více vrcholů nebo hran. Také je dobré si uvědomit, že počet hran v grafu může být až kvadrát počtu vrcholů.
+
 \begin{theorem}[O časové složitosti algoritmu BFS\_Graf]
 Algoritmus $BFS\_graf(G)$, má při reprezentaci grafu seznamem sousedů celkovou časovou složitost $\bigO{|V| + |E|}$.
 \end{theorem} \medskip
@@ -226,7 +223,7 @@ Algoritmus vnějším cyklem projde všechny vrcholy $v \in V(G)$ postupně. Zvo
 \section{Slabá a silná souvislost orientovaných grafů}
 % ============================================================
 
-Pro orientované grafy je potřeba pojem souvislosti trochu rozšířit. A to na slabou a silnou souvislost. Slabá souvislo ignoruje směr šipek a stačí jí že jsou všechny vrcholy spojeny (i klidně protisměrně). Silná naopak respektuje šipky a požaduje, aby existovala cesta mezi libovolnými dvěma vrcholy. Prvně si zavedeme pomocnou definici a to symetrizaci grafu neboli vlastně zapomenutím šipek. \bigskip
+Pro orientované grafy je potřeba pojem souvislosti trochu rozšířit. Rozlišujeme dva druhy. Slabou a silnou souvislost. U Slabé souvislosti se ke hranám chováme, jako by byly neorientované. U Silné souvislosti naopak požadujeme, aby existovala orientovaná cesta mezi libovolnými dvěma vrcholy. Prvně si zavedeme pomocnou definici a to symetrizaci grafu neboli to již zmiňované ignorování orientac hran. \bigskip
 
 \begin{definition}[Symetrizace orientovaného grafu]
 Nechť $G = (V, E)$ je orientovaný graf. \textbf{Symetrizace} grafu $G$ je neorientovaný graf $sym(G) = (V, E')$, kde pro každé dva vrcholy $u, v \in V$ platí:
@@ -245,13 +242,11 @@ Orientovaný graf $G = (V, E)$ je \textbf{silně souvislý}, pokud pro každé d
     \input{Obrázky/SlabaSilnaSouvislost}
 \end{center}
 
-\newpage
-
 % ============================================================
 \section{Izomorfismus a automorfismus grafů}
 % ============================================================
 
-Často se může stát, kdy se bavíme o dvou grafem, které jsou strukturou identické. Ale mají například lehce jinak nakreslené/pojmenované. V tomto případě mluvíme o izomorfismu grafů. \bigskip
+Často se může stát, kdy se bavíme o dvou grafech, které jsou strukturou identické, ale jsou například jinak nakreslené nebo pokud mají jinak označené vrcholy. Abychom vyjádřili do jisté míry rovnost těchto grafů, zavádíme následující pojmy. \bigskip
 
 \begin{definition}[Izomorfismus grafů]
 Nechť $G$ a $H$ jsou dva grafy. Zobrazení $f : V(G) \to V(H)$ nazveme \textbf{izomorfismem grafů} $G$ a $H$, pokud platí:

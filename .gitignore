@@ -8,3 +8,6 @@
 *.fdb_latexmk*.fls
 *.fdb_latexmk*.fls
 *.fdb_latexmk
+
+
+slidy/

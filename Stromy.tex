@@ -1,15 +1,16 @@
 \section{Stromy}
-Stromy jsou jedny z nejdůležitějších skupin grafů. Budeme je využívat v algoritmech stejně tak jako v mnoha datových strukturách. V této části si formálně zadefinujeme strom a podíváme se na jeho vlastnosti.
+Nyní se budeme věnovat třídě grafů nazývanou stromy. Je to jedna z nejdůležitějších skupin. Budeme je využívat v algoritmech stejně tak jako v mnoha datových strukturách. Pojďme si formálně zadefinovat stromy a podívat se na jejich vlastnosti.
 
 \begin{definition}
-  Graf $G$ je \textbf{strom}, právě když je souvislý a acyklický.
+  Graf $G$ je \textbf{strom}, právě tehdy když je souvislý a acyklický.
 \end{definition}
 
-Strom je tedy libovolný souvislý graf, který neobsahuje kružnice.
+Strom je tedy libovolný souvislý graf, který neobsahuje cykly.
 
 Pro nesouvislý acyklický graf používáme název \textbf{les}.
+
 \begin{definition}
-  Graf $G$ je \textbf{les}, právě když je acyklický (nemusí být souvislý).
+  Graf $G$ je \textbf{les}, právě když je acyklický.
 \end{definition}
 
 \begin{definition}
@@ -18,64 +19,71 @@ Pro nesouvislý acyklický graf používáme název \textbf{les}.
 
 List je tedy jakýkoli vrchol v libovolném grafu stupně 1. Ještě si dovolíme poznámku: V anglických textech se list (tedy \textit{leaf}) používá pouze pro vrcholy stupně 1 v lesích nebo stromech. V obecném grafu se nazývají \textit{pendent vertex}.
 
-
-\vspace{1mm}
-\begin{tikzpicture}[
-    vnode/.style={circle, draw, minimum size=7mm, inner sep=0pt}
-]
-    % --- Graph (a) ---
-    \node[vnode] (a2) at (0, 2) {2};
-    \node[vnode] (a1) at (-1, 0.8) {1};
-    \node[vnode] (a4) at (1.1, 2.7) {4};
-    \node[vnode] (a5) at (1.5, 1.2) {5};
-    \node[vnode] (a3) at (0.7, 0.1) {3};
-
-    \draw (a2) -- (a1);
-    \draw (a2) -- (a4);
-    \draw (a2) -- (a5);
-    \draw (a5) -- (a3);
-
-    \node at (0.2, -0.8) {(a) Strom};
-
-    % --- Graph (b) ---
-    \node[vnode] (b2) at (5, 1.8) {2};
-    \node[vnode] (b1) at (4.1, 0.8) {1};
-    \node[vnode] (b3) at (5.4, 0.1) {3};
-    \node[vnode] (b4) at (6.2, 2.7) {4};
-    \node[vnode] (b5) at (6.6, 1.2) {5};
-
-    \draw (b2) -- (b1);
-    \draw (b2) -- (b3);
-    \draw (b4) -- (b5);
-
-    \node at (5.3, -0.8) {(b) Les};
-    
-    % Bounding box for padding
-    \useasboundingbox (-1.5, -1.2) rectangle (8, 3.5);
-\end{tikzpicture}
-\vspace{0.5cm}
+\input{Obrázky/Tree.tex}
 
 \subsection{Vlastnosti stromu}
 
-\begin{theorem}[Věta o trhání listů]
+\begin{theorem}[Věta o existenci listů]
 Každý strom $T$ s alespoň $2$ vrcholy obsahuje alespoň dva listy.
 \end{theorem}
 
-\begin{proof}
 Důkaz provedeme sporem.
 
 \medskip
-\noindent\textbf{Myšlenka důkazu:} Vybereme si nějakou nejdelší cestu ve stromě a tvrdíme, že její krajní vrcholy jsou listy. Pokud si představíte, jak taková cesta musí vypadat, mělo by být vidět, jak jsme k tomuto tvrzení dospěli. Spor získáme jednoduše tak, že tuto nejdelší cestu prodloužíme. Prodlužování nejdelších cest je velmi časté v důkazech sporem a jistě se vám bude ještě hodit.
+\noindent Myšlenka důkazu: Vybereme si nějakou nejdelší cestu ve stromě a tvrdíme, že její krajní vrcholy jsou listy. Pokud si představíte, jak taková cesta musí vypadat, mělo by být vidět, jak jsme k tomuto tvrzení dospěli. Spor získáme jednodušše tak, že tuto nejdelší cestu prodloužíme. Prodlužování nejdelších cest je velmi časté v důkazech sporem a jistě se vám bude ještě hodit.
 
 \medskip
-\noindent\textbf{Důkaz:} Pro spor nechť je graf $G$ strom a $P$ je nějaká nejdelší cesta v grafu $G$ s krajními vrcholy $u$ a $v$. Předpokládejme, že alespoň jeden z nich není list v grafu $G$.
+\begin{proof}
+\noindent Pro spor nechť je graf $G$ strom a $P$ je nějaká nejdelší cesta v grafu $G$ s krajními vrcholy $u$ a $v$. Předpokládejme, že alespoň jeden z nich není list v grafu $G$. \\
 
-BUNO $u$ je krajní vrchol, který není list. Musí tedy mít alespoň $2$ hrany (nemůže mít $0$, protože je součástí cesty). Označme $e = \{u,w\}$ hranu, která není obsažena v $P$. Nyní rozlišujeme dva případy:
+\noindent Ať je $u$ krajním vrcholem, který není list. Musí tedy mít alespoň $2$ hrany (nemůže mít $0$, protože je součástí cesty). Označme $e = \{u,w\}$ hranu, která není obsažena v $P$. Nyní rozlišujeme dva případy:
 
 \begin{enumerate}
-    \item Pokud by $w$ byl součástí cesty $P$, pak by v grafu byl cyklus. To je spor s tím, že $G$ je strom (strom je acyklický).
+    \item Pokud by byl vrchol $w$ součástí cesty $P$, pak by v grafu byl cyklus. To je spor s tím, že $G$ je strom (strom je acyklický).
     \item Pokud by $w$ součástí cesty nebyl, pak lze cestu $P$ prodloužit přidáním vrcholu $w$ za vrchol $u$. To je spor s předpokladem, že $P$ je nejdelší cesta v $G$.
 \end{enumerate}
 
 V obou případech jsme dospěli ke sporu. Tvrzení tedy platí.
 \end{proof}
+
+\noindent Další důležitou vlastností stromů je ta, že pokud odebereme nebo přidáme do grafu list, graf stále zůstane stromem.
+
+\noindent Pro jednoduchost zavedeme tuto notaci $G - v = (V \setminus \{v\}, E \setminus \{e \in E | v \in e\})$. Tedy $G-v$ je jednodušše Graf $G$ bez vrcholu $v$. Podobně pak i notaci $G + v$.
+
+\begin{theorem}[Věta o trhání listů]
+Nechť $G = (V, E)$ je graf s alespoň $2$ vrcholy a nechť $v \in V$ je jeho list. Pak jsou následující tvrzení ekvivalentní: \begin{enumerate} \item $G$ je strom, \item $G - v$ je strom. 
+\end{enumerate} 
+\end{theorem}
+
+\begin{proof}
+Dokážeme ekvivalenci obou tvrzení pomocí dvou implikací:
+\begin{description}
+    \item[$1 \Rightarrow 2$] (Předpokládáme, že $G$ je strom, a dokazujeme, že $G - v$ je strom, tj. potřebujeme dokázat souvislost a acykličnost):
+    \begin{itemize}
+        \item \textbf{$G - v$ je souvislý:} Zvolme libovolné dva vrcholy $x, y \in V \setminus \{v\}$ a cestu $P$ mezi nimi v $G$ (ta existuje díky souvislosti $G$). Všechny vrcholy cesty $P$ kromě krajních mají stupeň $2$, tedy vrchol $v$ nemůže být součástí této cesty, to znamená že mezi všemi dvojicemi vrcholů stále existuje tato cesta i po odebrání $v$.
+
+        \item \textbf{$G - v$ je bez kružnic:} Odebráním vrcholu z acyklického grafu jsme jistě nemohli vytvořit cyklus. 
+    \end{itemize}
+    Graf $G - v$ je souvislý a bez kružnic, je to tedy strom.
+    
+    \item[$2 \Rightarrow 1$] (Předpokládáme, že $G - v$ je strom, a dokazujeme, že $G$ je strom):
+    \begin{itemize}
+        \item \textbf{$G$ je bez kružnic:} Přidáním listu $v$ ke stromu $G - v$ (vrácením listu $v$ do grafu $G$) nelze vytvořit cyklus (vrcholy které jsou součástí cyklu )
+
+        \item \textbf{$G$ je souvislý:} Mezi každými dvěma vrcholy $x, y \in V \setminus \{v\}$ vede cesta již v $G - v$. Ať je jediný soused listu $v$ vrchol $w$. Mezi ním a všemi ostatními vrcholy grafu $G-v$ existuje cesta. Z vrcholu $v$ do libovolného vrcholu $u$ grafu $G$ vznikne cesta tak, že pouze prodloužíme $u\text{--}w$ cestu o hranu $\{w,v\}$.
+    \end{itemize}
+    Graf $G$ je tedy souvislý a bez kružnic, což znamená, že je to strom.
+\end{description}
+\end{proof}
+
+\noindent Nakonec se podívejme na nějaké tvrzení ekvivalentní k tvrzení, že graf je strom.
+
+\begin{theorem}[Věta o charakterizaci stromů]
+Nechť $G = (V, E)$ je graf. Pak jsou následující tvrzení ekvivalentní:
+\begin{enumerate}
+    \item $G$ je strom,
+    \item pro každé dva vrcholy $u, v \in V$ existuje právě jedna $u$-$v$-cesta,
+    \item $G$ je souvislý a vynecháním libovolné hrany vznikne nesouvislý graf,
+    \item $G$ je souvislý a $|E| = |V| - 1$.
+\end{enumerate}
+\end{theorem}
