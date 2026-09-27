@@ -5,9 +5,9 @@ Nyní se budeme věnovat třídě grafů nazývanou stromy. Je to jedna z nejdů
   Graf $G$ je \textbf{strom}, právě tehdy když je souvislý a acyklický.
 \end{definition}
 
-Strom je tedy libovolný souvislý graf, který neobsahuje cykly.
+\noindent Strom je tedy libovolný souvislý graf, který neobsahuje cykly.
 
-Pro nesouvislý acyklický graf používáme název \textbf{les}.
+\noindent Pro nesouvislý acyklický graf používáme název \textbf{les}.
 
 \begin{definition}
   Graf $G$ je \textbf{les}, právě když je acyklický.
@@ -17,7 +17,7 @@ Pro nesouvislý acyklický graf používáme název \textbf{les}.
   Vrchol $v$ v grafu $G$ nazveme \textbf{list}, pokud platí pokud $\deg_G(v) = 1$.
 \end{definition}
 
-List je tedy jakýkoli vrchol v libovolném grafu stupně 1. Ještě si dovolíme poznámku: V anglických textech se list (tedy \textit{leaf}) používá pouze pro vrcholy stupně 1 v lesích nebo stromech. V obecném grafu se nazývají \textit{pendent vertex}.
+\noindent List je tedy jakýkoli vrchol v libovolném grafu stupně 1. Ještě si dovolíme poznámku: V anglických textech se list (tedy \textit{leaf}) používá pouze pro vrcholy stupně 1 v lesích nebo stromech. V obecném grafu se nazývají \textit{pendent vertex}.
 
 \input{Obrázky/Tree.tex}
 
@@ -27,7 +27,7 @@ List je tedy jakýkoli vrchol v libovolném grafu stupně 1. Ještě si dovolím
 Každý strom $T$ s alespoň $2$ vrcholy obsahuje alespoň dva listy.
 \end{theorem}
 
-Důkaz provedeme sporem.
+\noindent Důkaz provedeme sporem.
 
 \medskip
 \noindent Myšlenka důkazu: Vybereme si nějakou nejdelší cestu ve stromě a tvrdíme, že její krajní vrcholy jsou listy. Pokud si představíte, jak taková cesta musí vypadat, mělo by být vidět, jak jsme k tomuto tvrzení dospěli. Spor získáme jednodušše tak, že tuto nejdelší cestu prodloužíme. Prodlužování nejdelších cest je velmi časté v důkazech sporem a jistě se vám bude ještě hodit.
@@ -43,8 +43,8 @@ Důkaz provedeme sporem.
     \item Pokud by $w$ součástí cesty nebyl, pak lze cestu $P$ prodloužit přidáním vrcholu $w$ za vrchol $u$. To je spor s předpokladem, že $P$ je nejdelší cesta v $G$.
 \end{enumerate}
 
-V obou případech jsme dospěli ke sporu. Tvrzení tedy platí.
-\end{proof}
+\noindent V obou případech jsme dospěli ke sporu. Tvrzení tedy platí.
+\end{proof} \bigskip
 
 \noindent Další důležitou vlastností stromů je ta, že pokud odebereme nebo přidáme do grafu list, graf stále zůstane stromem.
 
@@ -87,3 +87,21 @@ Nechť $G = (V, E)$ je graf. Pak jsou následující tvrzení ekvivalentní:
     \item $G$ je souvislý a $|E| = |V| - 1$.
 \end{enumerate}
 \end{theorem}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
