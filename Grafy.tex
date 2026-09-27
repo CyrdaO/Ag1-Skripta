@@ -11,7 +11,8 @@ Toto se tedy v tomto kurzu naučíte, pojďme ale k věci a konečně si přesn�
 
 \newpage
 
-\section{Základy teorie grafů}
+\section{1. Přednáška}
+\subsection{Základy teorie grafů}
 
 \noindent Jak už jsme zmiňovali, budeme se zde zabývat grafy. Proto si nyní první z nich zavedeme.
 
@@ -79,7 +80,7 @@ Má-li cesta $P$ v grafu $G$ koncové vrcholy $s = v_0$ a $t = v_k$, mluvíme o 
 
 \newpage
 
-\section{Algoritmus BFS (Breadth-First Search)}
+\subsection{Algoritmus BFS (Breadth-First Search)}
 
 \noindent Nyní si představíme velmi důležitý algoritmus BFS neboli Breath-First search. Ten slouží pro nalezení nejkratší cesty mezi vrcholy. S jeho znalostí, pokud převedeme náš problém na graf, tak zvládneme najít nejkratší řešení.
 
@@ -166,7 +167,7 @@ Po skončení algoritmu $BFS(G, s)$ platí následující vlastnosti pro každý
 \end{itemize}
 \end{theorem} \bigskip
 
-\subsection{Důkazy správnosti BFS}
+\subsubsection{Důkazy správnosti BFS}
 
 \begin{proof}[Důkaz Vlastnosti 1]
 Připomínáme, že prvním otevřeným a následně uzavřeným vrcholem je startovní vrchol $s$. Algoritmus otevírá všechny dosud nenalezené sousedy právě zpracovávaného vrcholu. Zmiňme ještě, že dosažitelný vrchol říkáme vrcholu, do kterého existuje cesta z vrcholu $s$ (tedy samotný $s$ toto také splňuje).
@@ -215,7 +216,7 @@ Tento spor dokazuje, že žádná kratší cesta neexistuje, a tedy $d(s, v) = i
 
 Na závěr této části bychom ještě rádi doporučili vyřešit si miniprogtest na BFS, nejenže díky tomu BFS lépe pochopíte, ale také vám usnadní řešení progtestu velkého.
 
-\section{Speciální třídy grafů a vlastnosti}
+\subsection{Speciální třídy grafů a vlastnosti}
 
 Nyní si zavedeme pár speciálních grafů o kterých se často budeme bavit. Důležité je jejich značení. Úplný graf je $K_n$, Úplný bipartnitní graf je $K_{n,m}$, Kružnice je $C_n$ a Cesta je $P_n$. Kde n značí počet vrcholů.
 
@@ -288,7 +289,7 @@ Nechť $G = (V, E)$ je graf a $v \in V$ jeho vrchol.
 
 
 
-\section{Věta o principu sudosti}
+\subsection{Věta o principu sudosti}
 
 Princip sudosti nám říká, že každý graf musí mít dohromady sudý počet stupňů. Proč je to pravda? Každá hrana má dva vrcholy a každý z těchto vrcholů si započítá 1 stupeň. Tedy za každou hranu máme 2 stupně. \newline
 
@@ -397,4 +398,4 @@ Orientovaná hrana tvaru $(u, u)$ se nazývá \textbf{smyčka}.
 
 \newpage
 
-\section{Modifikace BFS - První zápočtovka}
+\subsection{Modifikace BFS - První zápočtovka}

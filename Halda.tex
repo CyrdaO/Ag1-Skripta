@@ -1,5 +1,7 @@
+\section{4. Přednáška}
+
 % ============================================================
-\section{Zakořeněné a binární stromy}
+\subsection{Zakořeněné a binární stromy}
 % ============================================================
 
 Od tohoto momentu se postupně začneme bavit o datovách strukturách. Jako první si zavedeme pomocné definice zakořenění a binárního stromu. Pomocí nich budeme poté definovat další datové struktury. Např. binární vyhledávací strom nebo minimovou haldu. \bigskip
@@ -31,7 +33,7 @@ Strom nazveme \textbf{binární}, pokud:
 \newpage
 
 % ============================================================
-\section{Binární minimová halda}
+\subsection{Binární minimová halda}
 % ============================================================
 
 První datovou strukturou je binární minimová halda. Je velmi důležitá, pomocí ní dokážeme efektivně získávat minima z množiny prvků. Alternativně u maximové maxima, nebo mediánové medián apod. Pomocí ní je implementována např. prioritní fronta v c++. Dále je možné pomocí ní řadit díky algoritmu HeapSort. \medskip
@@ -67,7 +69,7 @@ Pro formální praci s haldou $H$ udržujeme následující atributy:
 \end{remark} \bigskip
 
 % ------------------------------------------------------------
-\subsection{Strukturální vlastnosti haldy}
+\subsubsection{Strukturální vlastnosti haldy}
 
 \begin{lemma}[Počet hladin haldy]
 Binární halda obsahující $n$ prvků má právě $\floor{\log_2 n} + 1$ hladin.
@@ -113,7 +115,7 @@ Důkaz provedeme matematickou indukcí podle počtu vrcholů $n$.
 
 Halda má tři základní operace, které provádí efektivně. A to HeapInsert, HeapFindMin a HeapExtractMin. Z názvu plyne co dělají a nyní si ukážeme jejich implementaci. \bigskip
 
-\subsection{Vyhledání minima (HeapFindMin)}
+\subsubsection{Vyhledání minima (HeapFindMin)}
 Nalezení minimálního prvku je triviální díky vlastnosti haldového uspořádání. Globální minimum se nachází vždy v kořeni a na ten si držíme ukazatel. Stihneme to určitě za $\bigO{1}$. \bigskip
 
 \funkce{HeapFindMin}{halda $H$}
@@ -121,7 +123,7 @@ Nalezení minimálního prvku je triviální díky vlastnosti haldového uspoř�
 \item return $H.root$
 \end{pseudocode} \medskip
 
-\subsection{Vložení prvku (HeapInsert)}
+\subsubsection{Vložení prvku (HeapInsert)}
 Při vkládání nového klíče $x$ vytvoříme nový vrchol $v$ a rovnou ho vložíme jako nejpravějšího syna na poslední hladině. Jenže jsme tím mohli rozbít haldové uspořádání, tedy že otec $o$ bude najednou větší než $k$, $k(o)$ > $x$. V tomto případě musíme vrcholy $v$ a $o$ prohodit (druhého syna nerozbijeme, jelikož je větší než otec a toho vyměníme za menší prvek). Tento problém se může opakovat až cestou do kořene, a tak prohazujeme dokud je to potřeba. V nejextrémějším případě se z vrcholu $v$ stane kořen, tedy globální minimum. Této operaci opravy říkáme BubbleUp. Díky logaritmické hloubce haldy stihneme celý HeapInsert za $\bigO{\log(n)}$.\bigskip
 
 \funkce{HeapInsert}{halda $H$, klíč $k$}
@@ -154,7 +156,7 @@ Pokud H je prázdná, pak je výsledkem jednoprvková halda – hotovo. V opačn
 
 \newpage
 
-\subsection{Odebrání minima (HeapExtractMin)}
+\subsubsection{Odebrání minima (HeapExtractMin)}
 Kořen nemůžeme odstranit přímo, jelikož by jsme těžko hledali další minimum (museli by jsme projít celou haldu, tedy by nám operace trvala lineární čas). Proto se využívá trik. Prohodíme klíč v kořeni s klíčem $H.last$. Poslední list poté jednoduše odstraníme. Jenže náš nový klíč v kořeni nyní pravděpodobně porušuje haldové uspořádání. A tak ho postupně zabubláme dolů pomocí prohození vždy s menším z klíčů synů. Každé prohození zabere konstantní množství operací a hladin je v haldě logaritmicky, tedy to stihneme za $\bigO{\log(n)}$.\bigskip
 
 \funkce{HeapExtractMin}{halda $H$}
@@ -210,11 +212,8 @@ Nechť vrchol $v$ má v poli index $i \in \{1, \dots, n\}$. Pak platí:
 \bigskip
 
 % ============================================================
-\subsection{Rychlá konstrukce haldy a HeapSort}
+\subsection{Rychlá konstrukce haldy (heapBuild}
 % ============================================================
-
-\subsection{Lineární konstrukce haldy (HeapBuild)}
-
 
 Na vstupu máme pole prvků a chceme z něj postavit haldu. Jednoduchý způsob je $n$ krát zavolat operaci HeapInsert. Tímto způsobem to stihneme za $\bigO{n\log(n)}$. Existuje, ale lepší způsob. Uvědomíme si všechny listy, kterých je právě $\ceil{n/2}$ již tvoří haldy. Opravit musíme tedy pouze vnitřní vrcholy postupným zabubláváním dolů, od těch nejhlouběji směrem ke kořeni, čímž rozšíříme opravené haldy. Většina vrcholů se nebude zabublávat přes celou hloubku haldy. Kvalitnější analýzou zjistíme, že celá operace HeapBuild lze stihnout za $\bigO{n}$.\bigskip
 
@@ -262,7 +261,7 @@ Pomocí haldy můžeme vytvořit řadící algoritmus HeapSort. Funguje tak, že
 \newpage
 
 % ============================================================
-\section{Amortizovaná časová složitost}
+\subsection{Amortizovaná časová složitost}
 % ============================================================
 
 Stává se, že jednou za čas musíme časově zaplatit velmi drahou operaci. Například zdvojnásobení velikosti pole. Znamená to tedy že složitost operace PushBack je $\bigO{n}$? Ne úplně, jelikož se toto zvětšení stane jednou za delší čas, dokážeme jeho cenu naúčtovat všem předešlým voláním. Tedy rozmělnit tu cenu mezi dřívější volání. Této ceně se říká amortizovaná. A víc ukazuje reálnou cenu dané operace.\bigskip
@@ -272,7 +271,7 @@ Operace A nad dynamickou datovou strukturou má v daném kontextu svého provád
 \end{definition}\bigskip
 
 % ------------------------------------------------------------
-\subsection{Příklad 1: Nafukovací pole}
+\subsubsection{Příklad 1: Nafukovací pole}
 
 Uvažujme dynamické pole $P$ s počáteční kapacitou $m = 1$. Jakmile celé pole naplníme, tak kapacitu zdvojnásobíme. Následně všechny prvky překopírujeme do nového pole s velikostí $2m$. (V reálné implementaci je šance, že se při zdvojnásobení pole stále vejde na původní místo v paměti a poté není potřeba kopírovat. My řešíme nejhorší možný případ, proto tuto možnost zanedbáváme)\bigskip
 
@@ -306,7 +305,7 @@ Celková časová složitost posloupnosti $n$ operací je tedy $\bigTheta{n} + \
 \newpage
 
 % ------------------------------------------------------------
-\subsection{Příklad 2: Binární sčítačka}
+\subsubsection{Příklad 2: Binární sčítačka}
 
 Uvažujme $k$-bitovou sériovou sčítačku. Operace Inc zvýší její hodnotu o jedna postupným otáčením bitů zprava do leva. V nejhorší případě musíme otočit všechny bity za $\bigO{k}$. Např. Inc na 011 otočí všechny bity na 100. \bigskip
 

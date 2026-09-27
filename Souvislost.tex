@@ -1,5 +1,7 @@
+\section{2. Přednáška}
+
 % ============================================================
-\section{Souvislost grafu a souvislé komponenty}
+\subsection{Souvislost grafu a souvislé komponenty}
 % ============================================================
 
 Souvislost je jednou ze základních vlastností grafů. Díky ní víme, že z libovolného vrcholu $v$ se dostaneme do libovolného vrcholu $u$. \bigskip
@@ -106,7 +108,7 @@ Dostaneme-li vrchol $s$ jak najít jeho souvislou komponentu? K tomuto nám sta�
 \newpage
 
 % ============================================================
-\section{Výpočetní model RAM}
+\subsection{Výpočetní model RAM}
 % ============================================================
 
 Z PAx jistě znáte časovou a paměťovou složitost programu. Abychom ale mohli analyzovat složitosti algoritmu, musíme si zadefinovat nějaký model počítače. Počítače se často hodně liší, různé istrukce trvají jinak dlouho, atd. Proto si zavedeme teoretický model počítače, který modeluje to, co všichni přibližně od běžného počítače očekáváme.
@@ -145,7 +147,7 @@ Složitost algoritmu v nejhorším případě pro vstup velikosti $n$ definujeme
 
 Samotný graf můžeme v modelu RAM reprezentovat různými způsoby. Některé způsoby jsou lepší na rychlejší vyhledávání, jiné třeba víc spoří pamětí. Při programování zvolte způsob dle vašich požadavků. Zde si představíme dva možné a to matici sousednosti a seznam sousedů. \bigskip
 
-\subsection{Matice sousednosti}
+\subsubsection{Matice sousednosti}
 \begin{definition}[Matice sousednosti]
 Nechť $G = (V, E)$ je neorientovaný graf s množinou vrcholů $V = \{v_1, v_2, \dots, v_n\}$. \textbf{Matice sousednosti} grafu $G$ je čtvercová matice $A_G = (a_{i,j})_{i,j=1}^n$ typu $n \times n$ definovaná předpisem:
 $$a_{i,j} = \begin{cases} 1 & \text{pokud } \{v_i, v_j\} \in E, \\ 0 & \text{jinak.} \end{cases}$$
@@ -155,7 +157,7 @@ $$a_{i,j} = \begin{cases} 1 & \text{pokud } \{v_i, v_j\} \in E, \\ 0 & \text{jin
 Pro neorientovaný graf je matice $A_G$ vždy symetrická podle hlavní diagonály. Diagonální prvky $a_{i,i}$ jsou nulové (neorientovaný graf nemá smyčky). Paměťová složitost této reprezentace je vždy \textbf{$\bigO{n^2}$}, což je nevýhodné pro řídké grafy ($m \ll n^2$). Výhodou je zarovnaný přístup do paměti a díky tomu i dobrá cache.
 \end{remark} \bigskip
 
-\subsection{Seznam sousedů}
+\subsubsection{Seznam sousedů}
 \begin{definition}[Seznam sousedů]
 V reprezentaci \textbf{seznamem sousedů} uchováváme pro každý vrchol $v \in V(G)$ jednosměrně či obousměrně vázaný seznam všech jeho sousedů (tedy vrcholů $w$, pro které $\{v, w\} \in E$).
 \end{definition} \bigskip
@@ -164,7 +166,7 @@ V reprezentaci \textbf{seznamem sousedů} uchováváme pro každý vrchol $v \in
 Paměťová složitost se skládá z pole o velikosti $|V| = n$ pro začátky seznamů a z celkem $2|E| = 2m$ prvků v seznamech (každá neorientovaná hrana je uložena dvakrát -- u obou svých koncových vrcholů). Celková paměťová složitost je tedy \textbf{$\bigO{n + m}$}, což je optimální a velmi efektivní pro řídké grafy. V progtestech jsem volil tento způsob a prošel mi naprosto v pohodě:D
 \end{remark} \bigskip
 
-\subsection{Reprezentace orientovaného grafu}
+\subsubsection{Reprezentace orientovaného grafu}
 U orientovaných grafů reprezentujeme hrany jako uspořádané dvojice:
 \begin{itemize}
     \item \textbf{Matice sousednosti} obsahuje $a_{i,j} = 1$ právě tehdy, když v grafu existuje orientovaná hrana $(v_i, v_j) \in E$. Tato matice obecně \textbf{není symetrická}.
@@ -176,7 +178,7 @@ U orientovaných grafů reprezentujeme hrany jako uspořádané dvojice:
 \end{center}
 
 % ============================================================
-\section{Časová složitost algoritmu BFS}
+\subsection{Časová složitost algoritmu BFS}
 % ============================================================
 
 Díky zavedení modelu RAM nyní můžeme konečně dokázat časovou složitost algoritmu BFS
@@ -220,7 +222,7 @@ Algoritmus vnějším cyklem projde všechny vrcholy $v \in V(G)$ postupně. Zvo
 \newpage
 
 % ============================================================
-\section{Slabá a silná souvislost orientovaných grafů}
+\subsection{Slabá a silná souvislost orientovaných grafů}
 % ============================================================
 
 Pro orientované grafy je potřeba pojem souvislosti trochu rozšířit. Rozlišujeme dva druhy. Slabou a silnou souvislost. U Slabé souvislosti se ke hranám chováme, jako by byly neorientované. U Silné souvislosti naopak požadujeme, aby existovala orientovaná cesta mezi libovolnými dvěma vrcholy. Prvně si zavedeme pomocnou definici a to symetrizaci grafu neboli to již zmiňované ignorování orientac hran. \bigskip
@@ -243,7 +245,7 @@ Orientovaný graf $G = (V, E)$ je \textbf{silně souvislý}, pokud pro každé d
 \end{center}
 
 % ============================================================
-\section{Izomorfismus a automorfismus grafů}
+\subsection{Izomorfismus a automorfismus grafů}
 % ============================================================
 
 Často se může stát, kdy se bavíme o dvou grafech, které jsou strukturou identické, ale jsou například jinak nakreslené nebo pokud mají jinak označené vrcholy. Abychom vyjádřili do jisté míry rovnost těchto grafů, zavádíme následující pojmy. \bigskip

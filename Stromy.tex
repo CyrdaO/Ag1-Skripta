@@ -1,7 +1,7 @@
+\section{3. Přednáška}
 
 
-
-\section{Stromy}
+\subsection{Stromy}
 Nyní se budeme věnovat třídě grafů nazývanou stromy. Je to jedna z nejdůležitějších skupin. Budeme je využívat v algoritmech stejně tak jako v mnoha datových strukturách. Pojďme si formálně zadefinovat stromy a podívat se na jejich vlastnosti.
 
 \begin{definition}
@@ -23,7 +23,7 @@ Nyní se budeme věnovat třídě grafů nazývanou stromy. Je to jedna z nejdů
 
 \input{Obrázky/Tree.tex}
 
-\subsection{Vlastnosti stromu}
+\subsubsection{Vlastnosti stromu}
 
 \begin{theorem}[Věta o existenci listů]
 Každý strom $T$ s alespoň $2$ vrcholy obsahuje alespoň dva listy.
@@ -78,6 +78,7 @@ Dokážeme ekvivalenci obou tvrzení pomocí dvou implikací:
 \end{description}
 \end{proof}
 
+\subsection{Ekvivlentní definice stromu}
 
 \noindent Každý pojem jde zadefinovat více způsoby a v určitých případech se nám i hodí alternativní definice. Proto si zde ukážeme alternativní definice ke stromu. Jediné co je potřeba je ukázat ekvivalenci těchto definic.
 
@@ -161,7 +162,7 @@ Jelikož je graf $H$ souvislý a má právě $|V| - 1$ hran, je podle Věty o ch
 \newpage
 
 % ============================================================ %
-\section{Topologické uspořádání}
+\subsection{Topologické uspořádání}
 % ============================================================ %
 
 Představte si klasický problém, kdy má spoustu úkolů a ty na sobě různě závisý. Např. úkol X lze začít plnit až za úkolem Y. My chceme zjistit zda takovýto soubor úkolů lze vůbec vyřešit, dokonce pokud lze, tak jaké části lze řešit paralelně. K tomu nám pomůže topologické uspořádání a algoritmus topSort. \bigskip
@@ -208,7 +209,7 @@ Tímto způsobem vytváříme posloupnost vrcholů $v_1, v_2, v_3, \dots$. Proto
 
 \newpage
 
-\subsection{Algoritmus TopSort}
+\subsubsection{Algoritmus TopSort}
 
 Existence zdroje nám dává nápad na algoritmus. V každém kroku nalezneme zdroj, zpracujeme ho a odebere z grafu $G$. Takto vyrobíme topologické uspořádání grafu $G$. Pokud by jsme v nějakém kroku nebyli schopni nalézt zdroj, poté $G$ musí obsahovat cyklus a topologické uspořádání nelze nalézt.\bigskip
 
@@ -253,7 +254,7 @@ Inicializace a výpočet vstupních stupňů trvá $\bigTheta{|E|}$. Každý vrc
 \newpage
 
 % ============================================================ %
-\section{Problém řazení a kvadratické algoritmy}
+\subsection{Problém řazení a kvadratické algoritmy}
 % ============================================================ %
 
 S řažením se již každý setkal v PAX. Cílem je uspořádat si data podle nějakého klíče. To nám následně pomůže při jejich obsluze. V této kapitole si představíme kvadratické řadící algoritmy a jejich vlastnosti. Ty se kvůli jejich složitosti vyplatí používat na menší data. Zároveň rozhodně neplatí, že by nějaké řadící algoritmy byli lepší než jiné. Některé využívají více paměti, jiné mají dobrou cache hit rate. Záleží na situaci. \medskip
@@ -273,7 +274,7 @@ S řažením se již každý setkal v PAX. Cílem je uspořádat si data podle n
 \end{enumerate}
 \end{definition} \bigskip
 
-\subsection{Základní kvadratické algoritmy}
+\subsubsection{Základní kvadratické algoritmy}
 
 \noindent \textbf{SelectSort}: Rozdělí pole na levou seřazenou a pravou neseřazenou část. V každém kroku najde minimum v neseřazené části a prohodí ho s jejím prvním prvkem. Ten je poté seřazený a tím se nám posune hranice mezi těmito částmi. Pokračujeme dokud celé pole neni seřazené. Vlastnosti:
 \begin{itemize}
