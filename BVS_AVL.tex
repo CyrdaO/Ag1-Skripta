@@ -39,11 +39,15 @@ Pak dodefinujeme, že $T(\emptyset)$ je prázdný strom a $h(T(\emptyset)) = 0$.
     \end{itemize}
 \end{definition} \bigskip
 
+\newpage
+
 \subsection{BVS Algoritmy}
 
 \begin{remark}
 Na BVS je pár důležitých operací. Doporučuju pochopit princip těchto algoritmů než se učit pseudokód nazpaměť.
 \end{remark} \bigskip
+
+\subsection{BVSShow}
 
 \noindent První je algoritmus BVSShow. Jeho cílem je provést InOrder průchod stromu a vypsat všechny klíče vzestupně. Z definice BVS víme, že pro každý vrchol $v$ platí: klíče v jeho levém podstromě jsou menší a klíče v pravém podstromě větší. Aby algoritmus vypsal klíče ve vzestupném pořadí, musí se nejprve co nejvíce zanořit doleva, k nejmenším klíčům. Teprve po návratu z levého syna vypíše klíč aktuálního vrcholu a poté pokračuje do pravého syna, kde jsou klíče větší. Tento postup se opakuje pro každý vrchol stromu.
 Jelikož v každém vrcholu strávíme konstantní čas, celková časová složitost algoritmu je $\bigO{|T(v)|}$. \bigskip
@@ -58,6 +62,8 @@ Jelikož v každém vrcholu strávíme konstantní čas, celková časová slož
   \item Zavoláme \textcolor{blue}{BVSShow}($r(v)$)
 \end{pseudocode} \bigskip
 
+\subsection{BVSMin}
+
 \noindent BVSMin/BVSMax. Jeho cílem je vypsat minimální/maximální hodnotu klíče ve stromě. Pro minimální klíč se z daného vrcholu zanořujeme stále doleva. Jakmile vrchol již levého syna nemá, pak je minimálním. Analogicky pro maximum, pouze se zanořujeme doprava. V kažédm vrcholu provedeme konstantě operací tedy celkem provedeme $\bigO{h(T(v))}$\bigskip
 
 \noindent \textbf{Vstup}: Ukazatel na vrchol $v$ libovolného BVS $T(v)$ \newline
@@ -68,6 +74,8 @@ Jelikož v každém vrcholu strávíme konstantní čas, celková časová slož
   \item Pokud $\ell(v) = \emptyset$: return $k(v)$
   \item Zavoláme \textcolor{blue}{BVSMin}($\ell(v)$)
 \end{pseudocode} \bigskip
+
+\subsection{BVSFind}
 
 \noindent BVSFind slouží k nalezení vrcholu ke klíči v BVS. Dostaneme na vstupu ukazatel na kořen $v$ BVS a hledaný klíč. Nyní postupuje následovně, pokud je hledaný klíč větší než $k(v)$. Tak musíme jít do pravého podstromu $R(v)$, kde jsou klíče větší. Analogicky pro menší klíč. Dokud buďto nenalezneme vrchol s hledaným klíčem nebo nevylezeme ze stromu. V každém vrcholu provedeme pouze konstantě mnoho operací a celkem tedy $\bigO{h(T(v))}$. \bigskip
 
@@ -81,6 +89,8 @@ existuje, jinak $\emptyset$. \newline
     \item Pokud $k(v) < x$: return \textcolor{blue}{BVSFind}($r(v)$)
     \item return $v$
 \end{pseudocode} \bigskip
+
+\subsection{BVSPred}
 
 \noindent BVSPred a BVSSucc slouží k získání předchůdce/následníka nějakého vrcholu $v$ v BVS $T$. Pro předchůdce, je to vždy takový klíč $x$, který je největší ze všech klíčů menších než $x$ v $T$. Jak ho nalezneme? Rozlišujeme zde dva případy, ten lehčí je když vrchol $v$ má levého syna. V tom případě je předchůdce vrchol s maximálním klíčem z celého levého podstromu $L(v)$. To platí, jelikož jsou všechny klíče v $L(v)$ menší než $k(v)$ a maximum z $L(v)$ je ten největší menší. Druhý případ je když $v$ nemá levého syna v tom případě se musíme vynořit nahoru (doprava jít nemůžeme tam jsou všechny klíče větší). Takto cestujeme směrem ke kořeni až do doby než se vrátíme do rodiče $p$ zprava. Předchůdce je poté vrchol $p$. Zprava se chceme vrátit jelikož my potřebujeme najít menší první menší klíč. Pokud by jsme přišli zleva, tak je rodič větší než celý náš podstrom.\newline
 Pokud náš prvek je minimálním v celém stromě vrátíme nic. Alternativně lze dodefinovat vrcholy s klíčy $\pm\infty$.\newline
@@ -101,6 +111,8 @@ existuje-li, jinak $\emptyset$. \newline
     \item return $z$
 \end{pseudocode} \bigskip
 
+\subsection{BVSInsert}
+
 \noindent BVSInsert jak z názvu plyne vkládá prvek do BVS. Na vstupu dostaneme ukazatel na kořen $v$ nějakého BVS a klíč $x$, který chceme vložit. Ve stromě předpokládáme unikátní klíče v případě již existujícího stejného klíče se vložení neprovede. Algoritmus prochází strom stejně jako BVSFind a hledá volné místo kam vložit prvek. Jakmile se dostaneme mimo strom, tak jsme nalezli místo kam vložit daný klíč. Pokud je strom prázdný, tak pouze vložíme prvek. V každém vrcholu provedeme pouze konstantě mnoho operací a jdeme skrze vrcholy od kořene až do listu, což je celkem za $\bigO{h(T(v))}$. \bigskip
 
 \noindent \textbf{Vstup}: Ukazatel na kořen $v$ libovolného BVS $T(v)$ a vkládaný klíč $x$. \newline
@@ -116,6 +128,8 @@ existuje-li, jinak $\emptyset$. \newline
     \item \tab $r(v) :=$ \textcolor{blue}{BVSInsert}$(r(v), x)$
     \item return $v$
 \end{pseudocode} \bigskip
+
+\subsection{BVSDelete}
 
 \noindent Poslední operací je BVSDelete, ten slouží k odstranění vrcholu $v$ z BVS dle zadaného klíče. Zde máme 3 možnosti. První je pokud vrchol $v$ nemá žádného syna neboli je listem. V tom případě ho prostě odstraníme a vše funguje dále. Další případ je kdy má právě jednoho syna vrchol $w$. Ani zde neni problém, rodiči vrcholu $v$, $p(v)$ nahradíme syna $v$ za vrchol $w$. Vrchol $v$ poté bezproblému odstraníme. Posledním případem je kdy vrchol $v$ má oba syny. V tomto případě nemůžeme vrchol $v$ odstranit jinak by jsme rozbili strukturu. Pomůžeme si trikem a to pomocí nahrazení vrcholu $v$ za jeho následníka nebo předchůdce (ti musí existovat jelikož má vrchol $v$ oba syny a zároveň jsou to maxima/minima těch podstromů, takže problém se nerekurzí dále). Také jsme nemohli rozbít definici BVS, jelikož jsme nahradili bezprostředním následníkem/předchůdcem a stále jsou vlevo menší klíče a vpravo větší. Hledáme vrchol jako při BVSFind, k tomu hledáme Minimum podstromu pomocí BVSMin a v každém vrcholu provedeme konstantě mnoho operací tedy celkem $\bigO{h(T(v)}$. \bigskip
 
@@ -138,6 +152,8 @@ klíčem $x$, existoval-li. \newline
     \item \tab $r(v) := $ \textcolor{blue}{BVSDelete}($r(v), k(w)$) \textcolor{gray}{//Musíme smazat ještě ten prohozený vrchol}
     \item return $v$
 \end{pseudocode} \bigskip
+
+\subsection{Časová složitost operací nad BVS}
 
 \begin{remark}
 BVS nemá jednoznačnou strukturu. Skutečne zkuste provést BVSInsert na prvcích \{2, 1, 3\} a poté na \{1, 2, 3\}. Množiny jsou v obou případech stejné. Ale výsledný BVS je jiný.\bigskip

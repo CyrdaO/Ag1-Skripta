@@ -1,5 +1,5 @@
 
-\section*{Motivace a úvod}
+\section{Motivace a úvod}
 
 Vítame vás u studijního textu k předmětu BI-AG1. Tento text je neoficiální materiál pro tento předmět. Pokud byste narazili na jakoukoli chybu, prosím kontaktujte nás ať ji můžeme opravit.
 
@@ -8,6 +8,8 @@ Jak jistě víte, svět se mění (a to nejen v IT). Díky pokročilým LLM již
 Tento předmět se také věnuje grafům. Je možné, že jste na ně už při studiu narazili, byť možná jen v omezené míře. Ať už v BI-PA2 nebo jako diagram relace v BI-DML. Ale to není zdaleka vše kde se s grafy potkáte. Grafy jsou opravdu všude. Mapa pražského metra? Model počítačové sítě? Hledání cesty v bludišti? Rodokmen? Ano to vše jsou grafy. Tím, že nějaký problém v životě budete reprezentovat grafem a nad ním provádět operace/pouštět algoritmus ho můžete mnohem jednodušeji vyřešit. Například hledání trasy v navigaci je jen hledání nejkratší cesty v grafu. Dají se tím ale řešit i problémy které s grafem zdánlivě nemají ale vůbec nic společného. Například převozníkův problém se dá řešit pomocí reprezentace v grafu a hledáním cesty mezi dvěma vrcholy. \\
 
 Toto se tedy v tomto kurzu naučíte, pojďme ale k věci a konečně si přesně zadefinovat co to takový graf je.
+
+\newpage
 
 \section{Základy teorie grafů}
 
@@ -150,7 +152,9 @@ Každý vrchol je přidán do fronty $Q$ nejvýše jednou, neboť před svým vl
 
 \input{Obrázky/LayersGraph}
 
-\noindent Nyní si dokážeme korektnost algoritmu. Vždy u korektnosti dokazujeme vše co nám algoritmus slibuje. Zde u BFS jsou to 3 věci, že správně uzavře vrcholy, že správně naplní pole vzdáleností a pole předchůdců.
+\noindent Nyní si dokážeme korektnost algoritmu. Vždy u korektnosti dokazujeme vše co nám algoritmus slibuje. Zde u BFS jsou to 3 věci, že správně uzavře vrcholy, že správně naplní pole vzdáleností a pole předchůdců. \\
+
+\noindent \textbf{Zde se lišíme od přednášky! V přednášce jsou ty důkazy velmi odmávané, a kdyby byli na zkoušce (jako že tam pravděpodobně nebudou), tak by nemuseli být uznané. Pokud chcete pochopit princip doporučujeme přednášku, zde jsou stejné ale víc formálně popsané}
 
 
 \begin{theorem}[O správnosti algoritmu BFS]
@@ -207,11 +211,6 @@ Důkaz provedeme indukcí dle fáze. \\
 Nyní ukážeme sporem, že nemůže existovat žádná $s$-$v$-cesta kratší než $i$. Předpokládejme, že existuje cesta $P$ z $s$ do $v$ o délce $j < i$. Protože $j < i$, musí podle holubníkového principu na cestě $P$ existovat dva sousední vrcholy $w$ a $w'$ a dvě nesousední hladiny $H_k$ a $H_\ell$ (tj. $|k - \ell| > 1$) takové, že $w \in H_k$ a $w' \in H_\ell$. \\
 To je ovšem spor s tím, že sousední vrcholy na cestě mustí ležet v sousedních hladinách (rozdíl indexů hladin sousedních vrcholů může být nejvýše 1, protože když se zpracovává hladina $H_k$, všichni její dosud nenalezení sousedé se zařadí do $H_{k+1}$, a ostatní sousedé již leží v $H_k$ nebo $H_{k-1}$). \\
 Tento spor dokazuje, že žádná kratší cesta neexistuje, a tedy $d(s, v) = i = D[v]$.
-\end{proof}
-
-
-\begin{proof}[Důkaz Vlastnosti 3]
-Přeneháváme na cvičení.
 \end{proof}
 
 Na závěr této části bychom ještě rádi doporučili vyřešit si miniprogtest na BFS, nejenže díky tomu BFS lépe pochopíte, ale také vám usnadní řešení progtestu velkého.

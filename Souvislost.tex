@@ -51,7 +51,7 @@ je relací ekvivalence. Třídy ekvivalence této relace indukují souvislé kom
 \end{proof}
 
 % ==================================================================
-\section{Rozklad grafu na souvislé komponenty (BFS\_Graf)}
+\subsection{Rozklad grafu na souvislé komponenty (BFS\_Graf)}
 % ==================================================================
 
 Pokud graf tedy není souvislý, nemůžeme jednodušše pustit algoritmus BFS na libovolném vrcholu a očekávat, že nalezne všechny vrcholy, jak to tedy zařídit? Zařídí to tato mírně modifikovaná verze algoritmu.
@@ -140,7 +140,7 @@ Složitost algoritmu v nejhorším případě pro vstup velikosti $n$ definujeme
 \noindent Co nás bude u algoritmů zajímat je, jak budou složitosti programu škálovat s velikostí vstupu, tedy nebudeme počítat přesný počet instrukcí, ale spíše zda algoritmus vykoná za jeho běh $\mathcal{O}(n)$ instrukcí nebo třeba $\mathcal{O}(n^2) \text{ či dokonce } \mathcal{O}(2^n)$.
 
 % ============================================================
-\section{Reprezentace grafů v paměti počítače}
+\subsection{Reprezentace grafů v paměti počítače}
 % ============================================================
 
 Samotný graf můžeme v modelu RAM reprezentovat různými způsoby. Některé způsoby jsou lepší na rychlejší vyhledávání, jiné třeba víc spoří pamětí. Při programování zvolte způsob dle vašich požadavků. Zde si představíme dva možné a to matici sousednosti a seznam sousedů. \bigskip
