@@ -92,22 +92,38 @@ Nechť $G = (V, E)$ je graf. Pak jsou následující tvrzení ekvivalentní:
 \end{enumerate}
 \end{theorem} \bigskip
 
+%TODO: change this, first sentence implies you have to remember proofs, second doesn't make sense (logic vise)
 \begin{remark}
-    Zde se může zdát, že to je hromada důkazů co se musíte naučit nazpaměť, ale není tomu tak. Stačí se zamyslet co musí platit, aby daná definice byla ekvivalentní. Musí být souvislá a acyklická a to přesně stačí ukázat. Např. mezi 1. a 2. z existence cesty vám rovnou plyne souvislost a poté zkusíte sporem co kdyby tam byl cyklus.
+    Důkazy tvrzení jsou vcelku přímočaré a alespoň před 2. zápočtovou písemkou byste je měli být schopni vymyslet sami. Doporučuji se tedy před ní vrátit a tyto důkazy si zkusit.
 \end{remark}
-
 
 \begin{proof}
 Důkaz ekvivalence provedeme postupným dokázáním jednotlivých implikací:\bigskip
 
 \noindent\textbf{Dokážeme $1 \Rightarrow 2$:}
-Předpokládejme, že $G$ je strom. Jelikož je $G$ souvislý, existuje pro každé $u, v \in V$ alespoň jedna $u$-$v$-cesta. Pro spor předpokládejme, že existují dva vrcholy $u, v$, mezi kterými vedou alespoň dvě různé cesty $P_1 = a_1, a_2, \dots, a_k$ a $P_2 = b_1, b_2, \dots, b_\ell$ (kde $a_1 = b_1 = u$ a $a_k = b_\ell = v$). Nechť $i \ge 1$ je nejmenší index, na kterém se cesty rozcházejí (tj. $a_i = b_i$, ale $a_{i+1} \neq b_{i+1}$). Nechť $p, q > i$ jsou nejmenší indexy, na kterých se cesty opět spojují, tj. $a_p = b_q$ a vnitřní vrcholy $\{a_{i+1}, \dots, a_{p-1}\}$ a $\{b_{i+1}, \dots, b_{q-1}\}$ jsou disjunktní. Pak ale posloupnost vrcholů $a_i, a_{i+1}, \dots, a_p = b_q, b_{q-1}, \dots, b_{i+1}, a_i$ tvoří v $G$ kružnici, což je spor s acykličností stromu $G$.\bigskip
+Předpokládejme, že $G$ je strom. Jelikož je $G$ souvislý, existuje pro každé $u, v \in V$ alespoň jedna $u$-$v$-cesta. \\
+
+\noindent Pro spor předpokládejme, že existují dva vrcholy $u, v$, mezi kterými vedou alespoň dvě různé cesty $P_1 = a_1, a_2, \dots, a_k$ a $P_2 = b_1, b_2, \dots, b_\ell$ (kde $a_1 = b_1 = u$ a $a_k = b_\ell = v$). \\
+
+\noindent Nechť $i \ge 1$ je nejmenší index, na kterém se cesty rozcházejí (tj. $a_i = b_i$, ale $a_{i+1} \neq b_{i+1}$). Nechť $p, q > i$ jsou nejmenší indexy, na kterých se cesty opět spojují, tj. $a_p = b_q$ a vnitřní vrcholy $\{a_{i+1}, \dots, a_{p-1}\}$ a $\{b_{i+1}, \dots, b_{q-1}\}$ jsou disjunktní.\\
+
+\noindent Pak ale posloupnost vrcholů $a_i, a_{i+1}, \dots, a_p = b_q, b_{q-1}, \dots, b_{i+1}, a_i$ tvoří v $G$ kružnici, což je spor s acykličností stromu $G$
+
+\input{./Obrázky/TreePathProof1.tex}
+
+\bigskip
 
 \noindent\textbf{Dokážeme $2 \Rightarrow 1$:}
-Z předpokladu, že mezi každými dvěma vrcholy existuje práve jedna cesta, přímo plyne souvislost $G$. Pokud by $G$ obsahoval kružnici $C$, pak by mezi libovolnými dvěma různými vrcholy $x, y$ na této kružnici existovaly dvě různé cesty (po obou stranách kružnice), což je spor s acykličností stromu. Tedy $G$ je acyklický, a proto je to strom. \bigskip
+Z předpokladu, že mezi každými dvěma vrcholy existuje právě jedna cesta, přímo plyne souvislost $G$. \\
+
+\noindent Pokud by $G$ obsahoval kružnici $C$, pak by mezi nějakými $x, y$ na této kružnici existovaly dvě různé cesty (po obou stranách kružnice), což je spor s acykličností stromu. Tedy $G$ je acyklický, a proto je to strom.
+
+\bigskip
 
 \noindent\textbf{Dokážeme $1 \Rightarrow 3$:}
 Jelikož je $G$ strom, je souvislý. Nechť $e = \{u, v\} \in E$ je libovolná hrana. Pro spor předpokládejme, že $G - e$ je stále souvislý. Pak v $G - e$ existuje nějaká $u$-$v$-cesta $P$. Přidáním hrany $e = \{u, v\}$ k cestě $P$ získáme v grafu $G$ kružnici, což je spor s tím, že $G$ je strom. \bigskip
+
+\input{./Obrázky/TreePathProof2.tex}
 
 \noindent\textbf{Dokážeme $3 \Rightarrow 1$:}
 Souvislost $G$ je platí ze zadání. Chceme ukázat, že $G$ je acyklický. Pro spor předpokládejme, že $G$ obsahuje kružnici $C$. Zvolme libovolnou hranu $e = \{x, y\}$ na této kružnici. Odebráním hrany $e$ se graf $G$ nerozpadne na více komponent, protože pro jakoukoli cestu mezi vrcholy $u$ a $v$, která používala hranu $e$, poskytne zbytek kružnice $C \setminus \{e\}$ náhradní obchůzku. Graf $G - e$ tedy zůstane souvislý, což je spor s předpokladem, že odebráním hrany se stane nesouvislým. \bigskip
