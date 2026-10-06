@@ -13,7 +13,7 @@ Od tohoto momentu se postupně začneme bavit o datovách strukturách. Jako prv
     \item Leží-li vrchol $u$ na (jediné) cestě z vrcholu $v$ do kořene $r$, pak $u$ nazveme \textbf{předkem} vrcholu $v$ a $v$ nazveme \textbf{potomkem} vrcholu $u$.
     \item Pokud navíc $\{u, v\} \in E(T)$ tvoří hranu, říkáme, že $u$ je \textbf{otec} (rodič) vrcholu $v$ a $v$ je \textbf{syn} (dítě) vrcholu $u$.
     \item Vrcholy rozřazujeme podle vzdálenosti od kořene do jednotlivých \textbf{hladin}: v 0.\ hladině leží samotný kořen $r$, v 1.\ hladině leží jeho synové atd.
-    \item \textbf{Hloubka zakořeněného stromu} $T$ je celkový počet jeho hladin.
+    \item \textbf{Hloubka zakořeněného stromu} $T$ je celkový počet jeho hladin (tedy strom o jednom prvku má hladinu 1).
 \end{itemize}
 \end{definition} \bigskip
 
@@ -36,9 +36,7 @@ Strom nazveme \textbf{binární}, pokud:
 \subsection{Binární minimová halda}
 % ============================================================
 
-První datovou strukturou je binární minimová halda. Je velmi důležitá, pomocí ní dokážeme efektivně získávat minima z množiny prvků. Alternativně u maximové maxima, nebo mediánové medián apod. Pomocí ní je implementována např. prioritní fronta v c++. Dále je možné pomocí ní řadit díky algoritmu HeapSort. \medskip
-
-\noindent Halda drží pevnou strukturu, vždy ji naplňujeme zhora-dolů a zleva-doprava. Zároveň u ní platí, že kořen je nejmenším z prvků. A pro všechny prvky platí, že jejich otec je menší než oni sami. Mezi sousedy žádné takové pravidlo neplatí. \bigskip
+První datovou strukturou je binární minimová halda. Díky ní dokážeme efektivně získávat minima z množiny prvků, alternativně u maximové maxima. Takto je implementována např. prioritní fronta v c++. Dále je možné s její pomocí řadit prvky algoritmem HeapSort. \medskip
 
 \begin{definition}[Binární minimová halda]
 \textbf{Binární minimová halda} (zkráceně jen \textbf{halda}) je datová struktura ve tvaru binárního stromu, v jehož každém vrcholu $x$ je uložen jeden porovnatelný klíč $k(x)$, přičemž splňuje dvě základní podmínky:
@@ -49,9 +47,13 @@ První datovou strukturou je binární minimová halda. Je velmi důležitá, po
 \end{enumerate}
 \end{definition} \bigskip
 
-\begin{remark}[Pozorování]
+\begin{remark}
+  Pokud nebude řečeno jinak, binární minimovou haldu budeme vždy označovat pouze jako \textbf{halda}.
+\end{remark}
+
+\begin{observation}
 Z podmínek haldového uspořádání plyne, že na libovolné cestě vedoucí z jakéhokoli vrcholu nahoru do kořene tvoří klíče \textbf{nerostoucí} posloupnost. V samotném kořeni haldy se tedy vždy nachází \textbf{globální minimum} ze všech uložených prvků.
-\end{remark} \bigskip
+\end{observation} \bigskip
 
 \begin{center}
     \input{Obrázky/Heap}
@@ -84,7 +86,9 @@ Pro $n = 2^h - 1$ dostáváme:
 $$h = (h - 1) + 1 = \floor{\log_2(2^h - 1)} + 1 = \floor{\log_2 (n)} + 1$$
 \end{proof} \medskip
 
-\noindent Poslední rovnice funguje takto: Víme, že halda drží strukturu binárního stromu, pro $n = 2^h - 1$ (tedy úplný binární strom) má přesně $\log_2 (n)$ hladin. Spodní hodnota tam je pro počet prvků mezi $2^{h-1}$ a $2^h - 1$. A z toho plyne druhá rovnost.\bigskip
+
+\noindent Kde u poslední rovnosti využijeme toho, že halda drží strukturu binárního stromu, pro $n = 2^h - 1$ (tedy úplný binární strom) má přesně $\log_2 (n)$ hladin.
+\bigskip
 
 \begin{lemma}[Počet listů a vnitřních vrcholů haldy]
 Binární halda s $n \ge 3$ prvky má právě $\floor{n/2}$ vnitřních vrcholů a $\ceil{n/2}$ listů.
@@ -113,17 +117,17 @@ Důkaz provedeme matematickou indukcí podle počtu vrcholů $n$.
 \subsection{Základní operace nad haldou}
 % ============================================================
 
-Halda má tři základní operace, které provádí efektivně. A to HeapInsert, HeapFindMin a HeapExtractMin. Z názvu plyne co dělají a nyní si ukážeme jejich implementaci. \bigskip
+Halda má tři základní operace, které provádí efektivně. A to HeapInsert, HeapFindMin a HeapExtractMin, které slouží pro vkládání prvků, hledání minima a smazání minima resp.. \bigskip
 
 \subsubsection{Vyhledání minima (HeapFindMin)}
-Nalezení minimálního prvku je triviální díky vlastnosti haldového uspořádání. Globální minimum se nachází vždy v kořeni a na ten si držíme ukazatel. Stihneme to určitě za $\bigO{1}$. \bigskip
+Nalezení minimálního prvku je triviální díky vlastnosti haldového uspořádání. Globální minimum se nachází vždy v kořeni a na ten si držíme ukazatel. To jistě stihneme za $\bigO{1}$. \bigskip
 
 \funkce{HeapFindMin}{halda $H$}
 \begin{pseudocode}
 \item return $H.root$
 \end{pseudocode} \medskip
 
-\subsubsection{Vložení prvku (HeapInsert)}
+\subsubsection{HeapInsert}
 Při vkládání nového klíče $x$ vytvoříme nový vrchol $v$ a rovnou ho vložíme jako nejpravějšího syna na poslední hladině. Jenže jsme tím mohli rozbít haldové uspořádání, tedy že otec $o$ bude najednou větší než $k$, $k(o)$ > $x$. V tomto případě musíme vrcholy $v$ a $o$ prohodit (druhého syna nerozbijeme, jelikož je větší než otec a toho vyměníme za menší prvek). Tento problém se může opakovat až cestou do kořene, a tak prohazujeme dokud je to potřeba. V nejextrémějším případě se z vrcholu $v$ stane kořen, tedy globální minimum. Této operaci opravy říkáme BubbleUp. Díky logaritmické hloubce haldy stihneme celý HeapInsert za $\bigO{\log(n)}$.\bigskip
 
 \funkce{HeapInsert}{halda $H$, klíč $k$}
@@ -143,7 +147,7 @@ Při vkládání nového klíče $x$ vytvoříme nový vrchol $v$ a rovnou ho vl
 \end{pseudocode} \bigskip
 
 \begin{remark}
-    Zde prohazujeme pouze samotné klíče, jelikož jsme si haldu definovali pouze s klíči. Pokud ale na klíči máte navázanou nějakou hodnotu. Je potřeba prohodit celé vrcholy, aby jste neporušili vazbu (klič, data).
+    Zde prohazujeme pouze samotné klíče, jelikož jsme si haldu definovali pouze s klíči. Pokud ale na klíči máte navázanou nějakou hodnotu nebo si někde uchováváte odkazy na vrcholy, pak je potřeba prohodit celé vrcholy, aby jste neporušili vazbu (klič, data).
 \end{remark} \bigskip
 
 \begin{lemma}[Korektnost a složitost HeapInsert]
@@ -151,7 +155,8 @@ Volání operace $\text{HeapInsert}(H, k)$ nad minimovou haldou $H$ vytvoří ko
 \end{lemma}
 
 \begin{proof}
-Pokud H je prázdná, pak je výsledkem jednoprvková halda – hotovo. V opačném případě označme K výsledek volání HeapInsert$(H, k)$. K jistě splňuje tvar haldy. Zbývá ověřit, že splňuje podmínku haldového uspořádání. Po přidání hodnoty $k$ do nového listu $l$ může být porušená podmínka mezi $l$ a jeho otcem $o$, tedy $k(l) < k(o)$. Zároveň nemůžeme porušit podmínku s druhým synem $r$ vrcholu $o$, jelikož pro něj platí $k(r) \geq k(o) > k(l)$. Toto řeší procedura BubbleUp, která prohozením posune problém o hladinu blíže ke kořeni a zastaví se nejpozději právě v něm. Již víme, že halda má $\floor{\log_2(n)} + 1$ hladin. Na každé hladině provedeme konstantní množství operací a proto opravíme haldu za $\bigO{\log(n)}$.
+Pokud H je prázdná, pak je výsledkem jednoprvková halda. V opačném případě označme K výsledek volání HeapInsert$(H, K)$. K jistě splňuje tvar haldy. Zbývá ověřit, zda splňuje podmínku haldového uspořádání. \\
+Po přidání hodnoty $k$ do nového listu $l$ může být porušená podmínka mezi $l$ a jeho otcem $o$, tedy $k(l) < k(o)$. Zároveň nemůžeme porušit podmínku s druhým synem $r$ vrcholu $o$, jelikož pro něj platí $k(r) \geq k(o) > k(l)$. Toto řeší procedura BubbleUp, která prohozením posune problém o hladinu blíže ke kořeni a zastaví se nejpozději právě v něm. Již víme, že halda má $\floor{\log_2(n)} + 1$ hladin. Na každé hladině provedeme konstantní množství operací a proto opravíme haldu za $\bigO{\log(n)}$.
 \end{proof}
 
 \newpage
@@ -191,9 +196,9 @@ Prohozením klíčů a odstraněním posledního listu $l$ jistě zachováme tva
 \subsection{Reprezentace haldy v poli}
 % ============================================================
 
-Díky pevnému tvaru haldy máme výbornou výhodu a tou je reprezentace v poli. Tato vlastnost se nám následně bude hodit pro řazení pole pomocí algoritmu HeapSort. \bigskip
+Jednoznačný tvar haldy nám umožňuje její reprezentaci v poli. Tato vlastnost se nám následně bude hodit pro řazení in-place pomocí algoritmu HeapSort. \bigskip
 
-\noindent Haldu postupně indexujeme zhora-dolů a zleva-doprava. Kořen začíná na indexu 1, prvek na indexu 0 je zbytečný. Existuje i verze, kde se začíná od indexu 0. Ta se v ag1 neučí, ze zkušenosti je možné ji použít.\bigskip
+\noindent Haldu postupně indexujeme zhora-dolů a zleva-doprava. Kořen začínáme indexovat na indexu 1 (snadnou úpravou se dá docílit i indexování od 0).
 
 \begin{remark}[Pozorování: Indexové vztahy v haldě] 
 Nechť vrchol $v$ má v poli index $i \in \{1, \dots, n\}$. Pak platí:
@@ -212,10 +217,10 @@ Nechť vrchol $v$ má v poli index $i \in \{1, \dots, n\}$. Pak platí:
 \bigskip
 
 % ============================================================
-\subsection{Rychlá konstrukce haldy (heapBuild}
+\subsection{Rychlá konstrukce haldy (HeapBuild)}
 % ============================================================
 
-Na vstupu máme pole prvků a chceme z něj postavit haldu. Jednoduchý způsob je $n$ krát zavolat operaci HeapInsert. Tímto způsobem to stihneme za $\bigO{n\log(n)}$. Existuje, ale lepší způsob. Uvědomíme si všechny listy, kterých je právě $\ceil{n/2}$ již tvoří haldy. Opravit musíme tedy pouze vnitřní vrcholy postupným zabubláváním dolů, od těch nejhlouběji směrem ke kořeni, čímž rozšíříme opravené haldy. Většina vrcholů se nebude zabublávat přes celou hloubku haldy. Kvalitnější analýzou zjistíme, že celá operace HeapBuild lze stihnout za $\bigO{n}$.\bigskip
+Na vstupu máme pole prvků a chceme z něj postavit haldu. Jednoduchý způsob je $n$ krát zavolat operaci HeapInsert. Tímto způsobem to stihneme za $\bigO{n\log(n)}$. Existuje, ale lepší způsob. Uvědomíme si všechny listy, kterých je právě $\ceil{n/2}$ již splňují haldové uspořádání. Opravit musíme tedy pouze vnitřní vrcholy postupným zabubláváním dolů, od těch nejhlouběji směrem ke kořeni, čímž rozšíříme opravené haldy. Většina vrcholů je v haldě "poměrně" hluboko (kvůli tvaru binárních stromů, většina prvků je na posledních hladinách), a proto nebude zabublávat přes všechny hladiny haldy. Kvalitnější analýzou zjistíme, že celá operace HeapBuild lze stihnout za $\bigO{n}$.\bigskip
 
 \funkce{HeapBuild}{pole $x_1, \dots, x_n$}
 \begin{pseudocode}
@@ -231,15 +236,15 @@ Operace $\text{HeapBuild}$ postaví haldu z $n$ prvků v časové složitosti $\
 \end{theorem}
 
 \begin{proof}
-Uvažujme haldu o $h$ hladinách (indexovaných $0, 1, \dots, h-1$). Na $j$-té hladině leží nejvýše $2^j$ vrcholů (pokud je plná, výjimkou může být pouze poslední hladina). Volání operace BubbleDown z $j$-té hladiny trvá v nejhorším případě počet hladin od $j$-té do nejspodnější hladiny, tedy $\bigO{h - 1 - j}$ (poslední hladina je $h-1$ a odečítáme od ní $j$ tou hladinu, tedy počet hladin mezi nimi).
+Uvažujme haldu o $h$ hladinách (indexovaných $0, 1, \dots, h-1$). Na $j$-té hladině leží nejvýše $2^j$ vrcholů (pokud je plná, výjimkou může být pouze poslední hladina). Volání operace BubbleDown na prvkách na $j$-té hladině trvá v nejhorším případě počet hladin od $j$-té do nejhlubší hladiny, tedy $\bigO{h - 1 - j}$ (poslední hladina je ve hloubce $h-1$ a jdeme z hladiny hloubky $j$, tedy počet hladin mezi nimi).
 Sečtením práce přes všechny hladiny dostáváme celkovou složitost:
 $$T(n) = \sum_{j=0}^{h-1} 2^j \cdot (h - 1 - j)$$
-Substitucí $q = h - 1 - j$ přejde suma na tvar:
+Pro zjednodušení substitucí $q = h - 1 - j$ přejde suma na tvar:
 $$T(n) = \sum_{j=0}^{h-1} 2^{h - 1 - (h - 1 - j)} \cdot (h - 1 - j) = \sum_{q=0}^{h-1} 2^{h - 1 - q} \cdot q = 2^{h-1} \sum_{q=0}^{h-1} 2^{-q} \cdot q \leq n \sum_{q=0}^{h-1} \frac{q}{2^q}$$
 \begin{enumerate}
     \item \textit{První úprava je přičtení a odečtení h-1 v exponentu.}
-    \item \textit{Druhá úprava je substituce výrazu h-1-j za q. Důvodem je dostat $h - 1$ do exponentu, odtud ho lze snadno vytáhnout ven.}
-    \item \textit{Třetí úprava je vytáhnutí výrazu $2^{h-1}$ ven před sumu, jelikož na sumě nijak nezávisý, je to pouhá konstanta.}
+    \item \textit{Druhá úprava je substituce výrazu $h-1-j$ za $q$. Důvodem je dostat $h - 1$ do exponentu, odtud ho lze snadno vytáhnout ven.}
+    \item \textit{Třetí úprava je vyjmutí výrazu $2^{h-1}$ ven před sumu (na sumě nijak nezávisí).}
     \item \textit{Čtvrtá úprava je kompaktní přepsání na zlomek $2^{-q} = \frac{1}{2^q}$ a zároveň platný odhad: Kde Počet prvků na poslední hladině je méně či rovno počtu prvků celé haldy.}
 \end{enumerate}
 Časouvou složitost lze zhora odhadnout nekonečnou řadou $n \sum_{q=0}^{\infty} \frac{q}{2^q}$. Jelikož výraz $a_q = \frac{q}{2^q}$ od $q \geq 1$ je kladný (první člen $a_0$ nemá na konvergenci vliv). Můžeme pro něj použít D'Alambertovo kritérium (viz. MA2).
@@ -264,7 +269,9 @@ Pomocí haldy můžeme vytvořit řadící algoritmus HeapSort. Funguje tak, že
 \subsection{Amortizovaná časová složitost}
 % ============================================================
 
-Stává se, že jednou za čas musíme časově zaplatit velmi drahou operaci. Například zdvojnásobení velikosti pole. Znamená to tedy že složitost operace PushBack je $\bigO{n}$? Ne úplně, jelikož se toto zvětšení stane jednou za delší čas, dokážeme jeho cenu naúčtovat všem předešlým voláním. Tedy rozmělnit tu cenu mezi dřívější volání. Této ceně se říká amortizovaná. A víc ukazuje reálnou cenu dané operace.\bigskip
+ Často narazíme na algoritmy, které mají "většinou" relativně malou složitost, ale jednou za čas se stane, že nějaká operace zabere opravdu mnoho času. Například zdvojnásobení velikosti pole. Znamená to tedy že složitost operace PushBack je $\bigO{n}$? V nejhorším případě samozřejmě ano, ale tak trošku tušíme, že tato informace může být poněkud zavádějící, pokud se tato drahá operace stane velmi zřídka. Můžeme se tedy podívat na dlouhodobější horizont volání této funkce nad nějakou datovou strukturou a podívat se, jaká byla v "průměru" její složitost.\\
+
+Abychom se vyhli neurčitým výrazům jako: "většinou", "průměrná operace", apod., pojďme si přesněji zadefinovat co to tedy at amortizovaná složitost je.
 
 \begin{definition}[Amortizovaná časová složitost]
 Operace A nad dynamickou datovou strukturou má v daném kontextu svého provádění amortizovanou časovou složitost $O(f(n))$ (značíme $O^*(f(n)))$, pokud posloupnost k operací A má celkovou časovou složitost $O(k \cdot f(n))$. Parametr n je velikost dynamické množiny po provedení této posloupnosti operací.
@@ -288,7 +295,7 @@ Uvažujme dynamické pole $P$ s počáteční kapacitou $m = 1$. Jakmile celé p
 \end{pseudocode} \bigskip
 
 \begin{theorem}[Amortizovaná složitost vkládání do nafukovacího pole]
-Uvažujme na počátku prázdné nafukovací pole. Potom celková časová složitost posloupnosti n operací je $\bigTheta{n}$, neboli amortizovaná časová složitost operace $\text{NPInsert}$ je $\Theta^*(1)$.
+Uvažujme na počátku prázdné nafukovací pole. Potom celková časová složitost posloupnosti n operací je $\bigTheta{n}$, neboli amortizovaná časová složitost jedné operace $\text{NPInsert}$ je $\Theta^*(1)$.
 \end{theorem} \bigskip
 
 \begin{proof}
@@ -296,8 +303,9 @@ Práce sestává z vkládání jednotlivých prvků každý za $\bigO{1}$. Celko
 Samostné zvětšení pole zabere čas $\bigTheta{i}$ a to vždy když $i$ je mocnina dvou (neboli pole je plné).
 Všechna zvětšení tedy zaberou:
 $$2^0 + 2^1 + 2^2 + 2^3 + \dots + 2^k = \sum_{j=0}^{k} 2^j = \frac{2^{k+1} - 1}{2 - 1} = 2^{k+1} - 1$$
-\textit{třetí úprava je vzorec pro součet geometické řady.}\\ 
-Kde $2^k < n$ a zároveň $2^k$ je nejvyšší mocnina dvojky menší než $n$.
+\textit{Třetí rovnost je pouze sečtení geometické řady.}\\ 
+
+\noindent Kde $2^k < n$ a zároveň $2^k$ je nejvyšší mocnina dvojky menší než $n$.
 Jistě platí, že $2^{k+1} - 1 \leq 2n$. (Jelikož $2^k < n$ a $2^{k+1}$ je 2 krát větší), tedy složitost kopírování je $\bigO{n}$.
 Celková časová složitost posloupnosti $n$ operací je tedy $\bigTheta{n} + \bigO{n} = \bigTheta{n}$. Podělením počtem operací $n$ dostáváme amortizovanou složitost operace $\Theta^*(1)$.
 \end{proof}
@@ -307,18 +315,22 @@ Celková časová složitost posloupnosti $n$ operací je tedy $\bigTheta{n} + \
 % ------------------------------------------------------------
 \subsubsection{Příklad 2: Binární sčítačka}
 
-Uvažujme $k$-bitovou sériovou sčítačku. Operace Inc zvýší její hodnotu o jedna postupným otáčením bitů zprava do leva. V nejhorší případě musíme otočit všechny bity za $\bigO{k}$. Např. Inc na 011 otočí všechny bity na 100. \bigskip
+Uvažujme $k$-bitovou sériovou sčítačku. Operace Inc zvýší její hodnotu o jedna postupným otáčením bitů zprava do leva. V nejhorší případě musíme otočit všechny bity za $\bigO{k}$. Např. Inc na 011 otočí všechny bity na 100. \\
+
+Pro dokázání počtu bitových inverzí na jednu operaci Inc (a tedy i složitost této operace) použijeme tzv. bankéřovu metodu. Ta využívá tzv. penízků. Každé operaci dáme k dispozici $k$ penízků (např. $10$, $log(n)$, apod.), pak ukážeme, že pro každou operaci, všechny v tomto případě inverze bitů, dokážeme zaplatit (jeden penízek za jednu inverzi) z penízků co jsme dostali, popřípadě ještě z penízků co nám zbyli z minulých operací.
 
 \begin{theorem}[Amortizovaná složitost binární sčítačky]
-Uvažujme na počátku vynulovanou binární sčítačku. Celková složitost posloupnosti $n$ volání operace $\text{Inc}$ měřená počtem bitových inverzí je $\bigO{n}$, neboli amortizovaná složitost operace $\text{Inc}$ je $\bigO{*}(1)$.
+  Uvažujme na počátku vynulovanou binární sčítačku. Celková složitost posloupnosti $n$ volání operace $\text{Inc}$ měřená počtem bitových inverzí je $\Theta(n)$, neboli amortizovaná složitost operace $\text{Inc}$ je $\Theta^{*}(1)$.
 \end{theorem}
 
 \begin{proof}
 Důkaz provedeve účetní (bankéřovou) metodou.
 \begin{enumerate}
-    \item Každé operaci Inc přiřadíme virtuální kredit ve výši 2 mincí.
-    \item Provedení 1 bitové inverze stojí právě 1 minci.
-    \item Operace jde zprava a všechny 1 postupně invertuje na 0. Jakmile narazí na první 0, tak jí za cenu jedné mince otočí na 1. Poté vezme druhou minci co má k dispozici a předplatí dopředu té jedničce cenu za její otočení zpět.
-    \item Po konci každé operace Inc zůstane na všech bitech s hodnotou jedna předplacená 1 mince. Jelikož jsme nulovou sčítačkou, tak posloupnost $n$ Inc operací lze zaplatit pomocí 2n mincí. Tedy amortizovaná cena operace Inc je $O^*(1)$.
+    \item Každé operaci Inc přiřadíme virtuální kredit ve výši 2 penízků.
+    \item Provedení jedné bitové inverze stojí právě 1 penízek.
+    \item První volání Inc zaplatí jeden penízek za invertování 0 na 1 a zbylí penízek dá nad tuto jedničku kterou právě invertoval.
+    \item Další volání Inc dokud před sebou vidí bit s hodnotou 1, tak ho invertuje na 0 do té doby, dokud je před ním 1. Jakmile narazí na první 0, tak ji invertuje na 1 a nechá na ní ležet penízek.
+    \item Protože jsme pokaždé co jsme invertovali 0 na 1 nechali na 1 ležet penízek, tak každé invertování 1 na 0 můžeme zaplatit díky tomuto penízku našetřenému z předchozích operací. Invertování z 0 na 1 se v každé operaci vyskytne přesně jednou, za tu zaplatíme jedním penízkem a druhý na této 1 necháme ležet.
+    \item Tedy na všechny operace nám stačí 2 penízky na jednu operaci a tedy každá operace je $\Theta^{*}(1)$ a složitost všech $n$ operací je tedy $\Theta^{*}(1) * n = \Theta^{*}(n)$.
 \end{enumerate}
 \end{proof}

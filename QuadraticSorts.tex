@@ -1,0 +1,79 @@
+% ============================================================ %
+\subsection{Problém řazení a kvadratické algoritmy}
+% ============================================================ %
+
+S řažením se již každý z vás setkal v PAx. Cílem je uspořádat si data podle nějakého klíče. To nám následně pomůže při jejich obsluze. V této kapitole si představíme kvadratické řadící algoritmy a jejich vlastnosti. Ty se kvůli jejich složitosti vyplatí používat na menší data. Zároveň rozhodně neplatí, že by nějaké řadící algoritmy byli lepší než jiné. Některé využívají více paměti, jiné mají dobrou cache hit rate. Další zase dokáží rozpoznat již seřazené data a skončit dříve.\medskip
+
+\begin{definition}[Problém řazení / třídění]
+\leavevmode\\
+\textbf{Vstup}: Posloupnost $n$ porovnatelných prvků $A = (a_1, a_2, \dots, a_n)$.\\
+\textbf{Výstup}: Permutace $A' = (a'_1, a'_2, \dots, a'_n)$ původní posloupnosti taková, že $a'_1 \le a'_2 \le \dots \le a'_n$.
+\end{definition}  \medskip
+
+\begin{definition}[Taxonomie řadicích algoritmů]
+Řadicí algoritmy klasifikujeme podle následujících kritérií:
+\begin{enumerate}
+    \item \textbf{In-place vs. Out-of-place}: Algoritmus je \textit{in-place}, pokud vyžaduje pouze $\bigO{1}$ (resp. $\text{polylog}(n)$) dodatečné paměti kromě samotného vstupního pole.
+    \item \textbf{Stabilita}: Algoritmus je \textit{stabilní}, pokud zachovává relativní pořadí prvků se stejným klíčem. Mějme posloupnost $a_1, \dots, a_n$ pro všechny prvky $a_i$ a $a_j$, kde $i < j$ a $a_i = a_j$ platí, že po seřažení bude vždy prvek $a_i$ před $a_j$ v seřazeném poli.
+    \item \textbf{Datová citlivost}: Algoritmus je \textit{datově citlivý}, pokud jeho časová složitost závisí na konkrétních hodnotách datových prvků. Např. bubbleSort skončí dřív pokud je pole již seřažené. 
+\end{enumerate}
+\end{definition} \bigskip
+
+\subsubsection{Základní kvadratické algoritmy}
+
+\noindent \textbf{SelectSort}: Rozdělí pole na levou seřazenou a pravou neseřazenou část. V každém kroku najde minimum v neseřazené části a prohodí ho s jejím prvním prvkem. Ten je poté seřazený a tím se nám posune hranice mezi těmito částmi. Pokračujeme dokud celé pole neni seřazené. Vlastnosti:
+\begin{itemize}
+    \item \textbf{Časová složitost} je $\bigO{n^2}$.
+    \item \textbf{In-Place}. Používá pouze $\bigO{1}$ paměti pro uložení minima a prohození prvků.
+    \item \textbf{Nestabilní}. V případě třeba tohoto pole 2,2,1. Dojde k prohození 1 za 2. Poté se ale dvojkám vyměnilo pořadí ve výstupním poli.
+    \item \textbf{Datově necitlivý}. Algoritmus se vždy pokusí nalézt minimum i když nic neprohodí, tak pokračuje dále.
+\end{itemize} \medskip
+
+\noindent \textbf{InsertSort}: Rozdělí pole na levou seřazenou a pravou neseřazenou část. V každém kroku vezme první prvek z neseřazené časti a odzadu ho zanořuje do seřazené části, dokud mu nenajde správnou pozici. Vlastnosti:
+\begin{itemize}
+    \item \textbf{Časová složitost} je $\bigO{n^2}$.
+    \item \textbf{In-Place}. Používá pouze $\bigO{1}$ paměti pro prohození prvků.
+    \item \textbf{Stabilní}. Díky cestě vzadu se vždy zastaví před stejnou hodnotou a neprohodí je.
+    \item \textbf{Datově necitlivý}. Pokud je pole seřazené či částečně seřazené, tak si ušetří spoustu zanoření a prohození. V nejlepším případě to stihne za $\bigTheta{n}$.
+\end{itemize} \bigskip
+
+\subsubsection{Algoritmus BubbleSort}
+
+Mějme posloupnost $a_1, \dots, a_n$ BubbleSort porovnává vždy dvojice sousedních prvků $a_i$ a $a_j$ pokud $a_i > a_j$ prohodí je. Takto postupně největší prvky probublají nakonec. Zároveň si drží bool proměnou \textit{zmena}, pokud nedojde za celý cyklus k prohození, pole je již seřazené a algoritmus může skončit dříve. Zde si ho dokážeme a více zanalyzujeme.
+
+\bigskip
+\funkce{BubbleSort}{pole $P$, délka $n$}
+\begin{pseudocode}
+\item $end := n$
+\item $zmena := 1$
+\item Dokud $zmena = 1$:
+\item \tab $zmena := 0$
+\item \tab Pro $j := 1, \dots, end - 1$:
+\item \tab \tab Pokud $P[j] > P[j+1]$:
+\item \tab \tab \tab Prohoď $P[j]$ a $P[j+1]$
+\item \tab \tab \tab $zmena := 1$
+\item \tab $end := end - 1$
+\end{pseudocode}
+
+\bigskip
+
+\begin{theorem}[Korektnost a invariant BubbleSortu]
+Algoritmus $\text{BubbleSort}$ korektně seřadí libovolné $n$-prvkové pole.
+\end{theorem}
+
+\begin{proof}
+Důkaz provedeme indukcí následujícího invariantu: \\
+\noindent\textbf{Invariant:} Po $i$-té iteraci hlavního cyklu se $i$ největších prvků pole nachází v seřazeném pořadí na posledních $i$ pozicích vpravo.
+\begin{itemize}
+    \item \textit{Základní krok ($i = 1$):} V první iteraci algoritmus prochází celé pole zleva doprava a každou změnou posouvá největší prvek doprava. Na konci 1. iterace bude největší prvek na poslední pozici.
+    \item \textit{Indukční krok ($i - 1 \to i$):} Předpokládejme, že po $i - 1$ iteracích je $i - 1$ největších prvků na svých finálních pozicích vpravo. V $i$-té iteraci prohledáváme zbývajících $n - i + 1$ prvků. Největší z těchto zbývajících prvků probublá na pozici $n - i + 1$. Tím se pravá seřazená část rozšíří na $i$ prvků. A invariant platí.
+\end{itemize}
+\end{proof}
+
+\begin{theorem}[Složitost a vlastnosti BubbleSortu]
+Algoritmus $\text{BubbleSort}$ seřadí $n$-prvkové pole v nejhorším čase $\bigO{n^2}$ a je \textbf{in-place}, \textbf{stabilní} a \textbf{datově citlivý}.
+\end{theorem}
+
+\begin{proof}
+V nejhorším případě proběhne $n - 1$ iterací, pričemž $i$-tá iterace trvá $\bigTheta{n - i}$ kroků, což dává celkem $\sum_{i=1}^{n-1} (n - i) = \bigTheta{n^2}$. Paměťová složitost je $\bigO{1}$. Je stabilní, neboť prohazuje pouze striktně větší prvky ($P[j] > P[j+1]$). Pro již seřazené pole skončí po první iteraci v čase $\bigTheta{n}$.
+\end{proof}
