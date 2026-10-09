@@ -38,7 +38,7 @@ jobs:
             biber
 
       - name: Compile LaTeX
-        run: pdflatex main.tex
+        run: latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 
       - name: Prepare PDF
         run: |
