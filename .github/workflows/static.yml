@@ -1,21 +1,3 @@
-
-name: Build LaTeX and deploy to Pages
-
-on:
-  push:
-    branches: ["main"]
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: false
-
-jobs:
   deploy:
     environment:
       name: github-pages
@@ -23,34 +5,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install LaTeX and Make4ht
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            texlive-latex-base \
-            texlive-latex-recommended \
-            texlive-latex-extra \
-            texlive-fonts-recommended \
-            texlive-lang-czechslovak \
-            texlive-pictures \
-            texlive-extra-utils
-
-      - name: Convert LaTeX to HTML
-        run: |
-          mkdir -p site
-          make4ht -u -d site/ main.tex
-          cp site/main.html site/index.html
-
-      - name: Setup Pages
+      - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload website
-        uses: actions/upload-pages-artifact@v4
+      - name: Upload PDF
+        uses: actions/upload-pages-artifact@v3
         with:
-          path: site/
+          path: dokument.pdf
 
       - name: Deploy to GitHub Pages
         id: deployment
