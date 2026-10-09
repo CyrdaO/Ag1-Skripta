@@ -6,7 +6,7 @@ V této části se budeme věnovat orientovaným grafům.
 
 \noindent Představte si klasický problém každého FIŤáka před začátkem semestru. Chce si zapsat předměty, ale ty mají různé prerekvizity. Jak tedy zjistit co si zapsat může a co ne? Přesně k tomuto problému se hodí topologické uspořádání. Podobných problémů existuje celá řada. 
 
-Může se například stát, že takový problém vůbec nepůjde vyřešit? Také bychom mohli napřiklad chtít zapsat si více než jen jeden předmět, jaké si tedy může student zapsat naráz. Na všechny tyto otázky nám pomůže odpovědět následující algoritmu. Topsort. \bigskip
+\noindent Může se stát, že takový problém vůbec nepůjde vyřešit? Také bychom mohli například chtít zapsat si více než jen jeden předmět, jaké si tedy může student zapsat naráz. Na všechny tyto otázky nám pomůže odpovědět následující algoritmu. Topsort. \bigskip
 
 
 \begin{definition}[Topologické uspořádání]
@@ -27,11 +27,17 @@ Nechť $n \geq 1$. Orientovaná kružnice délky $n$ (s $n$ vrcholy) je orientov
 Orientovaný graf $G$ nazveme \textbf{acyklickým}, pokud neobsahuje žádnou orientovanou kružnici.
 \end{definition}
 
+\medskip
+
 \begin{remark}
     Těmto grafů se často říká (i v české terminologii) DAG, neboli Directed Acylic Graph.
-\end{remark} \medskip
+\end{remark} 
+
+\medskip
 
 \noindent Pokud byste takové topologické uspořádání měli vyrobit, začli byste asi tím, že byste se snažili najít vrchol, do kterého nevede žádná hrana. Takovému vrcholu budeme říkat zdroj.
+
+\medskip
 
 \begin{definition}[Zdroj a stok]
 Nechť $G = (V, E)$ je orientovaný graf.
@@ -45,22 +51,29 @@ Nechť $G = (V, E)$ je orientovaný graf.
 
 \noindent Ale musí takový vrchol existovat? Jak ho algoritmicky najít?
 
+\medskip
+
 \begin{theorem}[O existenci zdroje a stoku]
 Nechť $G = (V, E)$ je orientovaný acyklický graf. Potom $G$ obsahuje alespoň jeden zdroj a alespoň jeden stok.
 \end{theorem}
 
 \begin{proof}
-Dokážeme sporem pro zdroj (pro stok je důkaz analogický). \\
- 
-Předpokládejme, že v DAGu $G$ neexistuje žádný zdroj. \\
-Zvolme libovolný vrchol $v_1 \in V$. Jelikož $v_1$ není zdroj, vede do něj alespoň jedna orientovaná hrana z nějakého vrcholu $v_2$. Jelikož ani $v_2$ není zdroj, vede do něj hrana z $v_3$, atd. \\
-\indent Tímto způsobem vytváříme posloupnost vrcholů $v_1, v_2, v_3, \dots$. Protože množina vrcholů $V$ je konečná ($|V| = n$), musí se nejpozději po $n + 1$ krocích dle holubníkového principu nějaký vrchol zopakovat (nechť $v_i = v_j$ pro $i < j$).
-Posloupnost $v_i, v_{i+1}, \dots, v_j = v_i$ však tvoří v $G$ orientovaný cyklus, což je spor s tím, že $G$ je acyklický. Tedy v $G$ musí existovat alespoň jeden zdroj.
+Dokážeme sporem pro zdroj (pro stok je důkaz analogický).
+\begin{itemize}
+    \item Předpokládejme, že v DAGu $G$ neexistuje žádný zdroj.
+    
+    \item Zvolme libovolný vrchol $v_1 \in V$. Jelikož $v_1$ není zdroj, vede do něj alespoň jedna orientovaná hrana z nějakého vrcholu $v_2$. Jelikož ani $v_2$ není zdroj, vede do něj hrana z $v_3$, atd.
+
+    \item Tímto způsobem vytváříme posloupnost vrcholů $v_1, v_2, v_3, \dots$. Protože množina vrcholů $V$ je konečná ($|V| = n$), musí se nejpozději po $n + 1$ krocích dle holubníkového principu nějaký vrchol zopakovat (nechť $v_i = v_j$ pro $i < j$).
+
+    \item Posloupnost $v_i, v_{i+1}, \dots, v_j = v_i$ však tvoří v $G$ orientovaný cyklus, což je spor s tím, že $G$ je acyklický. Tedy v $G$ musí existovat alespoň jeden zdroj.
+
+\end{itemize}
 \end{proof}
 
 \subsubsection{Algoritmus TopSort}
 
-Existence zdroje nám dává cestu pro sestrojení algoritmu. V každém kroku nalezneme zdroj, zpracujeme ho a odebereme z grafu $G$. Takto vyrobíme topologické uspořádání grafu $G$. Pokud bychom v nějakém kroku nebyli schopni nalézt zdroj grafu, pak díky větě o existenci zdroje, musí nutně obsahovat cyklus a topologické uspořádání nelze nalézt.\bigskip
+Existence zdroje nám dává cestu pro sestrojení algoritmu. V každém kroku nalezneme zdroj, zpracujeme ho a odebereme z orientovaného grafu $G$. Takto vyrobíme topologické uspořádání grafu $G$. Pokud bychom v nějakém kroku nebyli schopni nalézt zdroj grafu, pak díky větě o existenci zdroje, musí nutně obsahovat cyklus a topologické uspořádání nelze nalézt.\bigskip
 
 \noindent Jak funguje topsort: Spočítáme si vstupní stupně pro každý vrchol $v$ (tedy počet hran co vedou \textbf{do} vrcholu $v$). Do fronty dáme vrcholy se vstupním stupněm 0, ty jsou zdroji v počátečním grafu. Vždy při odebrání zdroje $z$ s ním odebereme i jeho hrany a každému \textbf{následníkovi} snížíme stupeň o jedna. Pokud tomuto následníkovi klesne stupeň na 0, pak se stává zdrojem a my ho přidáme do fronty. \medskip
 
@@ -80,11 +93,15 @@ Existence zdroje nám dává cestu pro sestrojení algoritmu. V každém kroku n
 \item \tab \tab Pokud $\delta[w] = 0$: zařaď $w$ na konec fronty $Q$
 \item Pokud nebyly zpracovány všechny vrcholy grafu $G$:
 \item \tab Graf $G$ obsahuje orientovaný cyklus!
-\end{pseudocode} \bigskip
+\end{pseudocode} 
+
+\bigskip
 
 \begin{theorem}[O správnosti algoritmu TopSort]
 Algoritmus $\text{TopSort}(G)$ doběhne v konečném čase a buď vygeneruje platné topologické uspořádání, nebo správně detekuje orientovaný cyklus.
 \end{theorem}
+
+\medskip
 
 \begin{proof}
 Vstupní stupeň $\delta[v]$ udává počet dosud neodebraných předchůdců vrcholu $v$.

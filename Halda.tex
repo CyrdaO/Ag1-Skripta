@@ -128,7 +128,7 @@ Nalezení minimálního prvku je triviální díky vlastnosti haldového uspoř�
 \end{pseudocode} \medskip
 
 \subsubsection{HeapInsert}
-Při vkládání nového klíče $x$ vytvoříme nový vrchol $v$ a rovnou ho vložíme jako nejpravějšího syna na poslední hladině. Jenže jsme tím mohli rozbít haldové uspořádání, tedy že otec $o$ bude najednou větší než $k$, $k(o)$ > $x$. V tomto případě musíme vrcholy $v$ a $o$ prohodit (druhého syna nerozbijeme, jelikož je větší než otec a toho vyměníme za menší prvek). Tento problém se může opakovat až cestou do kořene, a tak prohazujeme dokud je to potřeba. V nejextrémějším případě se z vrcholu $v$ stane kořen, tedy globální minimum. Této operaci opravy říkáme BubbleUp. Díky logaritmické hloubce haldy stihneme celý HeapInsert za $\bigO{\log(n)}$.\bigskip
+Při vkládání nového klíče $x$ vytvoříme nový vrchol $v$ a rovnou ho vložíme jako nejpravějšího syna na poslední hladině. Jenže jsme tím mohli rozbít haldové uspořádání, tedy že klíč otce $o$ bude najednou větší než $k(v)$, $k(o)$ > $k(v)$. V tomto případě musíme klíče $k(v)$ a $k(o)$ prohodit (druhého syna nerozbijeme, jelikož je větší než otec a toho vyměníme za menší prvek). Tento problém se může opakovat až cestou do kořene, a tak prohazujeme dokud je to potřeba. V nejextrémějším případě se z vrcholu $v$ stane kořen, tedy globální minimum. Této operaci opravy říkáme BubbleUp. Díky logaritmické hloubce haldy stihneme celý HeapInsert za $\bigO{\log(n)}$.\bigskip
 
 \funkce{HeapInsert}{halda $H$, klíč $k$}
 \begin{pseudocode}
@@ -245,7 +245,7 @@ $$T(n) = \sum_{j=0}^{h-1} 2^{h - 1 - (h - 1 - j)} \cdot (h - 1 - j) = \sum_{q=0}
     \item \textit{První úprava je přičtení a odečtení h-1 v exponentu.}
     \item \textit{Druhá úprava je substituce výrazu $h-1-j$ za $q$. Důvodem je dostat $h - 1$ do exponentu, odtud ho lze snadno vytáhnout ven.}
     \item \textit{Třetí úprava je vyjmutí výrazu $2^{h-1}$ ven před sumu (na sumě nijak nezávisí).}
-    \item \textit{Čtvrtá úprava je kompaktní přepsání na zlomek $2^{-q} = \frac{1}{2^q}$ a zároveň platný odhad: Kde Počet prvků na poslední hladině je méně či rovno počtu prvků celé haldy.}
+    \item \textit{Čtvrtá úprava je kompaktní přepsání na zlomek $2^{-q} = \frac{1}{2^q}$ a zároveň platný odhad: Kde Počet prvků na poslední hladině je méně či rovno počtu prvků celé haldy.} \\
 \end{enumerate}
 Časouvou složitost lze zhora odhadnout nekonečnou řadou $n \sum_{q=0}^{\infty} \frac{q}{2^q}$. Jelikož výraz $a_q = \frac{q}{2^q}$ od $q \geq 1$ je kladný (první člen $a_0$ nemá na konvergenci vliv). Můžeme pro něj použít D'Alambertovo kritérium (viz. MA2).
 $$\lim_{q \to \infty} \frac{a_{q+1}}{a_q} = \lim_{q \to \infty} \frac{q+1}{2^{q+1}} \cdot \frac{2^q}{q} = \lim_{q \to \infty} \frac{q+1}{2q} = \frac{1}{2} < 1$$
@@ -271,7 +271,7 @@ Pomocí haldy můžeme vytvořit řadící algoritmus HeapSort. Funguje tak, že
 
  Často narazíme na algoritmy, které mají "většinou" relativně malou složitost, ale jednou za čas se stane, že nějaká operace zabere opravdu mnoho času. Například zdvojnásobení velikosti pole. Znamená to tedy že složitost operace PushBack je $\bigO{n}$? V nejhorším případě samozřejmě ano, ale tak trošku tušíme, že tato informace může být poněkud zavádějící, pokud se tato drahá operace stane velmi zřídka. Můžeme se tedy podívat na dlouhodobější horizont volání této funkce nad nějakou datovou strukturou a podívat se, jaká byla v "průměru" její složitost.\\
 
-Abychom se vyhli neurčitým výrazům jako: "většinou", "průměrná operace", apod., pojďme si přesněji zadefinovat co to tedy at amortizovaná složitost je.
+ \noindent Abychom se vyhli neurčitým výrazům jako: "většinou", "průměrná operace", apod., pojďme si přesněji zadefinovat co to tedy at amortizovaná složitost je.
 
 \begin{definition}[Amortizovaná časová složitost]
 Operace A nad dynamickou datovou strukturou má v daném kontextu svého provádění amortizovanou časovou složitost $O(f(n))$ (značíme $O^*(f(n)))$, pokud posloupnost k operací A má celkovou časovou složitost $O(k \cdot f(n))$. Parametr n je velikost dynamické množiny po provedení této posloupnosti operací.
@@ -317,7 +317,7 @@ Celková časová složitost posloupnosti $n$ operací je tedy $\bigTheta{n} + \
 
 Uvažujme $k$-bitovou sériovou sčítačku. Operace Inc zvýší její hodnotu o jedna postupným otáčením bitů zprava do leva. V nejhorší případě musíme otočit všechny bity za $\bigO{k}$. Např. Inc na 011 otočí všechny bity na 100. \\
 
-Pro dokázání počtu bitových inverzí na jednu operaci Inc (a tedy i složitost této operace) použijeme tzv. bankéřovu metodu. Ta využívá tzv. penízků. Každé operaci dáme k dispozici $k$ penízků (např. $10$, $log(n)$, apod.), pak ukážeme, že pro každou operaci, všechny v tomto případě inverze bitů, dokážeme zaplatit (jeden penízek za jednu inverzi) z penízků co jsme dostali, popřípadě ještě z penízků co nám zbyli z minulých operací.
+\noindent Pro dokázání počtu bitových inverzí na jednu operaci Inc (a tedy i složitost této operace) použijeme tzv. bankéřovu metodu. Ta využívá tzv. penízků. Každé operaci dáme k dispozici $k$ penízků (např. $10$, $log(n)$, apod.), pak ukážeme, že pro každou operaci, všechny v tomto případě inverze bitů, dokážeme zaplatit z penízků co jsme dostali, popřípadě ještě z penízků co nám zbyli z minulých operací.
 
 \begin{theorem}[Amortizovaná složitost binární sčítačky]
   Uvažujme na počátku vynulovanou binární sčítačku. Celková složitost posloupnosti $n$ volání operace $\text{Inc}$ měřená počtem bitových inverzí je $\Theta(n)$, neboli amortizovaná složitost operace $\text{Inc}$ je $\Theta^{*}(1)$.
@@ -329,8 +329,8 @@ Důkaz provedeve účetní (bankéřovou) metodou.
     \item Každé operaci Inc přiřadíme virtuální kredit ve výši 2 penízků.
     \item Provedení jedné bitové inverze stojí právě 1 penízek.
     \item První volání Inc zaplatí jeden penízek za invertování 0 na 1 a zbylí penízek dá nad tuto jedničku kterou právě invertoval.
-    \item Další volání Inc dokud před sebou vidí bit s hodnotou 1, tak ho invertuje na 0 do té doby, dokud je před ním 1. Jakmile narazí na první 0, tak ji invertuje na 1 a nechá na ní ležet penízek.
-    \item Protože jsme pokaždé co jsme invertovali 0 na 1 nechali na 1 ležet penízek, tak každé invertování 1 na 0 můžeme zaplatit díky tomuto penízku našetřenému z předchozích operací. Invertování z 0 na 1 se v každé operaci vyskytne přesně jednou, za tu zaplatíme jedním penízkem a druhý na této 1 necháme ležet.
-    \item Tedy na všechny operace nám stačí 2 penízky na jednu operaci a tedy každá operace je $\Theta^{*}(1)$ a složitost všech $n$ operací je tedy $\Theta^{*}(1) * n = \Theta^{*}(n)$.
+    \item Další volání Inc dokud před sebou vidí bit s hodnotou 1, tak ho invertuje na 0 do té doby, než je před ním 1. Jakmile narazí na první 0, tak ji invertuje na 1 a nechá na ní ležet penízek. Např. 1011 -> 1100.
+    \item Protože jsme pokaždé co jsme invertovali 0 na 1 nechali na ní ležet penízek, tak každé invertování zpět na 0 můžeme zaplatit, díky tomuto našetřenému penízku.
+    \item Na každou operaci $\text{Inc}$ nám stačí 2 penízky. Jeden použijeme a druhý tam necháme do budoucna. Tedy každý $\text{Inc}$ je $\Theta^{*}(1)$ a složitost všech $n$ operací je tedy $\Theta^{*}(1) * n = \Theta^{*}(n)$.
 \end{enumerate}
 \end{proof}

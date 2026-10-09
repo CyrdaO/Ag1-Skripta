@@ -16,15 +16,21 @@ Neorientovaný graf $G$ je \textbf{souvislý}, jestliže v něm pro každé jeho
 Indukovaný podgraf $H$ grafu $G$ je \textbf{souvislou komponentou}, pokud je souvislý a neexistuje žádný souvislý podgraf $F$ grafu $G$ takový, že $H \subseteq F$ a $H \neq F$.
 \end{definition}
 
-\noindent Sovouslé komponenty jsou tedy největší možné podgrafy grafu $G$ takové, že jsou souvislé. \bigskip
+\noindent Souvislé komponenty jsou tedy největší možné podgrafy grafu $G$ takové, že jsou souvislé.
 
-\begin{remark}[Pozorování]
+\begin{center}
+    \input{Obrázky/SouvislostGraf}
+\end{center}
+
+\begin{observation}
 Graf je souvislý právě tehdy, když obsahuje jedinou souvislou komponentu.
-\end{remark} \bigskip
+\end{observation} 
 
-\begin{remark}[Pozorování]
-Graf o $n$ vrcholech a 0 hranách má $n$ souvislých komponent.
-\end{remark} \bigskip
+\begin{observation}
+Graf na $n$ vrcholech a 0 hranách má $n$ souvislých komponent.
+\end{observation}
+
+\bigskip
 
 \noindent Souvislost lze také popsat pomocí relace ekvivalence na vrcholech grafu.
 
@@ -34,16 +40,12 @@ $$u \leftrightsquigarrow v \iff \text{existuje } u\text{-}v\text{-cesta v } G$$
 je relací ekvivalence. Třídy ekvivalence této relace indukují souvislé komponenty grafu $G$.
 \end{theorem} \bigskip
 
-\begin{center}
-    \input{Obrázky/SouvislostGraf}
-\end{center} \bigskip
-
 \noindent Předtím, než se podíváte na důkaz přoč je tato relace ekvivalencí, zkuste si to jako cvičení dokázat sami, u prvních dvou vlastností se jedná se o velmi přímočarý důkaz a velmi dobré cvičení na ověření si, zda jste tuto definici správně pochopili. U třetí vlastnosti si pak musíte uvědomit, že složením dvou cest nemusí vzniknout cesta, ale sled (ten pak lze zkrátit na cestu, na tento důkaz narazíme v druhé půlce semestru).
 
 \begin{proof}
-    Stačí nám ověřit reflexivitu, symetrii a transitivitu (viz. DML), tím dokážeme ekvivalenci. \bigskip
-
-    Mějme graf $G$ a nějaké jeho 3 vrcholy $u, v, w \in G$.
+    Stačí nám ověřit reflexivitu, symetrii a transitivitu (viz. DML), tím dokážeme ekvivalenci. \\
+    
+    \noindent Mějme graf $G$ a nějaké jeho 3 vrcholy $u, v, w \in G$.
 
     \begin{enumerate}
         \item Reflexivita - Z vrcholu $v$ určitě existuje cesta do vrcholu $v$. Je to    přesně cesta délky 0.
@@ -58,7 +60,7 @@ je relací ekvivalence. Třídy ekvivalence této relace indukují souvislé kom
 
 Pokud graf tedy není souvislý, nemůžeme jednodušše pustit algoritmus BFS na libovolném vrcholu a očekávat, že nalezne všechny vrcholy, jak to tedy zařídit? Zařídí to tato mírně modifikovaná verze algoritmu.
 
-Algoritmus \texttt{BFS\_Graf} prochází celý graf $G$ a postupně spouští algoritmus BFS pro každý dosud nenalezený vrchol $s \in V(G)$. Tímto způsobem postupně projde všechny souvislé komponenty grafu a spočítá vzdálenosti $D$ i strom nejkratších cest $P$ pro každou komponentu zvlášť. Nemůže tak zůstat vrchol do, kterého by se algoritmus nedostal, jelikož bude provolán vnější smyčkou a sám najde všechny ze svojí komponenty. \bigskip
+\noindent Algoritmus \texttt{BFS\_Graf} prochází celý graf $G$ a postupně spouští algoritmus BFS pro každý dosud nenalezený vrchol $s \in V(G)$. Tímto způsobem postupně projde všechny souvislé komponenty grafu a spočítá vzdálenosti $D$ i strom nejkratších cest $P$ pro každou komponentu zvlášť. Nemůže tak zůstat vrchol do, kterého by se algoritmus nedostal, jelikož bude provolán vnější smyčkou a sám najde všechny ze svojí komponenty. \bigskip
 
 \begin{remark}
     Toto není jediný způsob prohledání grafu, algoritmus BFS lze v tomto případě například zaměnit za DFS.
@@ -91,9 +93,9 @@ Algoritmus \texttt{BFS\_Graf} prochází celý graf $G$ a postupně spouští al
         
         \item Algoritmus BFS\_Graf nejprve nastaví všechny vrcholy na stav \textit{nenalezený}. Poté postupně prochází všechny vrcholy $s \in V(G)$. Pokud je vrchol $s$ stále nenalezený, zavolá na něm algoritmus BFS.
 
-        \item Uvažujme libovolnou komponentu souvislosti $C$ grafu $G$. Pokud ještě žádný vrchol z $C$ nebyl nalezen, algoritmus při průchodu vrcholů narazí na některý vrchol $s \in C$ ve stavu \textit{nenalezený} a zavolá BFS$(G,s)$. Protože všechny vrcholy v $C$ jsou ze $s$ dosažitelné, algoritmus BFS nalezne všechny vrcholy komponenty $C$.
+        \item Uvažujme libovolnou komponentu souvislosti $C$ grafu $G$. Pokud ještě žádný vrchol z $C$ nebyl nalezen, algoritmus při průchodu vrcholů narazí na některý vrchol $s \in C$ ve stavu \textit{nenalezený} a zavolá BFS$(G,s)$. Protože všechny vrcholy v $C$ jsou z $s$ dosažitelné, algoritmus BFS nalezne všechny vrcholy komponenty $C$.
         
-        \item Po dokončení tohoto volání jsou všechny vrcholy komponenty $C$ označeny jako nalezené. Když tedy algoritmus později narazí na další vrchol z této komponenty, podmínka $\text{stav}[s] = \text{nenalezený}$ již nebude splněna a další volání BFS nebude provedeno.
+        \item Po dokončení tohoto volání jsou všechny vrcholy komponenty $C$ označeny jako uzavřené. Když tedy algoritmus později narazí na další vrchol z této komponenty, podmínka $\text{stav}[s] = \text{nenalezený}$ již nebude splněna a další volání BFS nebude provedeno.
         
         \item Každá komponenta souvislosti je tedy zpracována právě jedním voláním algoritmu BFS a žádná komponenta není vynechána. Jelikož je BFS korektní, jsou pro všechny vrcholy správně určeny hodnoty $D$ a $P$.
 
@@ -101,9 +103,9 @@ Algoritmus \texttt{BFS\_Graf} prochází celý graf $G$ a postupně spouští al
     \end{enumerate}
 \end{proof}
 
-Teď tedy víme, jak prohledat celý graf i pokud předem nevíme, zda je souvislý. Můžete se ale ptát, jak ověřit souvislost grafu? Jak najít jeho souvislé komponenty? Pokud dostanu zadaný vrchol jak najít jeho komponentu souvislosti? Na tyto otázky nyní odpovíme malým "vylepšením" algoritmu, který jsme si právě ukázali. \\
+\noindent Teď tedy víme, jak prohledat celý graf i pokud předem nevíme, zda je souvislý. Můžete se ale ptát, jak ověřit souvislost grafu? Jak najít jeho souvislé komponenty? Pokud dostanu zadaný vrchol jak najít jeho komponentu souvislosti? Na tyto otázky nyní odpovíme malým "vylepšením" algoritmu, který jsme si právě ukázali. \\
 
-Dostaneme-li vrchol $s$ jak najít jeho souvislou komponentu? K tomuto nám stačí algoritmus který jsme si právě ukázali, stačí jen přidat jedno pole identifikátorů které pro každý vrchol držet identifikátor komponenty souvislosti ve které se vrchol nachází, to algoritmus vyplní vrcholem ve kterém začalo prohledávání současné komponenty.
+\noindent Dostaneme-li vrchol $s$ jak najít jeho souvislou komponentu? K tomuto nám stačí algoritmus který jsme si právě ukázali, stačí jen přidat jedno pole identifikátorů které pro každý vrchol držet identifikátor komponenty souvislosti ve které se vrchol nachází, to algoritmus vyplní vrcholem ve kterém začalo prohledávání současné komponenty.
 
 \newpage
 
@@ -116,18 +118,28 @@ Z PAx jistě znáte časovou a paměťovou složitost programu. Abychom ale mohl
 \begin{definition}[Model RAM]
 Výpočetní model \textbf{RAM} se skládá ze dvou hlavních částí:
 \begin{itemize}
-    \item \textbf{Paměť}: Je tvořena adresovatelným polem celočíselných paměťových buněk. Adresy jsou celá čísla, paměťové buňky mají neomezenou velikost (lze do nich ukládat libovolně velká celá čísla).
+    \item \textbf{Paměť}: Je tvořena adresovatelným polem celočíselných paměťových buněk. Adresy jsou celá čísla.
     \item \textbf{Program}: Je konečná posloupnost sekvenčně prováděných instrukcí. Instrukce dělíme na:
     \begin{enumerate}
-        \item \textbf{Aritmeticko-logické}(sčítání, násobení, porovnávání, ...): Mají dva vstupní argumenty a jeden výstupní. Vstupem může být přímá konstanta, přímo adresovaná buňka, nebo nepřímo adresovaná buňka (adresa je uložena v jiné přímo adresované buňce).
+        \item \textbf{Aritmeticko-logické:} (sčítání, násobení, porovnávání, ...): Obvykle mají dva vstupní argumenty a jeden výstupní. Vstupem může být přímá konstanta, přímo adresovaná buňka, nebo nepřímo adresovaná buňka (adresa je uložena v jiné přímo adresované buňce).
         \item \textbf{Řídicí}: Zahrnují nepodmíněné skoky, podmíněné skoky a instrukci pro zastavení programu (halt).
     \end{enumerate}
 \end{itemize}
 \end{definition} \medskip
 
-\noindent Na začátku výpočtu jsou vstupní data uložena v určených paměťových buňkách a procesor v každém kroku provede právě jednu instrukci. Po zastavení se obsah určených buněk interpretuje jako výstup. \bigskip
+\noindent Na začátku výpočtu jsou vstupní data uložena v určených paměťových buňkách a procesor v každém kroku provede právě jednu instrukci. Po zastavení se obsah určených buněk interpretuje jako výstup. 
 
-\noindent Nyní se konečně dostáváme k tomu co je časová a paměťová složitost. Je to ten nejhorší případ, ze všech vstupů až do velikosti $n$ včetně. \bigskip
+\medskip
+
+\begin{remark}
+    Pro představu může sloužit např. Assembler z předmětu SAP nebo APS. ADD je příkladem aritmeticko-logické instrukce a JMP příkladem řídící instrukce. Na vstup dostanou buďto konstantu, registr, nebo hodnotu z paměti.
+\end{remark}
+
+\bigskip
+
+\noindent Nyní se konečně dostáváme k tomu co je časová a paměťová složitost. Je to ten nejhorší případ, ze všech vstupů až do velikosti $n$ včetně.
+
+\medskip
 
 \begin{definition}[Složitost programu v modelu RAM]
 Složitost algoritmu v nejhorším případě pro vstup velikosti $n$ definujeme následovně:
@@ -159,7 +171,7 @@ Pro neorientovaný graf je matice $A_G$ vždy symetrická podle hlavní diagoná
 
 \subsubsection{Seznam sousedů}
 \begin{definition}[Seznam sousedů]
-V reprezentaci \textbf{seznamem sousedů} uchováváme pro každý vrchol $v \in V(G)$ jednosměrně či obousměrně vázaný seznam všech jeho sousedů (tedy vrcholů $w$, pro které $\{v, w\} \in E$).
+V reprezentaci \textbf{seznamem sousedů} uchováváme pro každý vrchol $v \in V(G)$ jednosměrně či obousměrně zřetězený seznam všech jeho sousedů (tedy vrcholů $w$, pro které $\{v, w\} \in E$).
 \end{definition} \bigskip
 
 \begin{remark}
@@ -174,7 +186,7 @@ U orientovaných grafů reprezentujeme hrany jako uspořádané dvojice:
 \end{itemize} \bigskip
 
 \begin{center}
-    \input{Obrázky/GrafSousednosti}
+    \input{Obrázky/GrapSousednosti}
 \end{center}
 
 % ============================================================
@@ -182,11 +194,13 @@ U orientovaných grafů reprezentujeme hrany jako uspořádané dvojice:
 % ============================================================
 
 Díky zavedení modelu RAM nyní můžeme konečně dokázat časovou složitost algoritmu BFS
-Na základě definovaného modelu RAM a reprezentace grafu můžeme exaktně dokázat časovou složitost algoritmu BFS. \bigskip
+Na základě definovaného modelu RAM a reprezentace grafu můžeme exaktně dokázat časovou složitost algoritmu BFS. 
+
+\medskip
 
 \begin{theorem}[O časové složitosti algoritmu BFS]
 Algoritmus $BFS(G, s)$ má při reprezentaci grafu $G$ seznamem sousedů časovou složitost $\bigO{|V| + |E|}$.
-\end{theorem} \medskip
+\end{theorem} 
 
 \begin{proof}
 Časovou složitost můžeme rozdělit na analýzu jednotlivých fází algoritmu:
@@ -209,11 +223,15 @@ Algoritmus $BFS(G, s)$ má při reprezentaci grafu $G$ seznamem sousedů časovo
 Celkem tedy dostáváme $\bigO{|V| + |E|}$.
 \end{proof} \bigskip
 
-Je důležité opravdu psát $\bigO{|V| + |E|}$ a ne jen $\bigO{|V|} \text{ nebo } \bigO{|E|}$, protože nevíme, zda je v grafu více vrcholů nebo hran. Také je dobré si uvědomit, že počet hran v grafu může být až kvadrát počtu vrcholů.
+\noindent Je důležité opravdu psát $\bigO{|V| + |E|}$ a ne jen $\bigO{|V|} \text{ nebo } \bigO{|E|}$, protože nevíme, zda je v grafu více vrcholů nebo hran. Také je dobré si uvědomit, že počet hran v grafu může být až kvadrát počtu vrcholů. 
+
+\medskip
 
 \begin{theorem}[O časové složitosti algoritmu BFS\_Graf]
 Algoritmus $BFS\_graf(G)$, má při reprezentaci grafu seznamem sousedů celkovou časovou složitost $\bigO{|V| + |E|}$.
-\end{theorem} \medskip
+\end{theorem}
+
+\medskip
 
 \begin{proof}
 Algoritmus vnějším cyklem projde všechny vrcholy $v \in V(G)$ postupně. Zvolme si libovolnou komponentu souvislosti $C$ grafu $G$. V jednom z vrcholů zacněme BFS a projdeme jí za $\bigO{|V(C)| + |E(C)|}$. Jelikož komponenty nemají žádnou společnou část. Tedy průchodem nic neopakujeme. Tak projdeme celý graf za sumu přes všechny komponenty. Což je právě celý graf. Tedy $\bigO{|V| + |E|}$.
@@ -225,20 +243,26 @@ Algoritmus vnějším cyklem projde všechny vrcholy $v \in V(G)$ postupně. Zvo
 \subsection{Slabá a silná souvislost orientovaných grafů}
 % ============================================================
 
-Pro orientované grafy je potřeba pojem souvislosti trochu rozšířit. Rozlišujeme dva druhy. Slabou a silnou souvislost. U Slabé souvislosti se ke hranám chováme, jako by byly neorientované. U Silné souvislosti naopak požadujeme, aby existovala orientovaná cesta mezi libovolnými dvěma vrcholy. Prvně si zavedeme pomocnou definici a to symetrizaci grafu neboli to již zmiňované ignorování orientac hran. \bigskip
+Pro orientované grafy je potřeba pojem souvislosti trochu rozšířit. Rozlišujeme dva druhy. Slabou a silnou souvislost. U Slabé souvislosti se ke hranám chováme, jako by byly neorientované. U Silné souvislosti naopak požadujeme, aby existovala orientovaná cesta mezi libovolnými dvěma vrcholy. Prvně si zavedeme pomocnou definici a to symetrizaci grafu neboli to již zmiňované ignorování orientace hran. \medskip
 
 \begin{definition}[Symetrizace orientovaného grafu]
 Nechť $G = (V, E)$ je orientovaný graf. \textbf{Symetrizace} grafu $G$ je neorientovaný graf $sym(G) = (V, E')$, kde pro každé dva vrcholy $u, v \in V$ platí:
 $$\{u, v\} \in E' \iff (u, v) \in E \lor (v, u) \in E$$
-\end{definition} \bigskip
+\end{definition} 
+
+\medskip
 
 \begin{definition}[Slabá souvislost]
-Orientovaný graf $G$ je \textbf{slabě souvislý}, pokud je jeho symetrizace $sym(G)$ souvislý neorientovaný graf.
-\end{definition} \bigskip
+Orientovaný graf $G$ je \textbf{slabě souvislý}, pokud je souvislá jeho symetrizace $sym(G)$.
+\end{definition} 
+
+\medskip
 
 \begin{definition}[Silná souvislost]
 Orientovaný graf $G = (V, E)$ je \textbf{silně souvislý}, pokud pro každé dva vrcholy $u, v \in V$ existuje v $G$ orientovaná cesta z $u$ do $v$ a zároveň orientovaná cesta z $v$ do $u$.
-\end{definition} \bigskip
+\end{definition} 
+
+\medskip
 
 \begin{center}
     \input{Obrázky/SlabaSilnaSouvislost}
@@ -253,7 +277,7 @@ Orientovaný graf $G = (V, E)$ je \textbf{silně souvislý}, pokud pro každé d
 \begin{definition}[Izomorfismus grafů]
 Nechť $G$ a $H$ jsou dva grafy. Zobrazení $f : V(G) \to V(H)$ nazveme \textbf{izomorfismem grafů} $G$ a $H$, pokud platí:
 \begin{enumerate}
-    \item $f$ je bijekce (vzájemně jednoznačné zobrazení),
+    \item $f$ je bijekce
     \item pro každou dvojici vrcholů $u, v \in V(G)$ platí:
     $$\{u, v\} \in E(G) \iff \{f(u), f(v)\} \in E(H)$$
 \end{enumerate}
@@ -265,5 +289,5 @@ Pokud takové zobrazení existuje, říkáme, že grafy $G$ a $H$ jsou \textbf{i
 \end{definition} \bigskip
 
 \begin{remark}[Počty grafů]
-Na pevné $n$-prvkové množině vrcholů $V$ existuje právě $2^{\binom{n}{2}}$ různých grafů. Počet navzájem neizomorfních grafů je však výrazně nižší. Například pro $n=3$ existuje $2^3 = 8$ různých grafů, které se však dělí do pouhých 4 tříd izomorfismu. Ty je zrovna potřeba napočítat manuálně. Binoimiální číslo $\binom{n}{k}$ udává počet podmnožin velikosti k z dané množiny velikosti n.
+Na pevné $n$-prvkové množině vrcholů $V$ existuje právě $2^{\binom{n}{2}}$ různých grafů. Počet navzájem neizomorfních grafů je však výrazně nižší. Například pro $n=3$ existuje $2^3 = 8$ různých grafů, které se však dělí do pouhých 4 tříd izomorfismu. Ty je zrovna potřeba napočítat manuálně. Binomiiální číslo $\binom{n}{k}$ udává počet podmnožin velikosti k z dané množiny velikosti n.
 \end{remark} \bigskip

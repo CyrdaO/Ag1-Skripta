@@ -45,10 +45,13 @@ Pro spor nechť je graf $G$ strom a $P$ je nějaká nejdelší cesta v grafu $G$
 \noindent V obou případech jsme dospěli ke sporu. Tvrzení tedy platí.
 \end{proof} \bigskip
 
-
 \noindent Další důležitou vlastností stromů je ta, že pokud odebereme nebo přidáme do grafu list, graf stále zůstane stromem.
 
+\medskip
+
 \noindent Pro jednoduchost zavedeme tuto notaci $G - v = (V \setminus \{v\}, E \setminus \{e \in E | v \in e\})$. Tedy $G-v$ je jednodušše Graf $G$ bez vrcholu $v$. Podobně pak i notaci $G + v$.
+
+\medskip
 
 \begin{theorem}[Věta o trhání listů]
 Nechť $G = (V, E)$ je graf s alespoň $2$ vrcholy a nechť $v \in V$ je jeho list. Pak jsou následující tvrzení ekvivalentní:                \begin{enumerate} 
@@ -56,6 +59,7 @@ Nechť $G = (V, E)$ je graf s alespoň $2$ vrcholy a nechť $v \in V$ je jeho li
     \end{enumerate} 
 \end{theorem}
 
+\medskip
 
 \begin{proof}
 Dokážeme ekvivalenci obou tvrzení pomocí dvou implikací:
@@ -70,7 +74,7 @@ Dokážeme ekvivalenci obou tvrzení pomocí dvou implikací:
     
     \item[$2 \Rightarrow 1$] (Předpokládáme, že $G - v$ je strom, a dokazujeme, že $G$ je strom):
     \begin{itemize}
-        \item \textbf{$G$ je bez kružnic:} Přidáním listu $v$ ke stromu $G - v$ (vrácením listu $v$ do grafu $G$) nelze vytvořit cyklus (vrcholy které jsou součástí cyklu )
+        \item \textbf{$G$ je bez kružnic:} Přidáním listu $v$ ke stromu $G - v$ (vrácením listu $v$ do grafu $G$) nelze vytvořit cyklus. Jelikož $deg(v) = 1$.
 
         \item \textbf{$G$ je souvislý:} Mezi každými dvěma vrcholy $x, y \in V \setminus \{v\}$ vede cesta již v $G - v$. Ať je jediný soused listu $v$ vrchol $w$. Mezi ním a všemi ostatními vrcholy grafu $G-v$ existuje cesta. Z vrcholu $v$ do libovolného vrcholu $u$ grafu $G$ vznikne cesta tak, že pouze prodloužíme $u\text{--}w$ cestu o hranu $\{w,v\}$.
     \end{itemize}
@@ -81,6 +85,8 @@ Dokážeme ekvivalenci obou tvrzení pomocí dvou implikací:
 \subsection{Ekvivlentní definice stromu}
 
 \noindent Každý pojem jde zadefinovat více způsoby a v určitých případech se nám i hodí alternativní definice. Proto si zde ukážeme alternativní definice ke stromu. Jediné co je potřeba je ukázat ekvivalenci těchto definic.
+
+\medskip
 
 \begin{theorem}[Věta o charakterizaci stromů]
 Nechť $G = (V, E)$ je graf. Pak jsou následující tvrzení ekvivalentní:
@@ -109,7 +115,9 @@ Předpokládejme, že $G$ je strom. Jelikož je $G$ souvislý, existuje pro kaž
 
 \noindent Pak ale posloupnost vrcholů $a_i, a_{i+1}, \dots, a_p = b_q, b_{q-1}, \dots, b_{i+1}, a_i$ tvoří v $G$ kružnici, což je spor s acykličností stromu $G$
 
-\input{./Obrázky/TreePathProof1.tex}
+\begin{center}
+    \input{./Obrázky/TreePathProof1.tex}    
+\end{center}
 
 \bigskip
 
@@ -123,10 +131,14 @@ Z předpokladu, že mezi každými dvěma vrcholy existuje právě jedna cesta, 
 \noindent\textbf{Dokážeme $1 \Rightarrow 3$:}
 Jelikož je $G$ strom, je souvislý. Nechť $e = \{u, v\} \in E$ je libovolná hrana. Pro spor předpokládejme, že $G - e$ je stále souvislý. Pak v $G - e$ existuje nějaká $u$-$v$-cesta $P$. Přidáním hrany $e = \{u, v\}$ k cestě $P$ získáme v grafu $G$ kružnici, což je spor s tím, že $G$ je strom. \bigskip
 
-\input{./Obrázky/TreePathProof2.tex}
+\begin{center}
+    \input{./Obrázky/TreePathProof2.tex}
+\end{center}
 
 \noindent\textbf{Dokážeme $3 \Rightarrow 1$:}
-Souvislost $G$ je platí ze zadání. Chceme ukázat, že $G$ je acyklický. Pro spor předpokládejme, že $G$ obsahuje kružnici $C$. Zvolme libovolnou hranu $e = \{x, y\}$ na této kružnici. Odebráním hrany $e$ se graf $G$ nerozpadne na více komponent, protože pro jakoukoli cestu mezi vrcholy $u$ a $v$, která používala hranu $e$, poskytne zbytek kružnice $C \setminus \{e\}$ náhradní obchůzku. Graf $G - e$ tedy zůstane souvislý, což je spor s předpokladem, že odebráním hrany se stane nesouvislým. \bigskip
+Souvislost $G$ je platí ze zadání. Chceme ukázat, že $G$ je acyklický. Pro spor předpokládejme, že $G$ obsahuje kružnici $C$. Zvolme libovolnou hranu $e = \{x, y\}$ na této kružnici. Odebráním hrany $e$ se graf $G$ nerozpadne na více komponent, protože pro jakoukoli cestu mezi vrcholy $u$ a $v$, která používala hranu $e$, poskytne zbytek kružnice $C \setminus \{e\}$ náhradní obchůzku. Graf $G - e$ tedy zůstane souvislý, což je spor s předpokladem, že odebráním hrany se stane nesouvislým. 
+
+\bigskip
 
 \noindent\textbf{Dokážeme $1 \Rightarrow 4$:}
 Souvislost $G$ platí z definice stromu. Vztah $|E| = |V| - 1$ dokážeme indukcí podle $n = |V|$:
@@ -152,22 +164,32 @@ Předpokládejme, že $G$ je souvislý a $|E| = |V| - 1$. Indukcí podle $n = |V
 
 \noindent Nyní si zavedeme kostru grafu. To je nejmenší souvislý podgraf, který používá všechny vrcholy. Později se budeme bavit o minimální kostře. Která nám pomáhá řešit problémy, jak shrabat co nejméně sněhu, tak aby celé město propojené. Místo města, můžeme řešit třeba komunikaci v síťi nebo logistický problém.
 
+\medskip
+
 \begin{definition}[Kostra grafu]
 Nechť $G = (V, E)$ je souvislý neorientovaný graf. Podgraf $K$ grafu $G$ nazveme \textbf{kostrou} grafu $G$, pokud $V(K) = V$ a $K$ je strom.
-\end{definition}
+\end{definition} \medskip
+
+\begin{center}
+    \input{Obrázky/Kostra}
+\end{center} \medskip
 
 \noindent Je dobré si uvědomit, že kostra grafu nemusí existovat. Pro libovolný nesouvislý graf jeho kostru nenajdete. 
+
+\medskip
 
 \begin{observation}[O existenci kostry]
   Mějme $G = (V, E)$, jeho kostra existuje právě tehdy když je $G$ souvislý.
 \end{observation}
 \begin{proof}
-  Důkaz ponecháváme na laskavém čtenáři.
+Pro spor předpokládejme, že graf $G$ neni souvislý a má kostru $K$.
+  \begin{itemize}
+      \item Kostra je z definice strom, tedy musí být souvislá a acyklická. Dále musí procházet všechny vrcholy grafu $G$.
+      \item To je ale spor s definicí, jelikož $G$ je nesouvislý a kostra $K$ je souvislá na všech jeho vrcholech. Tedy se nemůže jednat o podgraf.
+  \end{itemize}
 \end{proof}
 
-\begin{center}
-    \input{Obrázky/Kostra}
-\end{center} \bigskip
+\bigskip
 
 \noindent Jak takovou kostru nalezneme? Vzpomeňmě na algoritmus BFS, který jak víme, tvoří pole předchůdců. Každý vrchol má právě jednoho předchůdce, mezi nimi je hrana, přes kterou jsme se do tohoto vrcholu z předchůdce dostali. Pokud vezmeme z grafu všechny vrcholy a ty hrany které vedou z vrcholu do jejich předchůdce získáme tím hledanou kostru.\bigskip
 

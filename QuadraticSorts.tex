@@ -24,17 +24,17 @@ S řažením se již každý z vás setkal v PAx. Cílem je uspořádat si data 
 \noindent \textbf{SelectSort}: Rozdělí pole na levou seřazenou a pravou neseřazenou část. V každém kroku najde minimum v neseřazené části a prohodí ho s jejím prvním prvkem. Ten je poté seřazený a tím se nám posune hranice mezi těmito částmi. Pokračujeme dokud celé pole neni seřazené. Vlastnosti:
 \begin{itemize}
     \item \textbf{Časová složitost} je $\bigO{n^2}$.
-    \item \textbf{In-Place}. Používá pouze $\bigO{1}$ paměti pro uložení minima a prohození prvků.
-    \item \textbf{Nestabilní}. V případě třeba tohoto pole 2,2,1. Dojde k prohození 1 za 2. Poté se ale dvojkám vyměnilo pořadí ve výstupním poli.
+    \item \textbf{In-Place}. Používá pouze $\bigO{1}$ dodatečné paměti pro uložení minima a prohození prvků.
+    \item \textbf{Nestabilní}. V případě třeba tohoto pole [\textcolor{red}{2}, \textcolor{blue}{2}, 1]. Dojde k prohození 1 za první 2. Poté se ale dvojkám vyměnilo pořadí ve výstupním poli. Tedy [1, \textcolor{blue}{2}, \textcolor{red}{2}].
     \item \textbf{Datově necitlivý}. Algoritmus se vždy pokusí nalézt minimum i když nic neprohodí, tak pokračuje dále.
 \end{itemize} \medskip
 
 \noindent \textbf{InsertSort}: Rozdělí pole na levou seřazenou a pravou neseřazenou část. V každém kroku vezme první prvek z neseřazené časti a odzadu ho zanořuje do seřazené části, dokud mu nenajde správnou pozici. Vlastnosti:
 \begin{itemize}
     \item \textbf{Časová složitost} je $\bigO{n^2}$.
-    \item \textbf{In-Place}. Používá pouze $\bigO{1}$ paměti pro prohození prvků.
+    \item \textbf{In-Place}. Používá pouze $\bigO{1}$ dodatečné paměti pro prohození prvků.
     \item \textbf{Stabilní}. Díky cestě vzadu se vždy zastaví před stejnou hodnotou a neprohodí je.
-    \item \textbf{Datově necitlivý}. Pokud je pole seřazené či částečně seřazené, tak si ušetří spoustu zanoření a prohození. V nejlepším případě to stihne za $\bigTheta{n}$.
+    \item \textbf{Datově citlivý}. Pokud je pole seřazené či částečně seřazené, tak si ušetří spoustu zanoření a prohození. V případě seřazeného pole doběhne za $\bigTheta{n}$.
 \end{itemize} \bigskip
 
 \subsubsection{Algoritmus BubbleSort}
