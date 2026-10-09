@@ -14,7 +14,7 @@
       - name: Upload PDF
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dokument.pdf
+          path: skripta.pdf
 
       - name: Deploy to GitHub Pages
         id: deployment
