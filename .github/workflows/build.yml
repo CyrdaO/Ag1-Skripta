@@ -1,10 +1,8 @@
-
-name: Deploy PDF to GitHub Pages
+name: Build and publish PDF
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -17,23 +15,30 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  build-and-deploy:
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
+      - name: Compile LaTeX
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: paper.tex
 
-      - name: Upload PDF
+      - name: Prepare PDF
+        run: |
+          mkdir -p public
+          cp paper.pdf public/paper.pdf
+
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: Ag1_Skripta.pdf
+          path: public
 
       - name: Deploy to GitHub Pages
         id: deployment
