@@ -45,6 +45,19 @@ jobs:
         run: |
           mkdir -p public
           cp main.pdf public/main.pdf
+          cat > public/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html lang="cs">
+          <head>
+            <meta charset="utf-8">
+            <meta http-equiv="refresh" content="0; url=main.pdf">
+            <title>Dokument</title>
+          </head>
+          <body>
+            <a href="main.pdf">Otevřít PDF</a>
+          </body>
+          </html>
+          EOF
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
