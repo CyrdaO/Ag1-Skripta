@@ -22,33 +22,39 @@ Graf $G$ je uspořádaná dvojice $(V, E)$, kde:
     \item $V$ je neprázdná konečná množina \textbf{vrcholů},
     \item $E$ je množina \textbf{hran}, přičemž každá hrana je dvouprvková podmnožina $V$ (čili neuspořádaná dvojice vrcholů), značíme $\{u, v\}$.
 \end{itemize} \medskip
-Množinu všech dvouprvkových podmnožin množiny $V$ (tedy všech možných hran) značíme $\binom{V}{2}$. \medskip
+Množinu všech dvouprvkových podmnožin množiny $V$ (tedy všech možných hran) značíme $\binom{V}{2}$.
+Obvykle budeme říkat je $\bold{graf}$, tj. neříkáme neorientovaný. \medskip
 \end{definition}
 
-Všimněte si, že díky vlastnosti množin, nemůže být více hran mezi dvěma vrcholy a nezáleží na pořadí vrcholů v množině hrany. 
+\noindent Dále si všimneme, že hrana je dvouprvková podmnožina vrcholů. Tedy nezáleží na pořadí v jakém vrcholy uvedeme. Zároveň nemůže existovat více hran mezi dvěma vrcholy. Poté by množina hran nebyla množinou. Dále nemůže existovat smyčka, tedy hrana z vrcholu $v$ do toho samého vrcholu. Jelikož by se poté nejednalo o dvouprvkovou podmnožinu vrcholů. \bigskip
 
 \begin{center}
 \input{Obrázky/UnorientedGraphImage}
 \end{center}
 
-
 \begin{remark}
-\begin{enumerate}
-    \item Množinu vrcholů grafů zavádíme jakožto neprázdnou. Důvodem je aby jsme u většiny důkazů nemuseli explicitně ošetřovat prázdný graf. Poté u datových struktur toto omezení pomineme.
-    \item Množina hran je vždy dvouprvková podmnožina vrcholů. Díky tomu, že je množinou, tak nám vylučuje případ \{$v$, $v$\}, kde $v \in V$ nějakého grafu G. Tedy neorientovaný graf nemůže obsahovat smyčky, tedy hranu na jednom vrcholu.
-\end{enumerate}
+Množinu vrcholů grafů zavádíme jakožto neprázdnou. Důvodem je aby jsme u většiny důkazů nemuseli explicitně ošetřovat prázdný graf. Poté u datových struktur toto omezení pomineme.
 \end{remark}
 
 \bigskip
 
-\begin{definition}[Značení a incidence]
+\begin{definition}[značení]
+Nechť $G$ je graf. Pak
+\begin{itemize}
+    \item Množinu vrcholů grafu $G$ značíme $V(G)$ a množinu hran $E(G)$.
+    \item Počet vrcholů grafu budeme obvykle značit $n = |V(G)|$ a počet           hran $m = |E(G)|$.
+\end{itemize}
+\end{definition}
+
+\bigskip
+
+\begin{definition}[incidence]
 Nechť $e = \{u, v\}$ je hrana v grafu $G$. Pak řekneme, že:
 \begin{itemize}
     \item vrcholy $u$ a $v$ jsou \textbf{koncové vrcholy} hrany $e$,
     \item $u$ je \textbf{sousedem} $v$ v $G$ (a naopak),
     \item $u$ i $v$ jsou \textbf{incidentní} s hranou $e$.
 \end{itemize}
-Počet vrcholů grafu budeme obvykle značit $n = |V(G)|$ a počet hran $m = |E(G)|$.
 \end{definition}
 
 \begin{center}
@@ -66,12 +72,17 @@ Počet vrcholů grafu budeme obvykle značit $n = |V(G)|$ a počet hran $m = |E(
 
 \bigskip
 
+\noindent Nyní si zavedeme pojmy sled a cesta. Sled je vlastně posloupnost vrcholů a hran, které spolu sousedí. Cesta je poté silnější pojem, jelikož nám zakazuje opakování vrcholů (a tedy i hran, laskavý čtenář rozmyslí).
+
 \begin{definition}[Sled a cesta]
-\textbf{Sled} délky $k$ v grafu $G$ je sekvence $v_0, e_1, v_1, e_2, \dots, e_k, v_k$ taková, že $e_i = \{v_{i-1}, v_i\}$ a $e_i \in E(G)$ pro všechna $i = 1, \dots, k$. \\
-\textbf{Cesta} v grafu $G$ je sled, ve kterém se neopakují vrcholy (a tedy ani hrany). \\
-Má-li cesta $P$ v grafu $G$ koncové vrcholy $s = v_0$ a $t = v_k$, mluvíme o \textbf{cestě z $s$ do $t$} (nebo o \textbf{$s$-$t$-cestě}). Připouštíme i $s = t$ (cesta nulové délky). \\
-\textbf{Délka} $s$-$t$-cesty je počet hran v této cestě. \\
-\textbf{Vzdálenost} $s$ a $t$, značná $d(s, t)$, je délka nejkratší $s$-$t$-cesty v grafu $G$.
+\leavevmode
+\begin{itemize}
+\item \textbf{Sled} délky $k$ v grafu $G$ je sekvence $v_0, e_1, v_1, e_2, \dots, e_k, v_k$ taková, že $e_i = \{v_{i-1}, v_i\}$ a $e_i \in E(G)$ pro všechna $i = 1, \dots, k$.
+\item \textbf{Cesta} v grafu $G$ je sled, ve kterém se neopakují vrcholy (a tedy ani hrany).
+Má-li cesta $P$ v grafu $G$ koncové vrcholy $s = v_0$ a $t = v_k$, mluvíme o \textbf{cestě z $s$ do $t$} (nebo o \textbf{$s$-$t$-cestě}). Připouštíme i $s = t$ (cesta nulové délky).
+\item \textbf{Délka} $s$-$t$-cesty je počet hran v této cestě.
+\item \textbf{Vzdálenost} $s$ a $t$, značná $d(s, t)$, je délka nejkratší $s$-$t$-cesty v grafu $G$.
+\end{itemize}
 \end{definition}
 
 \begin{center}
@@ -82,7 +93,7 @@ Má-li cesta $P$ v grafu $G$ koncové vrcholy $s = v_0$ a $t = v_k$, mluvíme o 
 
 \subsection{Algoritmus BFS (Breadth-First Search)}
 
-\noindent Nyní si představíme velmi důležitý algoritmus BFS neboli Breath-First search. Ten slouží pro nalezení nejkratší cesty mezi vrcholy. S jeho znalostí, pokud převedeme náš problém na graf, tak zvládneme najít nejkratší řešení.
+\noindent Nyní si představíme velmi důležitý algoritmus BFS neboli Breath-First search. Ten slouží pro nalezení nejkratší cesty mezi vrcholy. S jeho znalostí, pokud převedeme náš problém na graf, tak zvládneme najít nejkratší řešení. \medskip
 
 \noindent \textbf{Vstup}: Neorientovaný graf $G = (V, E)$ a počáteční vrchol $s \in V$. \newline
 \noindent \textbf{Výstup}:
@@ -99,8 +110,11 @@ Má-li cesta $P$ v grafu $G$ koncové vrcholy $s = v_0$ a $t = v_k$, mluvíme o 
     \end{itemize}
 \end{itemize}
 
-Tedy algoritmus má najít délky nejkratších cest mezi počátčním vrcholem $s$ a všemi ostatními. Pokud se ptáte, jak získat samotnou nejkratší cestu (tedy posloupnost vrcholů a hran), tak tu lze jednoduše získat díky poli předchůdců $P$, stačí se podívat na předchůdce posledního vrcholu a následně jeho předchůdce a toto opakovat dokud se nedostaneme do samotného vrcholu $s$. Hledaná cesta je pak posloupnost těchto předchůdců.
+\medskip
 
+\noindent Tedy algoritmus má najít délky nejkratších cest mezi počátčním vrcholem $s$ a všemi ostatními. Pokud se ptáte, jak získat samotnou nejkratší cestu (tedy posloupnost vrcholů a hran), tak tu lze jednoduše získat díky poli předchůdců $P$, stačí se podívat na předchůdce posledního vrcholu a následně jeho předchůdce a toto opakovat dokud se nedostaneme do samotného vrcholu $s$. Hledaná cesta je pak posloupnost těchto předchůdců.
+
+\bigskip
 
 \noindent \textbf{Jak funguje BFS}: Začneme v počátečním vrcholu s. Poté vezmeme všechny jeho ještě nenalezené sousedy a umístíme je do fronty. Na závěr vrchol s uzavřeme a jeho práce končí. Následně opakujeme:
 \begin{enumerate}
@@ -109,7 +123,9 @@ Tedy algoritmus má najít délky nejkratších cest mezi počátčním vrcholem
     \item Přidáme do fronty všechny zatím nenalezené sousedy vrcholu $v$ a nastavíme je jako otevřené
     \item Označíme $v$ jako uzavřený
 \end{enumerate}
-Jakmile již neni možné vzít další prvek z fronty (fronta je prázdná) algoritmus končí. Výstupem jsou naplněná pole vzdáleností a předchůdců. Pro ilustraci se můžete podívat do slidů z přednášky, nebo na některé z mnoha videí dostupných na internetu. Pseudokód pak vypadá takto: \bigskip
+Jakmile již neni možné vzít další prvek z fronty (fronta je prázdná) algoritmus končí. Výstupem jsou naplněná pole vzdáleností a předchůdců. Pro ilustraci se můžete podívat do slidů z přednášky, nebo na některé z mnoha videí dostupných na internetu. Pseudokód pak vypadá takto: 
+
+\bigskip
 
 \funkce{BFS}{graf $G$, vrchol $s$}
 \begin{pseudocode}
@@ -131,9 +147,11 @@ Jakmile již neni možné vzít další prvek z fronty (fronta je prázdná) alg
 \item \tab \tab \tab Přidej $w$ na konec fronty $Q$
 \item \tab $\text{stav}[v] := \text{uzavřený}$
 \item Vrať $(D, P)$
-\end{pseudocode} \bigskip
+\end{pseudocode} 
 
-\noindent Nyní co jsme algoritmus zavedli, tak je potřeba ho analyzovat. Dokazuje se většinou několik vlastností. Zejména konečnost, že algoritmus někdy doběhne a správnost tedy že výsledek co dostaneme je správný. Nyní začneme konečností. \bigskip
+\bigskip
+
+\noindent Nyní co jsme algoritmus zavedli, tak je potřeba ho analyzovat. Dokazuje se většinou několik vlastností. Zejména konečnost, že algoritmus někdy doběhne a správnost tedy že výsledek co dostaneme je správný. Nyní začneme konečností. (U konečnosti se dokazuje i časová složitost, na to zatím nemáme aparát. U BFS doplníme u přednášky 2.) \bigskip
 
 \begin{theorem}[O konečnosti algoritmu BFS]
 Algoritmus $BFS(G, s)$ se vždy zastaví.
@@ -155,7 +173,7 @@ Každý vrchol je přidán do fronty $Q$ nejvýše jednou, neboť před svým vl
 
 \noindent Nyní si dokážeme korektnost algoritmu. Vždy u korektnosti dokazujeme vše co nám algoritmus slibuje. Zde u BFS jsou to 3 věci, že správně uzavře vrcholy, že správně naplní pole vzdáleností a pole předchůdců. \\
 
-\noindent \textbf{Zde se lišíme od přednášky! V přednášce jsou ty důkazy velmi odmávané, a kdyby byli na zkoušce (jako že tam pravděpodobně nebudou), tak by nemuseli být uznané. Pokud chcete pochopit princip doporučujeme přednášku, zde jsou stejné ale víc formálně popsané}
+\noindent \textbf{Zde se lišíme od přednášky! V přednášce jsou ty důkazy velmi odmávané, a kdyby byli na zkoušce (jako že tam pravděpodobně nebudou), tak by nemuseli být uznané. Pokud chcete pochopit princip doporučujeme přednášku, zde jsou stejné ale víc formálně popsané. Zde je jediná výjimka kde se lišíme.}
 
 
 \begin{theorem}[O správnosti algoritmu BFS]
@@ -205,20 +223,37 @@ Jedná se o ekvivalenci, musíme proto ukázat platnost dvou implikací.
 
 \noindent Myšlenka důkazu. Zvolíme fázi $F_i$. Z konstrukce BFS víme, že každý vrchol $v \in H_i$ má vzdálenost od $s$ nejvýše $i$, protože existuje cesta z $s$ do $v$ právě přes $i$ hladin. Zbývá ukázat, že nemůže existovat kratší cesta. Kdyby existovala cesta z $s$ do $v$ kratší než $i$, musela by při průchodu z $H_0$ do $H_i$ přeskočit alespoň jednu hladinu. To ale není možné, protože každé dva sousední vrcholy leží buď ve stejné hladině, nebo v hladinách s rozdílem nejvýše 1.
 
+\bigskip
+
 \begin{proof}[Důkaz Vlastnosti 2]
-Důkaz provedeme indukcí dle fáze. \\
-\textbf{Základní krok}: Tvrzení triviálně platí pro fázi $F_0$, kde $D[s] = 0 = d(s, s)$. \\
-\textbf{Indukční krok}: Uvažujme indukční krok pro fázi $F_i$ kde $i > 0$. Pokud $v \in H_i$, pak podle konstrukce $D[v] = i$ a z $s$ do $v$ existuje cesta o $i$ hranách. Tedy skutečná vzdálenost $d(s, v) \le i$. \\
-Nyní ukážeme sporem, že nemůže existovat žádná $s$-$v$-cesta kratší než $i$. Předpokládejme, že existuje cesta $P$ z $s$ do $v$ o délce $j < i$. Protože $j < i$, musí podle holubníkového principu na cestě $P$ existovat dva sousední vrcholy $w$ a $w'$ a dvě nesousední hladiny $H_k$ a $H_\ell$ (tj. $|k - \ell| > 1$) takové, že $w \in H_k$ a $w' \in H_\ell$. \\
-To je ovšem spor s tím, že sousední vrcholy na cestě mustí ležet v sousedních hladinách (rozdíl indexů hladin sousedních vrcholů může být nejvýše 1, protože když se zpracovává hladina $H_k$, všichni její dosud nenalezení sousedé se zařadí do $H_{k+1}$, a ostatní sousedé již leží v $H_k$ nebo $H_{k-1}$). \\
-Tento spor dokazuje, že žádná kratší cesta neexistuje, a tedy $d(s, v) = i = D[v]$.
+Důkaz provedeme indukcí dle fáze.
+\begin{itemize}
+\item \textbf{Základní krok}: Tvrzení triviálně platí pro fázi $F_0$, kde       $D[s] = 0 = d(s, s)$.
+\item \textbf{Indukční krok}: Uvažujme indukční krok pro fázi $F_i$ kde $i >     0$. Pokud $v \in H_i$, pak podle konstrukce $D[v] = i$ a z $s$ do $v$        existuje cesta o $i$ hranách. Tedy skutečná vzdálenost $d(s, v) \le i$.\\
+    Nyní ukážeme sporem, že nemůže existovat žádná $s$-$v$-cesta kratší než $i$. Předpokládejme, že existuje cesta $P$ z $s$ do $v$ o délce $j < i$. Protože $j < i$, musí podle holubníkového principu na cestě $P$ existovat dva sousední vrcholy $w$ a $w'$ a dvě nesousední hladiny $H_k$ a $H_\ell$ (tj. $|k - \ell| > 1$) takové, že $w \in H_k$ a $w' \in H_\ell$. \\
+    To je ovšem spor s tím, že sousední vrcholy na cestě mustí ležet v sousedních hladinách (rozdíl indexů hladin sousedních vrcholů může být nejvýše 1, protože když se zpracovává hladina $H_k$, všichni její dosud nenalezení sousedé se zařadí do $H_{k+1}$, a ostatní sousedé již leží v $H_k$ nebo $H_{k-1}$). \\
+    Tento spor dokazuje, že žádná kratší cesta neexistuje, a tedy $d(s, v) = i = D[v]$.
+\end{itemize}
 \end{proof}
 
-Na závěr této části bychom ještě rádi doporučili vyřešit si miniprogtest na BFS, nejenže díky tomu BFS lépe pochopíte, ale také vám usnadní řešení progtestu velkého.
+\bigskip
+
+\begin{proof}[Důkaz Vlastnosti 3]
+\leavevmode
+    Někdy doděláme :). Zatím jsem nepotkal člověka po kterém by byl vyžadován
+\end{proof}
+
+\medskip
+
+\noindent Na závěr této části bychom ještě rádi doporučili vyřešit si miniprogtest na BFS, nejenže díky tomu BFS lépe pochopíte, ale také vám usnadní řešení progtestu velkého.
+
+\bigskip
 
 \subsection{Speciální třídy grafů a vlastnosti}
 
-Nyní si zavedeme pár speciálních grafů o kterých se často budeme bavit. Důležité je jejich značení. Úplný graf je $K_n$, Úplný bipartnitní graf je $K_{n,m}$, Kružnice je $C_n$ a Cesta je $P_n$. Kde n značí počet vrcholů.
+Nyní si zavedeme pár speciálních grafů o kterých se často budeme bavit. Důležité je jejich značení. Úplný graf je $K_n$, Úplný bipartnitní graf je $K_{n,m}$, Kružnice je $C_n$ a Cesta je $P_n$. Kde $n,m$ značí počet vrcholů.
+
+\medskip
 
 \begin{definition}[Úplný graf]
 Nechť $n \ge 1$. \textbf{Úplný graf} na $n$ vrcholech, značný $K_n$, je graf $(V, \binom{V}{2})$, kde $|V| = n$. V úplném grafu jsou každé dva různé vrcholy spojené hranou. Někdy se úplné grafy také nazývají klika.
@@ -226,23 +261,17 @@ Nechť $n \ge 1$. \textbf{Úplný graf} na $n$ vrcholech, značný $K_n$, je gra
 
 \input{Obrázky/K_n Graph}
 
-\begin{observation}
- Úplný graf o $n$ vrcholech je $n-1$ regulární. 
-\end{observation}
-
 \bigskip
 
 \begin{definition}[Úplný bipartitní graf]
-Nechť $n_1 \ge 1$ a $n_2 \ge 1$. \textbf{Úplný bipartitní graf} $K_{n_1,n_2}$ tvořený dvěma partitami o velikostech $n_1$ a $n_2$ je graf $(A \cup B, E)$, kde $A \cap B = \emptyset$, $|A| = n_1$, $|B| = n_2$ a množina hran je:
-$$E = \{ \{a, b\} \mid a \in A, b \in B \}$$
-Platí, že $|E| = n_1 \cdot n_2$.
+Nechť $n_1 \ge 1$ a $n_2 \ge 1$. \textbf{Úplný bipartitní graf} $K_{n_1,n_2}$ tvořený dvěma partitami o velikostech $n_1$ a $n_2$ je graf $G = (A \cup B, \{ \{a, b\} \mid a \in A, b \in B \})$, kde $A \cap B = \emptyset$, $|A| = n_1$, $|B| = n_2$.
 \end{definition}
 
 \input{Obrázky/Bipartite Graph} 
 \bigskip
 
 \begin{definition}[Cesta]
-\textbf{Cesta} o $n$ vrcholech (označovaná $P_n$ pro $n \ge 1$) je graf s množinou vrcholů 
+Nechť $n \geq 1$. \textbf{Cesta} s $n$ vrcholy je graf $P_n = (V,E)$ s množinou vrcholů 
 $V = \{1, \dots, n\}$ a množinou hran $E = \{ \{i, i+1\} \mid i \in \{1, \dots, n-1\} \}$.
 \end{definition}
 
@@ -250,15 +279,19 @@ $V = \{1, \dots, n\}$ a množinou hran $E = \{ \{i, i+1\} \mid i \in \{1, \dots,
 \bigskip
 
 \begin{definition}[Kružnice]
-\textbf{Kružnice} o $n$ vrcholech (označovaná $C_n$ pro $n \ge 3$) je graf s množinou vrcholů
+NechŤ $n \geq 3$. \textbf{Kružnice} délky $n$ je graf $C_n = (V,E)$ s množinou vrcholů
 $V = \{1, \dots, n\}$ a množinou hran $E = \{ \{i, i+1\} \mid i \in \{1, \dots, n-1\} \} \cup \{ \{n,1\} \}.$
 \end{definition}
 
 \input{Obrázky/C_n Graph}
 \bigskip
 
+\noindent Doplňek grafu je graf, který má úplně stejné vrcholy. A pouze prohodí hrany. Tam kde předtím hrana vedla, tak v doplňku nepovede a ty hrany co v původním grafu nebyli, v doplňku jsou.
+
+\medskip
+
 \begin{definition}[Doplněk grafu]
-\textbf{Doplněk} $\bar{G}$ grafu $G = (V, E)$ je graf $(V, \binom{V}{2} \setminus E)$. Obsahuje tedy stejné vrcholy, ale jeho hrany jsou právě ty dvojice vrcholů, které v $G$ netvoří hranu.
+\textbf{Doplněk} $\bar{G}$ grafu $G = (V, E)$ je graf $(V, \binom{V}{2} \setminus E)$.
 \end{definition}
 
 \input{Obrázky/Doplněk G}
@@ -267,9 +300,9 @@ $V = \{1, \dots, n\}$ a množinou hran $E = \{ \{i, i+1\} \mid i \in \{1, \dots,
 \begin{definition}[Okolí a stupně]
 Nechť $G = (V, E)$ je graf a $v \in V$ jeho vrchol.
 \begin{itemize}
-    \item Stupněm vrcholu $v$ v grafu $G$ nazveme počet hran incidentních s ním. Značeno: $\deg_G(v)$.
+    \item Symbolem $\deg_G(v)$ označíme počet hran grafu $G$ obsahujících vrchol $v$.
     \item Symbolem $N_G(v)$ označíme \textbf{otevřené okolí} vrcholu $v$, tj. množinu všech sousedů $v$. Platí $\deg_G(v) = |N_G(v)|$.
-    \item Symbolem $N_G[v] = N_G(v) \cup \{v\}$ označíme \textbf{uzavřené okolí} vrcholu $v$.
+    \item Množinu $N_G[v] = N_G(v) \cup \{v\}$ nazveme \textbf{uzavřeným okolím} vrcholu $v$.
 \end{itemize}
 \end{definition}
 
@@ -277,7 +310,11 @@ Nechť $G = (V, E)$ je graf a $v \in V$ jeho vrchol.
 \bigskip
 
 \begin{definition}[Regulární graf]
-\textbf{Regulární graf} stupně $r$ (neboli $r$-regulární graf) je graf, v němž má každý vrchol stupeň právě $r$.
+\leavevmode
+\begin{itemize}
+    \item Graf je $\textbf{$r$-regulární}$, pokud stupeň každého jeho vrcholu je $r$.
+    \item Graf je $\textbf{regulární}$, pokud je $r$-regulární pro nějaké $r$.
+\end{itemize}
 \end{definition}
 
 \input{Obrázky/C3}
@@ -299,22 +336,21 @@ $$\sum_{v \in V} \deg_G(v) = 2|E|$$
 \end{theorem}
 
 \begin{proof}
-Při sečtení stupňů všech vrcholů započítáme každý konec každé hrany právě jednou. Jelikož každá hrana má přesně dva konce, započítáme každou hranu přesně dvakrát.
-\par
+Při sečtení stupňů všech vrcholů započítáme každý konec každé hrany právě jednou. Jelikož každá hrana má přesně dva konce, započítáme každou hranu přesně dvakrát.\\
 Formálně to můžeme vyjádřit následujícím řetězcem rovností:
 $$\sum_{v \in V} \deg_G(v) = \sum_{v \in V} |N_G(v)| = \sum_{v \in V} |\{u \in V \mid \{u, v\} \in E\}|$$
 Tedy součet stupňů všech vrcholů je roven počtu jeho sousedů (přímo definice). \\
 
-To vyjádříme dvěma sumami:
+\noindent To vyjádříme dvěma sumami:
 
 $$\sum_{v \in V} \sum_{\substack{e \in E \\ v \in e}} 1$$
 
-Vnější suma je přes všechny vrcholy $v \in V(G)$ a vnitřní suma sčítá přes všechny hrany současného vrcholu $v$.
+\noindent Vnější suma je přes všechny vrcholy $v \in V(G)$ a vnitřní suma sčítá přes všechny hrany současného vrcholu $v$. \\
 
-Prohozením pořadí sumace (přesčítáním přes všechny hrany a jejich konce, tedy vždy 2 vrcholy):
+\noindent Prohozením pořadí sumace (přesčítáním přes všechny hrany a jejich konce, tedy vždy 2 vrcholy):
 $$\sum_{e \in E} \sum_{v \in e} 1 = \sum_{e \in E} 2 = 2|E|$$
 
-Dostáváme požadovaný počet.
+\noindent Dostáváme požadovaný počet.
   \end{proof}
 
 \bigskip
@@ -327,31 +363,40 @@ Z věty o principu sudosti plynou tyto důležité vlastnosti:
 \end{enumerate}
 \end{corollary}
 
-Princip sudosti nám dává nutnou podmínku která se, jak už to jistě znáte, skvěle hodí pro vyvracení existence grafů. Pokud byste například dostali za úkol sestrojit graf tak, aby obsahoval vrcholy se zadanými stupni, pokud součet stupňů bude lichý hned víte, že to nelze (nemusíte sčítat samotné stupně, stačí se jen podívat na počet vrcholů s lichým stupněm a pokud jich nebude sudě tak víte, že součet stupňů musí být taky lichý). Také se tato věta velmi hodí u důkazů sporem, kde často můžete nalézt spor právě s touto větou.
+\medskip
+
+\noindent Princip sudosti nám dává nutnou podmínku která se, jak už to jistě znáte, skvěle hodí pro vyvracení existence grafů. Pokud byste například dostali za úkol sestrojit graf tak, aby obsahoval vrcholy se zadanými stupni, pokud součet stupňů bude lichý hned víte, že to nelze (nemusíte sčítat samotné stupně, stačí se jen podívat na počet vrcholů s lichým stupněm a pokud jich nebude sudě tak víte, že součet stupňů musí být taky lichý). Také se tato věta velmi hodí u důkazů sporem, kde často můžete nalézt spor právě s touto větou.
 
 \bigskip
 
-\noindent Teď si zavedeme podgrafy. Podgraf je podmnožina původního grafu, ale pouze tak že je stále grafem. Důležité: prázdný graf neni grafem a celý graf je podgrafem sama sebe. \\
+\noindent Teď si zavedeme podgrafy. Podgraf je podmnožina původního grafu, ale pouze tak že je stále grafem. $\textbf{Důležité:}$ prázdný graf neni grafem a celý graf je podgrafem sama sebe. \\
 Více omezení jsme u indukovaného podgrafu, který po vybrání podmnožiny vrcholů musí zahrnout všechny hrany co mezi libovolnou dvojicí z nich vedli.
 
 \medskip
 
 \begin{definition}[Podgraf a indukovaný podgraf]
-\leavevmode\\
-Graf $H$ je \textbf{podgrafem} grafu $G$ (píšeme $H \subseteq G$), pokud $V(H) \subseteq V(G)$ a $E(H) \subseteq E(G)$. \\
-Graf $H$ je \textbf{indukovaným podgrafem} grafu $G$, pokud $V(H) \subseteq V(G)$ a množina hran $E(H)$ obsahuje právě ty hrany z $G$, které mají oba koncové vrcholy ve $V(H)$, tedy:
-$$E(H) = E(G) \cap \binom{V(H)}{2}$$
-Indukovaný podgraf na množině vrcholů $V' \subseteq V$ značíme $G[V']$. \\
-Graf $G - V'$ značí podgraf indukovaný množinou $V \setminus V'$. Pro jednoprvkovou množinu píšeme zkráceně $G - v$. \\
-Podgraf úplného bipartitního grafu se nazývá \textbf{bipartitní graf}.
+\leavevmode
+\begin{itemize}
+    \item Graf $H$ je \textbf{podgrafem} grafu $G$ (píšeme $H \subseteq G$), pokud $V(H) \subseteq V(G)$ a $E(H) \subseteq E(G)$.
+    \item Graf $H$ je \textbf{indukovaným podgrafem} grafu $G$, pokud $V(H) \subseteq V(G)$ a množina hran $E(H)$ obsahuje právě ty hrany z $G$, které mají oba koncové vrcholy ve $V(H)$, tedy:
+    $$E(H) = E(G) \cap \binom{V(H)}{2}$$
+    \item Indukovaný podgraf na množině vrcholů $V' \subseteq V$ značíme $G[V']$.
+    \item Graf $G - V'$ značí podgraf indukovaný množinou $V \setminus V'$. Pro jednoprvkovou množinu píšeme zkráceně $G - v$.
+\end{itemize}
 \end{definition}
 
 \input{Obrázky/Podgraf}
 
-\bigskip
+\medskip
+
+\begin{definition}
+    Podgraf úplného bipartitního grafu se nazývá \textbf{bipartitní graf}.
+\end{definition}
+
+\medskip
 
 \begin{definition}[Klika]
-\textbf{Klika} v grafu $G$ je podmnožina vrcholů $C \subseteq V(G)$, v níž jsou každé dva vrcholy spojené hranou (čili indukovaný podgraf $G[C]$ je úplný graf).
+\textbf{Klika} v grafu $G$ je podmnožina vrcholů $C \subseteq V(G)$, v níž jsou každé dva vrcholy spojené hranou.
 \end{definition}
 
 \input{Obrázky/Klika}
@@ -395,7 +440,3 @@ Orientovaná hrana tvaru $(u, u)$ se nazývá \textbf{smyčka}.
 \item \tab $\text{stav}[v] := \text{uzavřený}$
 \item Vrať $(D, P)$
 \end{pseudocode}
-
-\newpage
-
-\subsection{Modifikace BFS - První zápočtovka}

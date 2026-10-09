@@ -66,7 +66,7 @@ Jelikož v každém vrcholu strávíme konstantní čas, celková časová slož
 
 \subsubsection{BVSMin}
 
-\noindent BVSMin/BVSMax. Jeho cílem je vypsat minimální/maximální hodnotu klíče ve stromě. Pro minimální klíč se z daného vrcholu zanořujeme stále doleva. Jakmile vrchol již levého syna nemá, pak je minimálním. Analogicky pro maximum, pouze se zanořujeme doprava. V kažédm vrcholu provedeme konstantě operací tedy celkem provedeme $\bigO{h(T(v))}$\bigskip
+\noindent BVSMin/BVSMax. Jeho cílem je vypsat minimální/maximální hodnotu klíče ve stromě. Pro minimální klíč se z daného vrcholu zanořujeme stále doleva. Jakmile vrchol již levého syna nemá, pak je minimálním. Analogicky pro maximum, pouze se zanořujeme doprava. V každém vrcholu provedeme konstantě operací tedy celkem provedeme $\bigO{h(T(v))}$\bigskip
 
 \noindent \textbf{Vstup}: Ukazatel na vrchol $v$ libovolného BVS $T(v)$ \newline
 \noindent \textbf{Výstup}: Minimimální klíč daného BVS $T(v)$ \newline
@@ -94,7 +94,11 @@ existuje, jinak $\emptyset$. \newline
 
 \subsubsection{BVSPred}
 
-\noindent BVSPred a BVSSucc slouží k získání předchůdce/následníka nějakého vrcholu $v$ v BVS $T$. Pro předchůdce, je to vždy takový klíč $x$, který je největší ze všech klíčů menších než $x$ v $T$. Jak ho nalezneme? Rozlišujeme zde dva případy, ten lehčí je když vrchol $v$ má levého syna. V tom případě je předchůdce vrchol s maximálním klíčem z celého levého podstromu $L(v)$. To platí, jelikož jsou všechny klíče v $L(v)$ menší než $k(v)$ a maximum z $L(v)$ je ten největší menší. Druhý případ je když $v$ nemá levého syna v tom případě se musíme vynořit nahoru (doprava jít nemůžeme tam jsou všechny klíče větší). Takto cestujeme směrem ke kořeni až do doby než se vrátíme do rodiče $p$ zprava. Předchůdce je poté vrchol $p$. Zprava se chceme vrátit jelikož my potřebujeme najít menší první menší klíč. Pokud by jsme přišli zleva, tak je rodič větší než celý náš podstrom.\newline
+\noindent BVSPred a BVSSucc slouží k získání předchůdce/následníka nějakého vrcholu $v$ v BVS $T$. Pro předchůdce, je to vždy takový klíč $x$, který je největší ze všech klíčů menších než $x$ v $T$. Jak ho nalezneme? Rozlišujeme zde dva případy:
+\begin{itemize}
+    \item Ten lehčí je když vrchol $v$ má levého syna. V tom případě je předchůdce vrchol s maximálním klíčem z celého levého podstromu $L(v)$. To platí, jelikož jsou všechny klíče v $L(v)$ menší než $k(v)$ a maximum z $L(v)$ je ten největší menší.
+    \item Druhý případ je když $v$ nemá levého syna v tom případě se musíme vynořit nahoru (doprava jít nemůžeme tam jsou všechny klíče větší). Takto cestujeme směrem ke kořeni až do doby než se vrátíme do rodiče $p$ zprava. Předchůdce je poté vrchol $p$. Zprava se chceme vrátit jelikož my potřebujeme najít první menší klíč. Pokud by jsme přišli zleva, tak je rodič větší než celý náš podstrom.
+\end{itemize}
 Pokud náš prvek je minimálním v celém stromě vrátíme nic. Alternativně lze dodefinovat vrcholy s klíčy $\pm\infty$.\newline
 Analogicky platí i pro následovníka. Stačí prohodit slova levý a pravý.
 buďto využijeme BVSMax nebo procházíme po rodičích a případně do kořene. celkem tedy za $\bigO{h(T(v))}$. \bigskip
@@ -133,7 +137,15 @@ existuje-li, jinak $\emptyset$. \newline
 
 \subsubsection{BVSDelete}
 
-\noindent Poslední operací je BVSDelete, ten slouží k odstranění vrcholu $v$ z BVS dle zadaného klíče. Zde máme 3 možnosti. První je pokud vrchol $v$ nemá žádného syna neboli je listem. V tom případě ho prostě odstraníme a vše funguje dále. Další případ je kdy má právě jednoho syna vrchol $w$. Ani zde neni problém, rodiči vrcholu $v$, $p(v)$ nahradíme syna $v$ za vrchol $w$. Vrchol $v$ poté bezproblému odstraníme. Posledním případem je kdy vrchol $v$ má oba syny. V tomto případě nemůžeme vrchol $v$ odstranit jinak by jsme rozbili strukturu. Pomůžeme si trikem a to pomocí nahrazení vrcholu $v$ za jeho následníka nebo předchůdce (ti musí existovat jelikož má vrchol $v$ oba syny a zároveň jsou to maxima/minima těch podstromů, takže problém se nerekurzí dále). Také jsme nemohli rozbít definici BVS, jelikož jsme nahradili bezprostředním následníkem/předchůdcem a stále jsou vlevo menší klíče a vpravo větší. Hledáme vrchol jako při BVSFind, k tomu hledáme Minimum podstromu pomocí BVSMin a v každém vrcholu provedeme konstantě mnoho operací tedy celkem $\bigO{h(T(v)}$. \bigskip
+\noindent Poslední operací je BVSDelete, ten slouží k odstranění vrcholu $v$ z BVS dle zadaného klíče. Zde máme 3 možnosti:
+\begin{itemize}
+    \item První je pokud vrchol $v$ nemá žádného syna neboli je listem. V tom případě ho prostě odstraníme a vše funguje dále.
+
+    \item Další případ je kdy má právě jednoho syna vrchol $w$. Ani zde není problém, rodiči vrcholu $v$, $p(v)$ nahradíme syna $v$ za vrchol $w$. Vrchol $v$ poté bezproblému odstraníme.
+
+    \item Posledním případem je kdy vrchol $v$ má oba syny. V tomto případě nemůžeme vrchol $v$ odstranit jinak by jsme rozbili strukturu. Pomůžeme si trikem a to pomocí nahrazení vrcholu $v$ za jeho následníka nebo předchůdce (ti musí existovat, jelikož má vrchol $v$ oba syny a zároveň to jsou maxima/minima těch podstromů). Také jsme nemohli rozbít definici BVS, jelikož jsme nahradili bezprostředním následníkem/předchůdcem a stále jsou vlevo menší klíče a vpravo větší.
+\end{itemize} 
+Hledáme vrchol jako při BVSFind, k tomu hledáme minimum podstromu pomocí BVSMin a v každém vrcholu provedeme konstantě mnoho operací tedy celkem $\bigO{h(T(v)}$. \bigskip
 
 \noindent \textbf{Vstup}: Ukazatel na kořen libovolného BVS $T(v)$ a klíč $x$. \newline
 \noindent \textbf{Výstup}: Ukazatel na kořen BVS, ze kterého byl odstraněn vrchol s
@@ -161,7 +173,7 @@ klíčem $x$, existoval-li. \newline
 BVS nemá jednoznačnou strukturu. Skutečne zkuste provést BVSInsert na prvcích \{2, 1, 3\} a poté na \{1, 2, 3\}. Množiny jsou v obou případech stejné. Ale výsledný BVS je jiný.\bigskip
 \end{remark}
 
-\noindent Časová složitost a problém BVS. Již jsme určili že operace jako BVSInsert, BVSDelete, BVSMin, BVSFind, atd. mají časovou složitost $\bigO{h(T(v)}$. Zde ale nastává problém, pokud nám strom zdegraduje na spojový seznam. To se stane např. pokud všechny prvky budou mít pouze pravého syna. Poté je $\bigO{h(T(v)} = \bigO{|T(v)|} = \bigO{n}$. Což se nám nelíbí, jelikož ztrácíme výhody oproti běznému poli. Jistě lze namítnout, že šance na tento scénář je malá. V případě kdy přijde útočník a začne nám dávat taková data, která toto způsobí. tak jsme nahraní. Na ochranu proti takovémuto zdegenerování se zavádí pojmy vyváženosti. \bigskip
+\noindent Časová složitost a problém BVS. Již jsme určili že operace jako BVSInsert, BVSDelete, BVSMin, BVSFind, atd. mají časovou složitost $\bigO{h(T(v)}$. Zde ale nastává problém, pokud nám strom zdegraduje na spojový seznam. To se stane např. pokud všechny prvky budou mít pouze pravého syna. Poté je $\bigO{h(T(v)} = \bigO{|T(v)|} = \bigO{n}$. Což se nám nelíbí, jelikož ztrácíme výhody oproti běznému poli. Jistě lze namítnout, že šance na tento scénář je malá. V případě kdy, ale přijde útočník a začne nám dávat taková data, která toto způsobí. tak jsme nahraní. Na ochranu proti takovémuto zdegenerování se zavádí pojmy vyváženosti. \bigskip
 
 \subsection{Dokonale Vyvážený BVS}
 \begin{definition}
@@ -244,7 +256,7 @@ Pokud má BVS zůstávat po provedení operací BVSInsert a BVSDelete dokonale v
     \noindent Detaily k důkazu:
     \begin{enumerate}
         \item V indukčním kroku využíváme $A_{h+1}$ místo $A_h$ je to kvůli případu kdy $h = 0$. V případě kdyby jsme použili $A_h$ museli by jsme explicitně vyřešit tento případ.
-        \item V indukčním kroku využíváme exponencionálu $2^{h/2}$ ta se využívá jelikož to hezky vyjde. Ale je možné využít i jiný exponent. Jelikož exponencionály o stejném základu se liší pouze o konstantu.
+        \item V indukčním kroku využíváme exponencionálu $2^{h/2}$ ta se využívá jelikož to hezky vyjde. Ale je možné využít i jiný exponent. 
         \item Argument "protože je binární, tak nemůže mít hloubu menší než $\floor{\log_{2}(n)}$". Lze nahradit tím stejným důkazem. Pouze nyní s největším možným stromem, aby jsme ukázali, že platí $\bigO{n}$.
     \end{enumerate}
 \end{remark} \bigskip
