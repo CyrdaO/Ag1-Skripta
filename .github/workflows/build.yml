@@ -28,12 +28,12 @@ jobs:
       - name: Compile LaTeX
         uses: xu-cheng/latex-action@v4
         with:
-          root_file: paper.tex
+          root_file: main.tex
 
       - name: Prepare PDF
         run: |
           mkdir -p public
-          cp paper.pdf public/paper.pdf
+          cp main.pdf public/main.pdf
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
