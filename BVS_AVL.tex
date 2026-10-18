@@ -360,7 +360,67 @@ Dvojitá rotace se provede jakožto dvě souvislé jednoduché rotace. První pr
     \item $h(T(y)) := \max(h(R(y)),\, h(T(x))) + 1$
 \end{pseudocode} \bigskip
 
-\noindent Samotná rotace nemusí vrátit ještě AVL strom, jelikož změnou hloubky v hloubce $h$ můžeme rozbít hloubkové vyvážení někde výše. Proto je potřeba jít vnější funkcí rekurentně až do kořene. To přesně poté dělá operace AVLInsert a AVLDelete. Nejlehčí je implementovat rotaci při návratu z rekurze. \bigskip
+
+% ============================================================ %
+\subsection{Operace nad AVL Stromem}
+% ============================================================ %
+
+Jelikož je AVL strom je rozšířením BVS, všechny operace, které nemění strukturu ani obsah stromu, fungují v AVL stromech naprosto identicky jako v klasickém BVS. Operace, které měli časovou složitost, Jako BVSFind, BVSMin, BVSPred, atd. závislou na hloubce, nyní mají krásně logaritmickou složitost. \medskip
+
+\noindent
+Jak ale naložíme s operacemi které přidávají či mažou prvky? Ty mohou svým provedením porušit hloubkové vyvážení tedy $|\delta(v)| \geq 2$ pro nějaký vrchol $v$. Proto je musíme lehce modifikovat. První z nich si upravme přidávání.
+
+% ------------------------------------------------------------ %
+\subsubsection{Operace AVLInsert}
+% ------------------------------------------------------------ %
+
+\noindent Při vkládání budeme postupovat úplně stejně jako u BVSInsert. Při návratu z rekurze budeme muset přepočítat $\delta(v)$ pro všechny vrcholy $v$ od vloženého až do kořene. V případě pokud porušíme hloubkové vyvážení ($\delta(v) \geq 2$), poté musíme opravit strom pomocí rotací.
+
+\bigskip
+
+\funkce{AVLInsert}{ukazatel na vrchol $v$, klíč $x$}
+\begin{pseudocode}
+\item Pokud $v = \emptyset$:
+\item \tab Vytvoř nový vrchol $v$ s klíčem $x$, $\delta(v) := 0$
+\item \tab return $v$
+\item Pokud $x = k(v)$: return $v$ \textcolor{gray}{// Klíč již ve stromu existuje}
+\item Pokud $x < k(v)$:
+\item \tab $\ell(v) := \text{\textcolor{blue}{AVLInsert}}(\ell(v), x)$
+\item Pokud $x > k(v)$:
+\item \tab $r(v) := \text{\textcolor{blue}{AVLInsert}}(r(v), x)$
+\item $v := \text{\textcolor{blue}{VyvažAVL}}(v)$ \textcolor{gray}{// Přepočet znaménka $\delta(v)$ a případná rotace}
+\item return $v$
+\end{pseudocode}
+
+\bigskip
+
+\noindent Pokud porušíme hloubkovou vyváženost, tak po její opravě rotací se hloubka vrátí na původní hodnotu (jinak by stále pořušovala hloubkovou vyváženost). Tedy již nemusíme propagovat tuto změnu dále (z pohledu rodiče podstromu se nic nezměnilo).
+
+% ------------------------------------------------------------ %
+\subsubsection{Operace AVLDelete}
+% ------------------------------------------------------------ %
+
+Vrchol mažeme úplně stejně jako v BVS. Stejně tak při návratu z rekurze musíme přepočítat hodnotu $\delta(v)$, pro všechny $v$ na ceště od smazaného ke kořeni. A v případě $|\delta(v)| \geq 2$ opravit strom pomocí rotací. 
+
+\bigskip
+\funkce{AVLDelete}{ukazatel na vrchol $v$, klíč $x$}
+\begin{pseudocode}
+\item Pokud $v = \emptyset$: return $\emptyset$
+\item Pokud $x < k(v)$: $\ell(v) := \text{\textcolor{blue}{AVLDelete}}(\ell(v), x)$
+\item Pokud $x > k(v)$: $r(v) := \text{\textcolor{blue}{AVLDelete}}(r(v), x)$
+\item Pokud $x = k(v)$:
+\item \tab Pokud $\ell(v) = \emptyset$: return $r(v)$ \textcolor{gray}{// Nemá syna nebo má jen pravého}
+\item \tab Pokud $r(v) = \emptyset$: return $\ell(v)$ \textcolor{gray}{// Má jen levého syna}
+\item \tab $w := \text{\textcolor{blue}{BVSMin}}(r(v))$ \textcolor{gray}{// Má oba syny -> nahradíme následníkem}
+\item \tab $k(v) := k(w)$
+\item \tab $r(v) := \text{\textcolor{blue}{AVLDelete}}(r(v), k(w))$
+\item $v := \text{\textcolor{blue}{VyvažAVL}}(v)$ \textcolor{gray}{// Přepočet znaménka $\delta(v)$ a případná rotace}
+\item return $v$
+\end{pseudocode}
+
+\bigskip
+
+\noindent Zde oproti AVLInsert nemůžeme propagaci zastavit po rotaci, jelikož se hloubka stromu mohla snížit o 1. Což dále může ovlivnit stupeň rodiče podstromu.
 
 \subsection{Časová složitost operací nad AVL stromem}
 
