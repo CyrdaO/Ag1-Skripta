@@ -113,7 +113,7 @@ Pokud graf tedy není souvislý, nemůžeme jednodušše pustit algoritmus BFS n
 \subsection{Výpočetní model RAM}
 % ============================================================
 
-Z PAx jistě znáte časovou a paměťovou složitost programu. Abychom ale mohli analyzovat složitosti algoritmu, musíme si zadefinovat nějaký model počítače. Počítače se často hodně liší, různé istrukce trvají jinak dlouho, atd. Proto si zavedeme teoretický model počítače, který modeluje to, co všichni přibližně od běžného počítače očekáváme.
+Z PAx jistě znáte časovou a paměťovou složitost programu. Abychom ale mohli analyzovat složitosti algoritmu, musíme si zadefinovat nějaký model počítače. Počítače se často hodně liší, různé instrukce trvají jinak dlouho, atd. Proto si zavedeme teoretický model počítače, který modeluje to, co všichni přibližně od běžného počítače očekáváme.
 
 \begin{definition}[Model RAM]
 Výpočetní model \textbf{RAM} se skládá ze dvou hlavních částí:
@@ -151,7 +151,7 @@ Složitost algoritmu v nejhorším případě pro vstup velikosti $n$ definujeme
 \end{definition}
 
 
-\noindent Co nás bude u algoritmů zajímat je, jak budou složitosti programu škálovat s velikostí vstupu, tedy nebudeme počítat přesný počet instrukcí, ale spíše zda algoritmus vykoná za jeho běh $\mathcal{O}(n)$ instrukcí nebo třeba $\mathcal{O}(n^2) \text{ či dokonce } \mathcal{O}(2^n)$.
+\noindent Co nás bude u algoritmů zajímat je, jak budou složitosti programu škálovat s velikostí vstupu. Jelikož na každém počítači mohou být jiné instrukce, či program jinak dlouho poběží. Nebudeme tedy počítat přesný počet instrukcí, ale spíše zda algoritmus vykoná za jeho běh $\mathcal{O}(n)$ instrukcí nebo třeba $\mathcal{O}(n^2) \text{ či dokonce } \mathcal{O}(2^n)$.
 
 % ============================================================
 \subsection{Reprezentace grafů v paměti počítače}

@@ -1,0 +1,94 @@
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  vnode/.style={circle, draw, minimum size=8mm, inner sep=0pt, font=\bfseries},
+  stree_hplus/.style={isosceles triangle, draw, isosceles triangle apex angle=50, shape border rotate=90, minimum height=17mm, minimum width=13mm, inner sep=1pt, font=\small},
+  stree_h/.style={isosceles triangle, draw, isosceles triangle apex angle=55, shape border rotate=90, minimum height=12mm, minimum width=10mm, inner sep=1pt, font=\small},
+  stree_hminus/.style={isosceles triangle, draw, isosceles triangle apex angle=60, shape border rotate=90, minimum height=8mm, minimum width=8mm, inner sep=1pt, font=\scriptsize},
+  thick, >=stealth,
+  stree_h_custom/.style args={#1/#2/#3}{
+    stree_h,
+    isosceles triangle apex angle=#1,
+    minimum height=#2,
+    minimum width=#3
+  },
+]
+% STROM PŘED ROTACÍ
+\begin{scope}[shift={(-1,0)}]
+    \node[vnode] (x) at (0, 2.4) {$x$};
+    \node[red, right=1pt of x, font=\bfseries] {(\textcolor{red}{-2})};
+
+    \node[vnode] (y) at (-1.9, 1.2) {$y$};
+    \node[blue!80!black, left=1pt of y, font=\bfseries] {(+1)};
+
+    % Podstrom A - h
+    \node[stree_h, anchor=apex] (A) at (-3.0, 0.0) {$A$};
+    \node[below=1pt of A, font=\scriptsize] {$h$};
+
+    \node[vnode] (z) at (-0.8, 0.0) {$z$};
+    \node[blue!80!black, right=1pt of z, font=\bfseries] {(-1)};
+
+    % Podstrom B - h
+    \node[stree_h, anchor=apex] (B) at (-1.5, -1.2) {$B$};
+    \node[below=1pt of B, font=\scriptsize] {$h$};
+
+    % Podstrom C - h-1
+    \node[stree_hminus, anchor=apex] (C) at (0.1, -1.2) {$C$};
+    \node[below=1pt of C, font=\scriptsize] {$h-1$};
+
+    % Podstrom D - h
+    \node[stree_h, anchor=apex] (D) at (1.5, 1.2) {$D$};
+    \node[below=1pt of D, font=\scriptsize] {$h$};
+
+    \draw (x) -- (y);
+    \draw (x) -- (D.apex);
+    \draw (y) -- (A.apex);
+    \draw (y) -- (z);
+    \draw (z) -- (B.apex);
+    \draw (z) -- (C.apex);
+
+    \node at (-0.5, -3.2) {\textbf{Strom před rotací LR}};
+\end{scope}
+
+  % ŠIPKA ROTACE
+  \draw[->, ultra thick, blue!70!black] (1.9, 0.6) -- node[above, font=\bfseries] {Dvojitá LR} node[below, font=\scriptsize] {(L pak R)} (4.3, 0.6);
+
+  % STROM PO ROTACI
+\begin{scope}[shift={(8,-0.1)}]
+    \node[vnode] (z2) at (0, 2.4) {$z$};
+    \node[green!50!black, right=1pt of z2, font=\bfseries] {(0)};
+
+    \node[vnode] (y2) at (-1.9, 1.2) {$y$};
+    \node[green!50!black, right=1pt of y2, font=\bfseries] {(0)};
+
+    % Podstrom A - h
+    \node[stree_h, anchor=apex] (A2) at (-3.0, 0.0) {$A$};
+    \node[below=1pt of A2, font=\scriptsize] {$h$};
+
+    % Podstrom B - h
+    \node[stree_h, anchor=apex] (B2) at (-1.4, 0.0) {$B$};
+    \node[below=1pt of B2, font=\scriptsize] {$h$};
+
+    \node[vnode] (x2) at (1.7, 1.2) {$x$};
+    \node[blue!80!black, right=1pt of x2, font=\bfseries] {(+1)};
+
+    % Podstrom C - h-1
+    \node[stree_hminus, anchor=apex] (C2) at (0.6, 0.0) {$C$};
+    \node[below=1pt of C2, font=\scriptsize] {$h-1$};
+
+    % Podstrom D - h
+    \node[stree_h, anchor=apex] (D2) at (2.8, 0.0) {$D$};
+    \node[below=1pt of D2, font=\scriptsize] {$h$};
+
+    \draw (z2) -- (y2);
+    \draw (z2) -- (x2);
+    \draw (y2) -- (A2.apex);
+    \draw (y2) -- (B2.apex);
+    \draw (x2) -- (C2.apex);
+    \draw (x2) -- (D2.apex);
+
+    \node at (0.0, -3.2) {\textbf{Strom po dvojité rotaci LR}};
+\end{scope}
+\end{tikzpicture}
+\caption{Dvojitá rotace LR (pro případ $\delta(z) = -1$). Nevyváženost $\mathbf{\textcolor{red}{-2}}$ v kořeni $x$ je odstraněna překořeněním za vrchol $z$.}
+\end{figure}

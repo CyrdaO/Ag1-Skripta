@@ -1,4 +1,4 @@
-\section{5. Přednáška}
+\section{5. Přednáška (kompletní, ale zatím bez korektury)}
 
 \subsection{Binární vyhledávací strom}
 
@@ -207,7 +207,7 @@ Pokud má BVS zůstávat po provedení operací BVSInsert a BVSDelete dokonale v
 % AVL Strom
 % ============================================================
 
-\subsection{Avl strom}
+\subsection{AVL strom}
 
 \noindent U úplně vyváženého BVS jsme kvůli přílišnému omezení narazili na degradaci rychlostí operací BVSInsert a BVSDelete. Proto musíme zvolit jinou cestu a to pomocí hloubkového vyvážení. \bigskip
 
@@ -218,13 +218,14 @@ Pokud má BVS zůstávat po provedení operací BVSInsert a BVSDelete dokonale v
 
 \noindent Řešení jak toto provést je více (např. Červeno-Černé stromy viz. BI-DAS). Zde v AG1 si představíme AVL stromy. Prvně ale musíme ukázat, že opravdu toto řešení dosáhne logaritmické hloubky stromu, jinak by nemělo smysl používat. \bigskip
 
+\subsubsection{Důkaz hloubky AVL}
+
 \begin{theorem}[o hloubce hloubkově vyvážených stromů]
     Hloubkově vyvážený strom s $n$ vrcholy má hloubku $\bigTheta{log(n)}$.
-\end{theorem}
+\end{theorem} \medskip
 
-\noindent \textbf{Myšlenka důkazu:} ukážeme že nejmenší možný strom (dle počtů vrcholů) stále zachovává logaritmickou hloubku což nám dá $\bigOmega{n}$. Poté díky tomu, že je binární víme, že pro největší možný strom platí $\bigO{n}$. Tedy celkem $\bigTheta{n}$.
+\noindent \textbf{Myšlenka důkazu:} ukážeme že nejmenší možný strom (dle počtů vrcholů) stále zachovává logaritmickou hloubku což nám dá $\bigOmega{\log_2{(n)}}$. Poté díky tomu, že je binární víme, že pro největší možný strom platí $\bigO{\log_2{(n)}}$. Víme z důkazu o hloubce binárního stromu. Tedy celkem $\bigTheta{\log_2{(n)}}$. \medskip
 
-\subsubsection{Důkaz hloubky AVL}
 \begin{proof}
     Důkaz provedeme indukcí.
 
@@ -257,30 +258,96 @@ Pokud má BVS zůstávat po provedení operací BVSInsert a BVSDelete dokonale v
     \begin{enumerate}
         \item V indukčním kroku využíváme $A_{h+1}$ místo $A_h$ je to kvůli případu kdy $h = 0$. V případě kdyby jsme použili $A_h$ museli by jsme explicitně vyřešit tento případ.
         \item V indukčním kroku využíváme exponencionálu $2^{h/2}$ ta se využívá jelikož to hezky vyjde. Ale je možné využít i jiný exponent. 
-        \item Argument "protože je binární, tak nemůže mít hloubu menší než $\floor{\log_{2}(n)}$". Lze nahradit tím stejným důkazem. Pouze nyní s největším možným stromem, aby jsme ukázali, že platí $\bigO{n}$.
+        \item Argument "protože je binární, tak nemůže mít hloubu menší než $\floor{\log_{2}(n)}$". Lze nahradit tím stejným důkazem. Pouze nyní s největším možným stromem, aby jsme ukázali, že platí $\bigO{\log_2{(n)}}$.
     \end{enumerate}
 \end{remark} \bigskip
 
-\subsubsection{Rotace AVL}
+\subsection{Rotace AVL}
 
 \begin{definition}
-    Znaménkem vrcholu $v$ nazveme funkci
-    \[
-        \delta(v) = h(R(v)) - h(L(v)).
-    \]
-\end{definition} \bigskip
+    AVL strom je hloubkově vyvážený BVS. Pro každý jeho vrchol $v$ definujeme \textbf{znaménko vrcholu} $\delta(v)$ jako rozdíl hloubek jeho pravého a levého podstromu:
+    $$\delta(v) = h(R(v)) - h(L(v))$$
+\end{definition} \medskip
 
 \begin{definition}
-    AVL strom je hloubkově vyvážený strom, kde pro každý vrchol $v$ platí, že $\delta(v) \in \{-1,0,1\}$
+V platném AVL stromu musí pro každý vrchol $v$ platit, že $\delta(v) \in \{-1, 0, +1\}$:
+\begin{itemize}[itemsep=-0.2em]
+    \item $\delta(v) = -1$: levý podstrom je o 1 hlubší než pravý,
+    \item $\delta(v) = 0$: oba podstromy mají stejnou hloubku,
+    \item $\delta(v) = +1$: pravý podstrom je o 1 hlubší než levý.
+\end{itemize}    
 \end{definition} \bigskip
+
 
 \noindent V případě kdy $\delta(v) \notin \{-1, 0, 1\}$, pak musíme strom opravit pomocí jednoduchých či dvojitých rotací. Obecně rotace vypadá takto: \bigskip
 
 \input{Obrázky/AVL_General_Rotation} \bigskip
 
-\noindent Obrázek může prvně vypadat matoucí, ale je to kompletní návod jak je provést. Např. u pravé rotace. Vrchol $y$ zavěsíme jako pravého syna vrcholu $x$. Jejich podstromy zůstanou stejné pouze podstrom B se přesune z pravého syna vrcholu $x$ jako levý syn vrcholu $y$. Analogicky levá rotace. \bigskip
+\noindent Obrázek může prvně vypadat matoucí, ale je to kompletní návod jak je provést. Vrcholy $x$ a $y$ chceme pomocí rotace opravit. Trojuhelníky $A,B,C$ jsou jejich podstromy. \\
 
-\noindent Rotaci provádíme vždy kdy $|\delta(v)| \geq 2$ pro nějaký vrchol $v$. Existuje spousta možných případů kdy se jaká provádí. Nejlehčí je si napsat pár příkladů na zkoušku. Je to velmi mechanická záležitost. Pro detailní popis koukněte do přednášky.\bigskip
+\noindent Rotací provádíme vždy když $|\delta(v)| \geq 2$. Kdy, ale máme zvolit levou a kdy pravou nebo dokonce dvojnou? Na tuto otázku si ihned odpovíme. \bigskip
+
+%---------------------------------------------------------------
+%-----------------------ROTACe----------------------------------
+%---------------------------------------------------------------
+
+\newcommand{\deltaVal}[1]{\delta(#1)}
+
+\subsubsection{Kdy a jak se provádí rotace v AVL stromu}
+
+
+Při provádění operací \texttt{AVLInsert} nebo \texttt{AVLDelete} se může hloubka některého podstromu změnit. Při návratu z rekurze směrem ke kořeni přepočítáme znaménka. Jakmile u nějakého vrcholu $x$ narazíme na hloubkovou nevyváženost, tj. $|\delta(x)| \ge 2$. Musíme tento vrchol a jeho podstrom opravit pomocí rotací. \medskip
+
+\noindent Podle znaménka nevyváženého vrcholu $x$ a znaménka jeho příslušného syna $y$ rozlišujeme 4 typy rotací:
+
+\begin{itemize}
+    \item \textbf{Jednoduchá rotace doprava}: $\delta(x) = \mathbf{\textcolor{red}{-2}}$ a $\delta(y) = \mathbf{-1}$.
+    \item \textbf{Jednoduchá rotace doleva}: $\delta(x) = \mathbf{\textcolor{red}{+2}}$ a $\delta(y) = \mathbf{+1}$.
+    \item \textbf{Dvojitá rotace vlevo-vpravo}: $\delta(x) = \mathbf{\textcolor{red}{-2}}$ a $\delta(y) = \mathbf{+1}$.
+    \item \textbf{Dvojitá rotace vpravo-vlevo}: $\delta(x) = \mathbf{\textcolor{red}{+2}}$ a $\delta(y) = \mathbf{-1}$.
+\end{itemize}
+
+\noindent Zjednodušeně řečeno pokud mají vrcholy $x,y$ stejné znaménko provádíme jednoduchou rotaci v opačném případě musíme provést dvojitou. \bigskip
+
+% ------------------------------------------------------------ %
+\subsubsection{Jednoduchá rotace doprava}
+% ------------------------------------------------------------ %
+
+\noindent U jednoduché rotace vpravo se připojí vrcholy $x$ jakožto pravý syn vrcholu $y$. Pouze strom B změní svou pozici na pravého syna vrcholu $x$.
+
+\input{Obrázky/BasicRightRotation}
+
+\bigskip
+
+\subsubsection{Jednoduchá rotace doleva}
+% ------------------------------------------------------------ %
+
+\noindent U jednoduché rotace vlevo se připojí vrchol $x$ jako levý syn vrcholu $y$. Následně podstrom B se staně pravým synem vrcholu $x$.
+
+\input{Obrázky/basicLeftRotation}
+
+\newpage
+
+\subsubsection{Dvojitá rotace vlevo-vpravo}
+% ------------------------------------------------------------ %
+
+Dvojitá rotace se provede jakožto dvě souvislé jednoduché rotace. První provedeme jednoduchou levou rotaci na vrchol $y$. Následně provedeme jednoduchou pravou rotaci na vrchol $x$.
+
+\input{Obrázky/DoubleRLRotations}
+
+\bigskip
+
+\subsubsection{Dvojitá rotace vpravo-vlevo (Right-Left Rotation -- RL)}
+% ------------------------------------------------------------ %
+
+\noindent První provedeme jednoduchou levou pravou na vrchol $y$. Následně provedeme jednoduchou levou rotaci na vrchol $x$.
+
+\input{Obrázky/DoubleLRRotation}
+
+\newpage
+
+% pseudokód
+\subsubsection{Levá rotace pseudokód}
 
 \noindent \textbf{Vstup}: Vrchol $x$ v BVS \newline
 \funkce{RotateLeft}{vrchol $x$}
@@ -295,7 +362,7 @@ Pokud má BVS zůstávat po provedení operací BVSInsert a BVSDelete dokonale v
 
 \noindent Samotná rotace nemusí vrátit ještě AVL strom, jelikož změnou hloubky v hloubce $h$ můžeme rozbít hloubkové vyvážení někde výše. Proto je potřeba jít vnější funkcí rekurentně až do kořene. To přesně poté dělá operace AVLInsert a AVLDelete. Nejlehčí je implementovat rotaci při návratu z rekurze. \bigskip
 
-\subsubsection{Časová složitost operací nad AVL stromem}
+\subsection{Časová složitost operací nad AVL stromem}
 
 \begin{theorem}
     AVLInsert a AVLDelete trvají $\bigO{log(n)}$.

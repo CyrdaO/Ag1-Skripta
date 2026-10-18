@@ -1,0 +1,76 @@
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  vnode/.style={circle, draw, minimum size=8mm, inner sep=0pt, font=\bfseries},
+  stree_hplus/.style={isosceles triangle, draw, isosceles triangle apex angle=50, shape border rotate=90, minimum height=17mm, minimum width=13mm, inner sep=1pt, font=\small},
+  stree_h/.style={isosceles triangle, draw, isosceles triangle apex angle=55, shape border rotate=90, minimum height=12mm, minimum width=10mm, inner sep=1pt, font=\small},
+  stree_hminus/.style={isosceles triangle, draw, isosceles triangle apex angle=60, shape border rotate=90, minimum height=8mm, minimum width=8mm, inner sep=1pt, font=\scriptsize},
+  thick, >=stealth,
+  stree_h_custom/.style args={#1/#2/#3}{
+    stree_h,
+    isosceles triangle apex angle=#1,
+    minimum height=#2,
+    minimum width=#3
+  },
+]
+  % STROM PŘED ROTACÍ
+  \begin{scope}[shift={(-2,0)}]
+    \node[vnode] (x) at (0, 1.8) {$x$};
+    \node[red, left=1pt of x, font=\bfseries] {(\textcolor{red}{+2})};
+    
+    % Podstrom A - h (střední)
+    \node[stree_h, anchor=apex] (A) at (-1.2, 0.6) {$A$};
+    \node[below=1pt of A, font=\scriptsize] {$h$};
+    
+    \node[vnode] (y) at (1.5, 0.6) {$y$};
+    \node[blue!80!black, left=1pt of y, font=\bfseries] {(+1)};
+    
+    % Podstrom B - h (střední)
+    \node[stree_h, anchor=apex] (B) at (0.7, -0.6) {$B$};
+    \node[below=1pt of B, font=\scriptsize] {$h$};
+    
+    % Podstrom C - h+1 (vysoký)
+    \node[stree_h_custom=35/18mm/15mm, anchor=apex] (C) at (2.3, -0.6) {$C$};
+    \node[below=1pt of C, font=\scriptsize] {$h+1$};
+    
+    \draw (x) -- (A.apex);
+    \draw (x) -- (y);
+    \draw (y) -- (B.apex);
+    \draw (y) -- (C.apex);
+    
+    \node at (0.5, -4) {\textbf{Strom před rotací}};
+  \end{scope}
+
+  % ŠIPKA ROTACE
+  \draw[->, ultra thick, blue!70!black] (1.8, 0.6) -- node[above, font=\bfseries] {Rotace L} node[below, font=\scriptsize] {(doleva)} (4.8, 0.6);
+
+  % STROM PO ROTACI
+  \begin{scope}[shift={(8.5,0)}]
+    \node[vnode] (y2) at (0, 1.8) {$y$};
+    \node[green!50!black, right=1pt of y2, font=\bfseries] {(0)};
+    
+    \node[vnode] (x2) at (-1.5, 0.6) {$x$};
+    \node[green!50!black, right=1pt of x2, font=\bfseries] {(0)};
+    
+    % Podstrom A - h
+    \node[stree_h, anchor=apex] (A2) at (-2.3, -0.6) {$A$};
+    \node[below=1pt of A2, font=\scriptsize] {$h$};
+    
+    % Podstrom B - h
+    \node[stree_h, anchor=apex] (B2) at (-0.7, -0.6) {$B$};
+    \node[below=1pt of B2, font=\scriptsize] {$h$};
+    
+    % Podstrom C - h + 1 (vysoký)
+    \node[stree_h_custom=35/18mm/15mm, anchor=apex] (C2) at (1.3, 0.6) {$C$};
+    \node[below=1pt of C2, font=\scriptsize] {$h + 1$};
+    
+    \draw (y2) -- (x2);
+    \draw (y2) -- (C2.apex);
+    \draw (x2) -- (A2.apex);
+    \draw (x2) -- (B2.apex);
+    
+    \node at (-0.4, -4) {\textbf{Strom po rotaci L}};
+  \end{scope}
+\end{tikzpicture}
+\caption{Jednoduchá rotace doleva (L). Špatné znaménko $\mathbf{\textcolor{red}{+2}}$ u vrcholu $x$ je opraveno na $0$.}
+\end{figure}
