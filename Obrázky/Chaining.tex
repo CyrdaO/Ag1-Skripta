@@ -1,0 +1,31 @@
+\begin{center}
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  cell/.style={rectangle, draw, minimum size=7mm, anchor=center},
+  node/.style={rectangle, draw, fill=blue!10, minimum height=6mm, minimum width=12mm, font=\small},
+  thick, >=stealth
+]
+  % Tabulka
+  \matrix (m) [matrix of math nodes, nodes={draw, minimum size=7mm, anchor=center}, row sep=-\pgflinewidth] {
+    0 \\ 1 \\ 2 \\ 3 \\ 4 \\
+  };
+
+  % Seznamy
+  \node[node, right=12pt of m-2-1] (n15) {15};
+  \draw[->] (m-2-1) -- (n15);
+  \node[node, right=10pt of n15] (n5) {5};
+  \draw[->] (n15) -- (n5);
+
+  \node[node, right=12pt of m-4-1] (n8) {8};
+  \draw[->] (m-4-1) -- (n8);
+
+  \node[node, right=12pt of m-5-1] (n14) {14};
+  \draw[->] (m-5-1) -- (n14);
+  \node[node, right=10pt of n14] (n4) {4};
+  \draw[->] (n14) -- (n4);
+
+\end{tikzpicture}
+\caption{Schéma hešování s řetězením. Přihrádka 1 obsahuje spojový seznam prvků $[15 \to 5]$, přihrádky 0 a 2 jsou prázdné.}
+\end{figure}
+\end{center}

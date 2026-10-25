@@ -1,0 +1,49 @@
+
+\begin{center}
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  box/.style={rectangle, draw, minimum size=7mm, inner sep=0pt, font=\small},
+  thick
+]
+
+\foreach \x in {0,...,9} {
+  \pgfmathtruncatemacro{\i}{\x+1}
+  \node[
+    draw,
+    minimum width=7mm,
+    minimum height=7mm,
+    inner sep=0pt,
+    outer sep=0pt
+  ] (m-1-\i) at (\x*7mm+3.5mm,3.5mm) {\x};
+}
+
+% Popisky nad buňkami
+\foreach \x in {0,...,9} {
+  \pgfmathtruncatemacro{\i}{\x+1}
+  \node[above=2pt of m-1-\i] {\scriptsize \x};
+}
+
+% Hodnoty v přihrádkách pro h(k) = k mod 10
+\node[below=12pt of m-1-3, box] (v1212) {1212};
+\draw[->] (v1212.north) -- (m-1-3.south);
+
+\node[below=12pt of m-1-6, box] (v935) {935};
+\draw[->] (v935.north) -- (m-1-6.south);
+
+\node[below=12pt of m-1-9, box] (v1948) {1948};
+\draw[->] (v1948.north) -- (m-1-9.south);
+
+\node[below=45pt of m-1-9, box] (v1918) {1918};
+\draw[->] (v1918.north) -- (v1948.south);
+
+\node[below=78pt of m-1-9, box] (v1968) {1968};
+\draw[->] (v1968.north) -- (v1918.south);
+
+\node[below=12pt of m-1-10, box] (v1989) {1989};
+\draw[->] (v1989.north) -- (m-1-10.south);
+
+\end{tikzpicture}
+\caption{Ukázka hešovací tabulky s $m = 10$ přihrádkami a hešovací funkcí $h(k) = k \bmod 10$. Letopočty 1948, 1918 a 1968 vedou do stejné přihrádky 8 a tvoří kolizi. Zde vyřešeno pomocí řetízků}
+\end{figure}
+\end{center}

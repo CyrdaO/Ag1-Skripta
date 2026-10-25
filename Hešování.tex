@@ -1,0 +1,477 @@
+
+% ============================================================ %
+\section{6. Přednáška (kompletní, ale zatím bez korektury}
+% ============================================================ %
+
+\subsection{Slovníky}
+
+Nyní si zavedeme datovou strukturu pro práci s měnicími se množinami dat, nazveme jí slovník. Ten pracuje s uspořádanými dvojicemi dat (klíč, hodnota). Pro vyhledávání a organizaci dat se využívá klíčů. V c++ můžete znát pod názvem map.
+
+\bigskip
+
+\begin{definition}[Slovník]
+Nechť $\mathcal{U}$ je množina všech možných klíčů, nazývaná \textbf{univerzum}. \textbf{Slovník} je datová struktura, která reprezentuje dynamickou podmnožinu prvků $K \subseteq \mathcal{U}$ (kde $|K| \ll |\mathcal{U}|$) s unikátními klíči a podporuje následující základní operace:
+\begin{itemize}[itemsep=-0.15em]
+    \item \funkce{Find}{$k$}: Zjistí, zda je prvek s klíčem $k \in K$ přítomen ve slovníku, a případně vrátí jeho hodnotu.
+    \item \funkce{Insert}{$x$}: Pokud prvek s klíčem $k(x) \notin K$, vloží prvek $x$ do slovníku.
+    \item \funkce{Delete}{$x$}: Pokud prvek s klíčem $k(x) \in K$, odstraní prvek $x$ ze slovníku.
+\end{itemize}
+\end{definition}
+
+\begin{remark}
+Klíče jsou v daném okamžiku unikátní — ve slovníku se nachází nejvýše jeden prvek s daným klíčem. Symbol $\ll$ znamená řádově menší.
+\end{remark}
+
+\bigskip
+
+\subsubsection{Implementace slovníku}
+
+V závislosti na to jak máme velké univerzum $\mathcal{U}$ a aktuální počet prvků n. Máme různé možnosti implementace.
+
+\begin{enumerate}
+    \item \textbf{Bitové pole}:
+    Pokud je univerzum $\mathcal{U}$ malé můžeme pro celé alokovat bitové pole, to nám drží informaci o všech prvcích (tedy každý možný klíč je alokován). Operaci Find, Insert, Delete stihneme krásně za $\bigO{1}$. Bohužel jelikož alokujeme celé univerzum je pamět $\bigO{|\mathcal{U}|}$. Což je pro velká univerza nepoužitelné.
+    
+    \item \textbf{Seřazené pole}:
+    Druhou možností je držet si seřazené pole. Díky tomu nemusíme mít alokovaný každý klíč, ale rychlost operací se zhorší. Vyhledávání dokážeme díky binárnímu vyhledávání stihnout za $\bigO{\log_2(n))}$. Bohužel modifikace pole nás v nejhorším případě nutí celé posunout, aby vzniklo místo pro nový prvek. Neboli jak Delete, tak Insert bude trvat $\bigO{n}$. Nepotřebujeme žádnou pamět navíc, stačí nám $\bigO{1}$ extra paměti.
+    
+    \item \textbf{BVS/AVL}:
+    Strom T nám poskytují složitost $\bigO{h(T)}$ pro všechny operace. U Avl je dokonce logaritmická. Operace jsme již definovali o přednášku dříve.
+    
+    \item \textbf{Hešovací tabulky (Rozptylovací tabulky)}:
+    Velmi dobrou možností je hešování, proto si ho nyní zaveďme.
+\end{enumerate}
+
+\newpage
+
+% ============================================================ %
+\subsection{Hešovací tabulky}
+% ============================================================ %
+
+\subsubsection{Hešování a Kolize}
+
+Hešování nám dovoluje za málo paměti získat velmi rychlé operace. Vytvoří si pole přihrádek a každý klíč prožene hešovací funkcí, která mu spočítá přihrádku do které spadne. Hašovaní optimálně stihne operace za $\mathcal{O}^*(1)$. Náročné je vyrobit dobrou funkci, která dostojí našim nárokům. První velkým problémem budou kolize. Ale nepředbíhejme a prvně si zadefinujme co vlastně je hešování:
+
+\bigskip
+
+\begin{definition}[Hešovací tabulka a hešovací funkce]
+Nechť $\mathcal{U}$ je univerzum klíčů. Zvolme pole $m$ přihrádek $P = \{0, 1, \dots, m-1\}$, které nazýváme \textbf{hešovací tabulkou}. \textbf{Hešovací funkce} je zobrazení $h: \mathcal{U} \to P$, které každému klíči z univerza přiřadí index přihrádky v tabulce. Prvek s klíčem $k \in K$ ukládáme do přihrádky $h(k)$.
+\end{definition}
+
+\medskip
+
+\begin{definition}[Faktor naplnění]
+Poměr počtu uložených prvků $n = |K|$ k celkovému počtu přihrádek $m$ v hešovací tabulce nazýváme \textbf{faktorem naplnění} a značíme ho:
+$$\alpha = \frac{n}{m}$$
+\end{definition}
+
+\medskip
+
+\noindent Standartním problémem u hešovácích tabulek jsou kolize. Tedy kdy dva různé klíče ukazují na stejnou přihrádku. Kolize musíme řešit, dvě implementace co si zde ukážeme jsou \textbf{řetízky} a \textbf{lineární přidávání}.
+
+\medskip
+
+\begin{definition}[Kolize]
+Jelikož velikost tabulky bývá výrazně menší než velikost univerza ($m \ll |\mathcal{U}|$), nevyhnutelně existují různé klíče $k_1 \neq k_2$ takové, že $h(k_1) = h(k_2)$. Tato situace se nazývá \textbf{kolize}.
+\end{definition}
+
+\input{Obrázky/ChainsHashing}
+
+\subsubsection{Využívané hešovací funkce}
+
+Hešovací funkce chtějí co nejvíce rozptylovat klíče mezi příhrádky a díky tomu zachovávat rychlou časovou složitost. Zde si uvedeme nějaké co se reálně používají. Pro více různých hešovacích funkcí koukněte na předmět BI-DAS.
+
+\begin{itemize}
+    \item \textbf{Lineární kongruence}:
+    $$h(k) = (a \cdot k) \bmod m$$
+    Kde $m$ je typicky zvolené prvočíslo a $a$ je dostatečně velká konstanta nesoudělná s $m$.
+    
+    \item \textbf{Vyšší bity součinu}:
+    Pro $w$-bitové klíče a $m = 2^\ell$ přihrádek zvolíme $w$-bitovou lichou konstantu $a$. Výpočet probíhá jako:
+    $$h(k) = \left\lfloor \frac{(a \cdot k) \bmod 2^w}{2^{w-\ell}} \right\rfloor$$
+    Neboli pro každé k spočítáme $a \cdot k$, ořízneme ho na $w$ bitů a z nich
+    vezmeme nejvyšších $\ell$.
+\end{itemize}
+
+\bigskip
+
+\noindent Pokud máme posloupnost více znaků (třeba string), můžeme na ně aplikovat jednu z těchto funkcí. Ta se aplikuje na každý znak a následně je sečte dohromady do jedného hodnoty.
+
+\begin{itemize}
+    \item \textbf{Skalární součin}: $h(k_0, \dots, k_{d-1}) = \left( \sum_{i=0}^{d-1} a_i k_i \right) \bmod m$, kde $a = (a_0, \dots, a_{d-1})$ je vektor nezávislých konstant a $k =(k_0, \dots, k_{d-1})$ je vstupní posloupnost. Pro fanoušky LA2, lze toto také napsat jako skalární součin $a^Tk$.
+    \item \textbf{Polynom (Polynomial Rolling Hash)}: $h(k_0, \dots, k_{d-1}) = \left( \sum_{i=0}^{d-1} a^i k_i \right) \bmod m$ pro pevně zvolenou bázi $a$. Oproti skalárnímu součinu, zde prvky $a_i$ mocníme na jejich $i$-tou mocninu.
+\end{itemize}
+
+\bigskip
+
+\subsubsection{Ideální Hešování}
+
+Ideální hešování je vzor, ke kterému se chceme dostat. Znamená to, že v každé přihrádce je n/m prvků, tedy jsou velmi rovnoměrně rozprostřené. A díky tomu je časová složitost nejlepší možná.
+
+\begin{definition}[Fakt: Časová složitost ideálního hešování]
+Uvažujme hešovací tabulku velikosti $m$ s $n$ prvky a s hešovací funkcí $h: \mathcal{U} \to P$, která je rychlá, bezpaměťová a rozděluje univerzum $\mathcal{U}$ rovnoměrně. Pokud jsou navíc vstupní data z univerza $\mathcal{U}$ vybírána nezávisle a rovnoměrně náhodně, potom: \begin{enumerate}[itemsep=-0.2em]
+    \item průměr počtu prvků v přihrádce je $\frac{n}{m}$,
+    \item počet prvků v přihrádce je $\bigO{n/m}$ pro skoro všechny přihrádky, 
+    \item průměrný počet operací vykonaných při hledání (\texttt{Find}), vkládání (\texttt{Insert}) i mazání (\texttt{Delete}) je $\bigO{n/m}$. 
+    \end{enumerate} 
+\end{definition}
+
+\subsubsection{Nafukovací hešovací tabulka a přehešování}
+
+Jednou za čas se může stát, že nám počet prvků v tabulce výrazně vzroste. I přes dobrou hešovací funkci, která prvky rozprostírá nám faktor $\alpha = n/m$ roste a to zpomaluje všechny operace. Jak toto vyřešíme?
+
+\medskip
+
+\noindent Zvolíme si konstantu Z a kdykoliv $\alpha > Z$, tak provedeme přehešování. K tomu nám pomůže amortizované nafukovací pole ze 4. přednášky.
+
+\medskipq
+
+\begin{enumerate}
+    \item Jakmile po vložení nového prvku faktor naplnění překročí hranici $\alpha > Z$, alokujeme novou tabulku s dvojnásobnou kapacitou $m' = 2m$.
+    \item Zvolíme novou hešovací funkci $h'$ přizpůsobenou nové velikosti $m'$.
+    \item Provádíme \textbf{přehešování}: pro každý prvek ze staré tabulky spočítáme novou pozici $h'(k)$ a vložíme jej do nové tabulky. Starou tabulku uvolníme.
+\end{enumerate}
+
+\noindent Proč je potřeba přepočítat prvky? Pokud bychom to neprovedli, tak se nám v rovnici změní hodnota m a můžeme dojít k úplně jinému indexu a tím by jsme prvek ztratili.
+
+\medskip
+
+\begin{theorem}[Složitost přehešování]
+Ačkoliv jedno přehešování trvá čas $\bigTheta{n}$, amortizovaná časová složitost jedné operace vkládání do nafukovací hešovací tabulky zůstává $\bigO{*}(1)$.
+\end{theorem}
+
+% ============================================================ %
+\subsection{Řešení kolizí}
+% ============================================================ %
+
+Pokud nastane kolize, musíme ji nějak vyřešit, jinak by jsme nevěděli, která z hodnot je správná. Existují dvě hlavní metody řešení kolizí v hešovacích tabulkách:
+
+\begin{enumerate}
+    \item \textbf{Řetězení (Otevřené hešování)}: Prvky se neukládají přímo do hešovací tabulky, ale do spojových seznamů (řetízků) zavěšených za jednotlivými přihrádkami.
+    \item \textbf{Otevřená adresace (Uzavřené hešování)}: Všechny prvky jsou ukládány přímo do samotného pole hešovací tabulky. Do jedné přihrádky se vejde nejvýše jeden prvek.
+\end{enumerate}
+
+\subsection{Řešení kolizí pomocí řetízků}
+
+Hešovací tabulka obsahuje $m$ přihrádek. V každé přihrádne máme spojový seznam a prvky do něj zavěšujeme. Operace vždy v nejhorším případě musí projít celý seznam. Ideálně proto chceme aby seznamy byli co nejkratší.
+
+\input{Obrázky/Chaining}
+
+\begin{theorem}[Složitost operací při řetězení]
+Při použití řetězení s ideální hešovací funkcí a faktorem naplnění $\alpha = n/m$ trvají operace \texttt{Find}, \texttt{Insert} a \texttt{Delete} v průměrném případě časy:
+$$\bigO{1 + \alpha}$$
+Pokud volíme velikost tabulky $m = \bigTheta{n}$, mají všechny operace v průměrném čase konstantní složitost $\bigO{1}$. Jelikož $\bigO{1 + n/m} = \bigO{1 + n/(c*n)} = \bigO{1 + 1/((c-1)*n)} = \bigO{1}$.
+\end{theorem}
+
+\medskip
+
+\noindent Operace fungují takto:
+\begin{itemize}
+    \item Find: Pomocí hešovací funkce spočítá index, poté projde seznam a hledá prvek. Pokud ho najde vrátí ho, v opačném případě zahlásí, že prvek neexistuje.
+    \item Insert: Nejdříve si spočítá index a následně přilepí nový prvek nakonec seznamu.
+    \item Delete: Najde prvek a poté ho smaže ze seznamu. Seznam se tím zkrátí o jednu hodnotu.
+\end{itemize}
+
+\subsection{Otevřená adresace}
+
+V hešovací tabulce s otevřenou adresací uchovává každá přihrádka nejvýše jeden prvek. Při kolizi neukládáme prvek do seznamu, ale hledáme pro něj náhradní volnou přihrádku v tabulce. Takto pokračujeme, dokud mu jí nenalezneme.
+
+\begin{definition}[Vyhledávací posloupnost]
+Pro každý klíč $k \in \mathcal{U}$ definuje hešovací funkce jeho \textbf{vyhledávací posloupnost}:
+$$h(k, 0), h(k, 1), \dots, h(k, m-1)$$
+která tvoří permutaci indexů přihrádek $\{0, 1, \dots, m-1\}$. Určuje pořadí přihrádek, ve kterých se postupně snažíme prvek najít nebo vložit. Samotné čísla $0,1,2,\dots$ jsou počty neúspěšných pokusů.
+\end{definition}
+
+\subsubsection{OpenFind}
+
+Operace OpenFind vypočítá index pro hledanou hodnotu. Pokud je přihrádka v tabulce prázdná vrací neůspěch. V opačném případě koukne na klíč hodnoty porovná jí s hledanou. Je li stejná, tak jsme našli hledaný prvek. Jinak musí zkusit jít dále, tak že zahešuje hodnotu nyní s vyšším číslem
+
+\medskip
+
+\funkce{OpenFind}{$k$}
+\begin{pseudocode}
+\item Pro $i := 0, \dots, m-1$:
+\item \tab $j := h(k, i)$
+\item \tab Pokud $A[j]$ obsahuje klíč $k$: return $A[j]$ \textcolor{gray}{// Úspěšný nález}
+\item \tab Pokud je $A[j]$ prázdná: return $\emptyset$ \textcolor{gray}{// Neúspěch, klíč ve struktuře není}
+\item return $\emptyset$
+\end{pseudocode}
+
+\bigskip
+
+\subsubsection{OpenDelete}
+
+OpenDelete stejně jako OpenFind hledá prvek, který má smazat. Když ho nalezne, tak ho nahradí náhrobkem. Což je speciální prvek mimo naše univerzum.
+
+\medskip
+
+\funkce{OpenDelete}{$k$}
+\begin{pseudocode}
+\item Pro $i := 0, \dots, m-1$:
+\item \tab $j := h(k, i)$
+\item \tab Pokud $A[j]$ obsahuje klíč $k$:
+\item \tab \tab $A[j] := \dagger$ \textcolor{gray}{// Nahrazení prvku náhrobkem}
+\item \tab \tab return success
+\item \tab Pokud je $A[j]$ prázdná: return failure
+\end{pseudocode}
+
+\medskip
+
+\begin{remark}[Problém naivního mazání a Náhrobek]
+Pokud bychom při mazání prvku přihrádku jednoduše označili jako prázdnou, přerušili bychom tím vyhledávací posloupnost pro jiné prvky, které byly vloženy později po této kolizi. Tyto existující prvky by pak algoritmus \texttt{OpenFind} nenašel!
+Proto se smazané prvky nahrazují speciální značkou — \textbf{náhrobkem} $\dagger$:
+\begin{itemize}[itemsep=-0.15em]
+    \item \texttt{OpenFind} při naražení na $\dagger$ pokračuje dále v hledání v posloupnosti.
+    \item \texttt{OpenInsert} může přihrádku označenou $\dagger$ znovu využít a přepsat novým prvkem.
+\end{itemize}
+\end{remark}
+
+\bigskip
+
+\subsubsection{OpenInsert}
+
+Operace OpenInsert vypočítá index pro vkládanou hodnotu, začíná s číslem 0. Je-li tato pozice už obsazená musíme spočítat index znova, nyní s číslem 1. Takto pokračujeme dokud nenajdeme volnou pozici nebo pozici s náhrobkem.
+
+\medskip
+
+\funkce{OpenInsert}{$x$}
+\begin{pseudocode}
+\item Pokud \textcolor{blue}{OpenFind}($k(x)$) $\neq \emptyset$: return \textcolor{gray}{// Klíč již v tabulce je}
+\item Pro $i := 0, \dots, m-1$:
+\item \tab $j := h(k(x), i)$
+\item \tab Pokud je $A[j]$ prázdná nebo $A[j] = \dagger$:
+\item \tab \tab $A[j] := x$
+\item \tab \tab return
+\item ohlaš zaplnění tabulky
+\end{pseudocode}
+
+\bigskip
+
+\subsubsection{Volba vyhledávací posloupnosti}
+
+\noindent Jaké posloupnosti volit? Nyní si ukážeme dvě poměrně přímočaré možnosti:
+
+\begin{enumerate}
+    \item \textbf{Lineární přidávání (Linear Probing)}:
+    $$h(k, i) = (f(k) + i) \bmod m$$
+    Začne v nějaké přihrádce a následně po jedné zkouší přihrádky napravo. Tento přístup je skvělý z pohledu cache paměti, ale trpí v případě velkého množství zaplněných přihrádek u sebe.
+    
+    \item \textbf{Dvojité hešování (Double Hashing)}:
+    $$h(k, i) = (f(k) + i \cdot g(k)) \bmod m$$
+    Používá dvě nezávislé hešovací funkce $f(k)$ a $g(k)$, kde $g(k)$ musí být nesoudělné s $m$ (v praxi se volí $m$ jako prvočíslo). Číslo i je poté počet neúspěšných pokusů.
+\end{enumerate}
+
+\bigskip
+
+\newpage
+
+% ============================================================ %
+\subsection{Úvod do randomizace v algoritmických úlohách}
+% ============================================================ %
+
+Zapojením náhody do výpočtu lze navrhnout algoritmy, které mohou být jednodušší, efektivnější nebo odolné vůči zlomyslným vstupům od útočníka. Proto si nyní zaveďme opravdu základy této teorie. Tu následně využijeme pro důkaz o efektivitě otevřené adresace.
+
+\subsubsection{Základy teorie pravděpodobnosti}
+
+První si zavedeme pravděpodobnostní prostor. Zde $\Omega$ značí množinu všeho co může nastat a $P$ je funkce která každému tomuto jevu přiřadí jeho pravděpodobnost. Zároveň platí, že jsme omezeni 1 (100\%). Proto suma všeho co může nastat je rovna 1.
+
+\medskip
+
+\begin{definition}[Diskrétní pravděpodobnostní prostor]
+\textbf{Diskrétní pravděpodobnostní prostor} je dvojice $(\Omega, P)$, kde $\Omega$ je konečná nebo spočetná množina elementárních jevů a $P: \Omega \to [0, 1]$ je pravděpodobnostní funkce splňující:
+$$\sum_{\omega \in \Omega} P(\omega) = 1$$
+\textbf{Jev} $A$ je libovolná podmnožina $A \subseteq \Omega$ a jeho pravděpodobnost je $P(A) = \sum_{\omega \in A} P(\omega)$.
+\end{definition}
+
+\medskip
+
+\noindent Nezávislost nám říká, že dva jevy na sobě nijak nezávisí, proto můžeme jejich pravděpodobnosti vynásobit. Např. hod dvěma kostkami. Kde první jev je padla 4 na první kostce a druhý jev je padla 6 na druhé kostce. V obou případech je to šance 1/6. Tedy celková šance je 1/36. Neboli naše jevy jsou nezávislé.
+
+\begin{definition}[Nezávislé jevy]
+Dva jevy $A, B \subseteq \Omega$ jsou \textbf{nezávislé}, pokud platí $P(A \cap B) = P(A) \cdot P(B)$.
+\end{definition}
+
+\medskip
+
+\noindent Opačný jev je velmi logický. Pokud máme 30\% šanci že hodíme hlavu na minci (v BI-PST se používá hlava místo pany). Tak šance že nám hlava nepadne (neboli že padlo cokoli jiného) je 70\%.
+
+\begin{definition}[Opačný jev]
+Opačný jev k jevu $A$ značíme $\bar{A} = \Omega \setminus A$ a platí pro něj $P(\bar{A}) = 1 - P(A)$.
+\end{definition}
+
+\medskip
+
+\begin{definition}[Randomizovaný RAM]
+Standardní výpočetní model RAM rozšíříme o instrukci \texttt{$X$ := random($Y$, $Z$)}, která v čase $\bigO{1}$ vygeneruje rovnoměrně náhodné celé číslo z intervalu $\langle Y, Z \rangle$ nezávisle na předchozích voláních.
+\end{definition}
+
+\subsubsection{Příklad: Kontrola násobení matic (VerifyMM)}
+
+Mějme čtvercové matice $A, B, C$ typu $n \times n$. Chceme ověřit, zda platí $C = A \cdot B$. Klasické násobení matic trvá čas $\bigO{n^3}$ (nebo $\bigO{n^{2{,}37}}$ podle pokročilých algoritmů). Randomizovaný Freivaldsův algoritmus \texttt{VerifyMM} ověří správnost v čase $\bigO{n^2}$.
+
+\bigskip
+\funkce{VerifyMM}{$A, B, C$}
+\begin{pseudocode}
+\item Zvol náhodný vektor $x \in \{0, 1\}^n$ \textcolor{gray}{// Náhodný bázový vektor}
+\item $y := A \cdot (B \cdot x)$ \textcolor{gray}{// Násobení matice vektorem trvá $\bigO{n^2}$}
+\item $z := C \cdot x$
+\item Pokud $z = y$: return ``$C = A \cdot B$''
+\item return ``$C \neq A \cdot B$''
+\end{pseudocode}
+\bigskip
+
+\begin{theorem}[Správnost a složitost VerifyMM]
+Algoritmus \texttt{VerifyMM} vykoná $\bigO{n^2}$ aritmetických operací.
+\begin{enumerate}
+    \item Pokud $C = A \cdot B$, algoritmus vždy odpoví správně ``$C = A \cdot B$''.
+    \item Pokud $C \neq A \cdot B$, algoritmus odhalí chybu a odpoví ``$C \neq A \cdot B$'' s pravděpodobností alespoň $\frac{1}{2}$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Pokud $C = A \cdot B$, pak $C x = (AB) x = A(Bx)$ pro každý vektor $x$, algoritmus tedy dá vždy správnou odpověď. \\\\
+Nechť $C \neq A \cdot B$. Definujme rozdílovou matici $D = C - A \cdot B \neq \mathbf{0}$ (kdyby bylo rovno 0, pak platí rovnost). Chceme ukázat, že $P[D x \neq \mathbf{0}] \ge \frac{1}{2}$.
+Jelikož $D \neq \mathbf{0}$, existuje v $D$ alespoň jeden nenulový prvek $d_{i, j} \neq 0$. Pro $i$-tý řádek součinu $y = D x$ platí:
+$$y_i = d_{i, 1} x_1 + d_{i, 2} x_2 + \dots + d_{i, n} x_n = d_{i, j} x_j + S, \quad \text{kde } S = \sum_{k \neq j} d_{i, k} x_k$$
+\textit{Toto je vlastně jenom rozepsané maticové násobení. Máme řádek a násobíme tím sloupcový vektor. Tedy první s prvním, druhý s druhým, atd. My si z toho explicitně vytáhneme ten nenulový člen $d_{i,j}$ a zbytek schováme do $S$.} \\
+
+\noindent Generujme složky vektoru $x$ postupně a složku $x_j \in \{0, 1\}$ zvolme jako poslední. Hodnota $S$ je v ten okamžik pevně daná.
+Nyní $y_i = S$ (pro $x_j = 0$) nebo $y_i = S + d_{i, j}$ (pro $x_j = 1$). Jelikož $d_{i, j} \neq 0$, musí nastat buď $x_j = 0$ nebo $x_j = 1$ se stejnou pravděpodobností.
+Proto je $y_i \neq 0$ pro alespoň jednu ze dvou stejně pravděpodobných voleb $x_j$, což znamená $P[y_i \neq 0] \ge \frac{1}{2}$, a tedy $P[Dx \neq \mathbf{0}] \ge \frac{1}{2}$. \\
+
+\noindent \textit{Máme šanci 1/2 že člen $d_{i,j}$ bude roven 0 a tím potencionálně celá matice bude nulová, z čehož by plynula rovnost $C = A \cdot B$}. Také máme ale šanci 1/2 že člen $d_{i,j}$ bude nenulový a tím správně určíme, že $C \neq A \cdot B$.
+\end{proof}
+
+\bigskip
+
+\noindent Tedy výsledně pokud dostaneme matice, tak $C = A \cdot B$ poté stoprocentě správně řekneme že se rovnají. V případě kdyby tomu tak nebylo, poté se šancí 50\% řekneme, že tomu tak není. S tím ale nemusíme být spokojení. Přeci 50\% je ještě velká šance na chybu. To lze ale vyřešit. Stačí algoritmus spustit několikrát.
+
+\medskip
+
+\begin{remark}[Zvýšení jistoty opakovaným spouštěním]
+Pravděpodobnost chybného potvrzení při $C \neq AB$ u jednoho běhu je nejvýše $\frac{1}{2}$.
+Spustíme-li \texttt{VerifyMM} nezávisle $k$-krát za sebou a ve všech pokusech dostaneme rovnost, je pravděpodobnost chyby nejvýše:
+$$\left( \frac{1}{2} \right)^k$$
+Pro $k = 50$ je pravděpodobnost chyby menší než $10^{-15}$, což je v praktických výpočtech zanedbatelné, přičemž časová složitost zůstává $\bigO{k \cdot n^2} = \bigO{n^2}$. Samozřejmě tak konstanta neni nijak pěkná. Pro velké matice to stále rychlostně převáží.
+\end{remark}
+
+\bigskip
+
+\subsubsection{Náhodná veličina a střední hodnota}
+
+\noindent Diskrétní Náhodná veličina je funkce, která jevům přiřazuje nějakou váhu (bacha ne pravděpodobnost). Často totiž chceme jevům přiřadit konkrétní hodnotu např. kolik peněz vyhráváme, kolik padlo bodů nebo jak velká je škoda.
+
+\medskip
+
+\begin{definition}[Náhodná veličina a Střední hodnota]
+Nechť $(\Omega, P)$ je pravděpodobnostní prostor. \textbf{Diskrétní náhodná veličina} je funkce $X: \Omega \to \R$.
+\end{definition}
+
+\bigskip
+
+\noindent Střední hodnota je vlastně takový zobecněný průměr. Standartně když počítáme průměr, tak mají všechny hodnoty stejnou váhu. Nyní ale díky diskrétní náhodné veličině, můžeme váhy jevů specifikovat. Pokud by všechny jevy měli stejnou váhu, mluvíme o průměru.
+
+\medskip
+
+\begin{definition}
+Střední hodnota $\mathbb{E}[X]$ náhodné veličiny $X$ je definována jako průměr hodnot vážený jejich pravděpodobnostmi:
+$$\mathbb{E}[X] = \sum_{\omega \in \Omega} X(\omega) \cdot P(\omega) = \sum_{x_i} x_i \cdot P[X = x_i]$$
+\end{definition}
+
+\bigskip
+
+\noindent Linearita je vlastnost co nám říká, že platí additivita, tedy $\mathbb{E}[A + B]$ je rovna $\mathbb{E}[A] + \mathbb{E}[B]$. A také homogenita tedy, že $\mathbb{E}[\alpha \cdot A] = \alpha \cdot \mathbb{E}[A]$.
+
+\begin{theorem}[Linearita střední hodnoty]
+Pro libovolné náhodné veličiny $X, Y$ a reálné konstanty $\alpha, \beta \in \R$ platí:
+$$\mathbb{E}[\alpha X + \beta Y] = \alpha \mathbb{E}[X] + \beta \mathbb{E}[Y]$$
+\end{theorem}
+
+\begin{proof}
+Uvažujme diskrétní pravděpodobnostní prostor $(\Omega, \mathbf{P})$.
+Z definice střední hodnoty a uspořádání sumace dostáváme:
+    \begin{align*}
+    \mathbb{E}[\alpha X + \beta Y]
+    &= \sum_{\omega \in \Omega} (\alpha X + \beta Y)(\omega) \cdot \mathbf{P}(\omega) \\
+    &= \sum_{\omega \in \Omega} \bigl(\alpha \cdot X(\omega) + \beta \cdot Y(\omega)\bigr) \cdot \mathbf{P}(\omega) \\
+    &= \sum_{\omega \in \Omega} \alpha \cdot X(\omega) \cdot \mathbf{P}(\omega)
+     + \sum_{\omega \in \Omega} \beta \cdot Y(\omega) \cdot \mathbf{P}(\omega) \\
+    &= \alpha \sum_{\omega \in \Omega} X(\omega) \cdot \mathbf{P}(\omega)
+     + \beta \sum_{\omega \in \Omega} Y(\omega) \cdot \mathbf{P}(\omega) \\
+    &= \alpha \mathbb{E}[X] + \beta \mathbb{E}[Y].
+    \end{align*}
+\end{proof}
+
+\bigskip
+
+\noindent Střední hodnota nám také říká "průměrný" počet pokusů než nastane náhodný jev. Př. pokud chodíme se džbánek pro vodu a má pravděpodobnost $p$ (dosaďte si třeba 0,05), že se ucho utrhne. Tak ve střední hodnotě se ucho utrhne po 1/$p$ cestách pro vodu. (1/0,05 = 20 cest). Někdy se samozřejmě utrhne dřív a jindy vydrží déle, ale dlouhodobý průměr je přesně 20.
+
+\medskip
+
+\begin{theorem}[Opakování nezávislých pokusů / Čekání na náhodný jev]
+Uvažujme sérii nezávislých pokusů, ve kterých sledovaný jev $J$ nastává v každém pokusu s pravděpodobností $p > 0$. Nechť $T$ je náhodná veličina udávající počet pokusů do prvního výskytu jevu $J$. Pak střední hodnota počtu pokusů je:
+$$\mathbb{E}[T] = \frac{1}{p}$$
+\end{theorem}
+
+
+\subsection{O Efektivitě otevřené adresace}
+
+\begin{theorem}[O efektivitě otevřené adresace]
+Pokud jsou vyhledávací posloupnosti plně náhodné permutace a faktor naplnění je $\alpha = n/m < 1$, $n < m$, pak střední hodnota počtu navštívených přihrádek při neúspěšném hledání je nejvýše:
+$$\frac{1}{1 - \alpha}$$
+\end{theorem}
+
+\begin{proof}
+\begin{itemize}
+    \item Nechť k je hledaný klíč a $h_1, h_2, \dots, h_m$ je jeho vyhledávací posloupnost.
+    \item Označme $p_i$ pravděpodobnost, že při vyhledávání navštívíme alespoň $i$ přihrádek (tj. příhrádky $h_1, h_2, \dots, h_{i-1}$ byli obsazené.
+    \item Příhádku $h_1$ projdeme vždy, proto $p_1 = 1$. Toto je indukční předpoklad.
+    \item Přihrádku $h_2$ projdeme pouze v případě když $h_1$ byla obsazená. Proto $p_2 = n/m = \alpha$.
+    \item Obecně pro přihrádku $h_{i+1}$ je pravděpodobnost rovna tomu, že předešlých $i$ přihrádek bylo obsazeno.
+    \item Čili náhodně vybraná přihrádka ze zbývajících $m - (i - 1)$
+    možných přihrádek je obsazena libovolným klíčem ze zbývajících
+    $n - (i - 1)$ možných klíčů.
+    \item Proto $p_{i+1} = p_i \cdot (n - i + 1) / (m - i + 1) \leq p_i \cdot n/m = p_i \cdot \alpha$.
+    \item Indukcí dostaneme $p_{i+1} \leq \alpha$.
+    \item Nechť $S$ je střední hodnota počtu navštívených přihrádek.
+    \item Pak
+    \[
+        S = \sum_{i=1}^{m} i \cdot q_i,
+    \]
+    kde $q_i$ je pravděpodobnost, že jsme navštívili právě $i$ přihrádek. Tedy že přihrádky $h_1, \ldots, h_{i-1}$ jsou obsazené a přihrádka $h_i$ je prázdná. \\
+    \textit{Toto je přímo definice střední hodnoty.}
+    \item Jelikož
+    \[
+    \begin{aligned}
+        &\mathbf{P}[h_1,\ldots,h_{i-1}\text{ jsou obsazené}] = \\
+        &\mathbf{P}[h_1,\ldots,h_{i-1}\text{ jsou obsazené a } h_i
+        \text{ je prázdná}] + \\
+        &\mathbf{P}[h_1,\ldots,h_{i-1}\text{ jsou obsazené a } h_i
+        \text{ je obsazená}],
+    \end{aligned}
+    \]
+    \textit{Zde pravděpodobnost že prvních $i-1$ přihrádek je plných je určitě stejná jako že jich je prvních $i-1$ je obsazených a pak obě možné možnosti. Tedy nám nic nespecifikují.} \\\\
+    platí $p_i = q_i + p_{i+1}$, čili $q_i = p_i - p_{i+1}$. Proto
+    \[
+    \begin{aligned}
+        S
+        &= \sum_{i=1}^{m} i \cdot (p_i - p_{i+1}) \\
+        &= \sum_{i=1}^{m} i \cdot p_i
+           - \sum_{i=1}^{m} i \cdot p_{i+1} \\
+        &= \sum_{i=1}^{m} i \cdot p_i
+           - \sum_{i=2}^{m+1} (i-1) \cdot p_i \\
+        &= \sum_{i=1}^{m} p_i \cdot (i-(i-1)) \\
+        &= \sum_{i=1}^{m} p_i.
+    \end{aligned}
+    \]
+
+    \item Tedy
+    \[
+        S = \sum_{i=1}^{m} p_i
+        \leq \sum_{i=1}^{m} \alpha^{i-1}
+        < \sum_{i=0}^{\infty} \alpha^i
+        = \frac{1}{1-\alpha},
+    \]
+neboť $\alpha < 1$ a jedná se tedy o konvergentní geometrickou řadu $\alpha.$. Tedy můžeme využít vzorec pro součet geometické řady. Odhad $\sum_{i=1}^{m} p_i \leq \sum_{i=1}^{m} \alpha^{i-1}$ vychází z indukčního předpokladu. \\
+\end{itemize}
+\end{proof}
