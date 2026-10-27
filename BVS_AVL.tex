@@ -12,8 +12,9 @@ Strom nazveme \textbf{binární}, pokud
 \end{definition} \bigskip
 
 \begin{remark}
-Zakořeněnění je důležitá vlastnost. Představte si, že dostanete binární vyhledávací strom a prvek co se má do něj vložit.
-Kde začnete? Bez zakořenění neexistuje vstupní bod.
+Zakořeněnění je důležitá vlastnost. Řekněme, že máme popsat jak ve stromu najít vrchol $y$. Popis se
+přeci bude lišit, pokud začneme od kořene $u$ nebo $v$. Kořen ve vyhledávacích stromech budeme
+využívat jako jakýsi referenční bod.
 \end{remark} \bigskip
 
 \begin{definition}[Značení]
@@ -30,7 +31,7 @@ Pokud vrchol $v$ nemá levého syna, položíme $\ell(v) = \emptyset$. Podobně 
 Pak dodefinujeme, že $T(\emptyset)$ je prázdný strom a $h(T(\emptyset)) = 0$.
 \end{definition} \bigskip
 
-\noindent Nyní si zavedeme binární vyhledávací strom. Kdykoliv se budeme bavit o binárních stromech je myšlen tento.
+\noindent Nyní si zavedeme binární vyhledávací strom. Je důležité tyto pojmy rozlišovat.
 
 \begin{definition}
     Binární vyhledávací strom (BVS) je binární strom, v jehož každém vrcholu v je uložen \textbf{unikátní} klíč k(v) a pro každý jeho vrchol platí:
@@ -41,17 +42,24 @@ Pak dodefinujeme, že $T(\emptyset)$ je prázdný strom a $h(T(\emptyset)) = 0$.
     \end{itemize}
 \end{definition} \bigskip
 
+\begin{remark}
+  Pozorný čtenář si jistě všiml využití ostré nerovnosti. To nám implikuje, že v BVS může být každý
+  prvek nanejvýš jednou. Sami si zkuste sestrojit BVS, ve kterým je např. $5$ dvakrát. Narozdíl od
+  toho vzpomeňme si na binární haldu, kde duplikáty být mohou díky nerovnosti neostré.
+\end{remark}
+
 \newpage
 
 \subsection{BVS Algoritmy}
 
 \begin{remark}
-Na BVS je pár důležitých operací. Doporučuju pochopit princip těchto algoritmů než se učit pseudokód nazpaměť.
+Nyní si ukážeme pár zajímavých operací nad BVS. Tyto operace je lepší zkusit pochopit, než se učit
+pseudokód nazpaměť.
 \end{remark} \bigskip
 
 \subsubsection{BVSShow}
 
-\noindent První je algoritmus BVSShow. Jeho cílem je provést InOrder průchod stromu a vypsat všechny klíče vzestupně. Z definice BVS víme, že pro každý vrchol $v$ platí: klíče v jeho levém podstromě jsou menší a klíče v pravém podstromě větší. Aby algoritmus vypsal klíče ve vzestupném pořadí, musí se nejprve co nejvíce zanořit doleva, k nejmenším klíčům. Teprve po návratu z levého syna vypíše klíč aktuálního vrcholu a poté pokračuje do pravého syna, kde jsou klíče větší. Tento postup se opakuje pro každý vrchol stromu.
+\noindent První je algoritmus BVSShow. Jeho cílem je provést tzv. InOrder průchod stromu a vypsat všechny klíče vzestupně. Z definice BVS víme, že pro každý vrchol $v$ platí: klíče v jeho levém podstromě jsou menší a klíče v pravém podstromě větší. Aby algoritmus vypsal klíče ve vzestupném pořadí, musí se nejprve co nejvíce zanořit doleva, k nejmenším klíčům. Teprve po návratu z levého syna vypíše klíč aktuálního vrcholu a poté pokračuje do pravého syna, kde jsou klíče větší. Tento postup se opakuje pro každý vrchol stromu.
 Jelikož v každém vrcholu strávíme konstantní čas, celková časová složitost algoritmu je $\bigO{|T(v)|}$. \bigskip
 
 \noindent \textbf{Vstup}: Ukazatel na kořen $v$ libovolného BVS $T(v)$ \newline
@@ -66,7 +74,7 @@ Jelikož v každém vrcholu strávíme konstantní čas, celková časová slož
 
 \subsubsection{BVSMin}
 
-\noindent BVSMin/BVSMax. Jeho cílem je vypsat minimální/maximální hodnotu klíče ve stromě. Pro minimální klíč se z daného vrcholu zanořujeme stále doleva. Jakmile vrchol již levého syna nemá, pak je minimálním. Analogicky pro maximum, pouze se zanořujeme doprava. V každém vrcholu provedeme konstantě operací tedy celkem provedeme $\bigO{h(T(v))}$\bigskip
+\noindent BVSMin/BVSMax. Jeho cílem je vypsat minimální/maximální hodnotu klíče ve stromě. Pro minimální klíč se z daného vrcholu zanořujeme stále doleva. Jakmile vrchol již levého syna nemá, pak je minimálním. Analogicky pro maximum, pouze se zanořujeme doprava. V každé hladině navštívíme jeden vrchol a na každém vrcholu provedeme konstantě operací tedy celkem provedeme $\bigO{h(T(v))}$\bigskip
 
 \noindent \textbf{Vstup}: Ukazatel na vrchol $v$ libovolného BVS $T(v)$ \newline
 \noindent \textbf{Výstup}: Minimimální klíč daného BVS $T(v)$ \newline
@@ -79,7 +87,7 @@ Jelikož v každém vrcholu strávíme konstantní čas, celková časová slož
 
 \subsubsection{BVSFind}
 
-\noindent BVSFind slouží k nalezení vrcholu ke klíči v BVS. Dostaneme na vstupu ukazatel na kořen $v$ BVS a hledaný klíč. Nyní postupuje následovně, pokud je hledaný klíč větší než $k(v)$. Tak musíme jít do pravého podstromu $R(v)$, kde jsou klíče větší. Analogicky pro menší klíč. Dokud buďto nenalezneme vrchol s hledaným klíčem nebo nevylezeme ze stromu. V každém vrcholu provedeme pouze konstantě mnoho operací a celkem tedy $\bigO{h(T(v))}$. \bigskip
+\noindent BVSFind slouží k nalezení vrcholu ke klíči v BVS. Dostaneme na vstupu ukazatel na kořen $v$ BVS a hledaný klíč. Nyní postupuje následovně, pokud je hledaný klíč větší než $k(v)$. Tak musíme jít do pravého podstromu $R(v)$, kde jsou klíče větší. Analogicky pro menší klíč. Dokud buďto nenalezneme vrchol s hledaným klíčem nebo nevylezeme ze stromu. Stejně jako u BVSMin v kažé hladině navštívíme jeden vrchol a v každém vrcholu provedeme pouze konstantě mnoho operací a celkem tedy dostaneme $\bigO{h(T(v))}$. \bigskip
 
 \noindent \textbf{Vstup}: Ukazatel na vrchol $v$ libovolného BVS $T(v)$ a hledaný klíč $x$. \newline
 \noindent \textbf{Výstup}: Ukazatel na vrchol s klíčem $x$, pokud takový v $T(v)$
@@ -97,9 +105,9 @@ existuje, jinak $\emptyset$. \newline
 \noindent BVSPred a BVSSucc slouží k získání předchůdce/následníka nějakého vrcholu $v$ v BVS $T$. Pro předchůdce, je to vždy takový klíč $x$, který je největší ze všech klíčů menších než $x$ v $T$. Jak ho nalezneme? Rozlišujeme zde dva případy:
 \begin{itemize}
     \item Ten lehčí je když vrchol $v$ má levého syna. V tom případě je předchůdce vrchol s maximálním klíčem z celého levého podstromu $L(v)$. To platí, jelikož jsou všechny klíče v $L(v)$ menší než $k(v)$ a maximum z $L(v)$ je ten největší menší.
-    \item Druhý případ je když $v$ nemá levého syna v tom případě se musíme vynořit nahoru (doprava jít nemůžeme tam jsou všechny klíče větší). Takto cestujeme směrem ke kořeni až do doby než se vrátíme do rodiče $p$ zprava. Předchůdce je poté vrchol $p$. Zprava se chceme vrátit jelikož my potřebujeme najít první menší klíč. Pokud by jsme přišli zleva, tak je rodič větší než celý náš podstrom.
+    \item Druhý případ je když $v$ nemá levého syna v tom případě se musíme vynořit nahoru (doprava jít nemůžeme tam jsou všechny klíče větší). Takto cestujeme směrem ke kořeni až do doby než se vrátíme do rodiče $p$ z pravého syna. Tj. $v = r(p(v))$. Předchůdce je poté vrchol $p$. Zprava se chceme vrátit jelikož my potřebujeme najít první menší klíč. Pokud by jsme přišli z levého syna, tak je rodič větší než celý náš podstrom.
 \end{itemize}
-Pokud náš prvek je minimálním v celém stromě vrátíme nic. Alternativně lze dodefinovat vrcholy s klíčy $\pm\infty$.\newline
+Pokud náš prvek je minimálním v celém stromě vrátíme nic.\newline
 Analogicky platí i pro následovníka. Stačí prohodit slova levý a pravý.
 buďto využijeme BVSMax nebo procházíme po rodičích a případně do kořene. celkem tedy za $\bigO{h(T(v))}$. \bigskip
 
@@ -139,13 +147,13 @@ existuje-li, jinak $\emptyset$. \newline
 
 \noindent Poslední operací je BVSDelete, ten slouží k odstranění vrcholu $v$ z BVS dle zadaného klíče. Zde máme 3 možnosti:
 \begin{itemize}
-    \item První je pokud vrchol $v$ nemá žádného syna neboli je listem. V tom případě ho prostě odstraníme a vše funguje dále.
+    \item První je pokud vrchol $v$ nemá žádného syna neboli je listem. V tom případě ho prostě odstraníme a omezení BVS ani souvislost jistě neporušíme.
 
-    \item Další případ je kdy má právě jednoho syna vrchol $w$. Ani zde není problém, rodiči vrcholu $v$, $p(v)$ nahradíme syna $v$ za vrchol $w$. Vrchol $v$ poté bezproblému odstraníme.
+    \item Další případ je kdy má právě jednoho syna, nazvěme ho $w$. Ani zde není problém, rodiči vrcholu $v$, $p(v)$ nahradíme syna $v$ za vrchol $w$. Vrchol $v$ poté bezproblému odstraníme.
 
-    \item Posledním případem je kdy vrchol $v$ má oba syny. V tomto případě nemůžeme vrchol $v$ odstranit jinak by jsme rozbili strukturu. Pomůžeme si trikem a to pomocí nahrazení vrcholu $v$ za jeho následníka nebo předchůdce (ti musí existovat, jelikož má vrchol $v$ oba syny a zároveň to jsou maxima/minima těch podstromů). Také jsme nemohli rozbít definici BVS, jelikož jsme nahradili bezprostředním následníkem/předchůdcem a stále jsou vlevo menší klíče a vpravo větší.
-\end{itemize} 
-Hledáme vrchol jako při BVSFind, k tomu hledáme minimum podstromu pomocí BVSMin a v každém vrcholu provedeme konstantě mnoho operací tedy celkem $\bigO{h(T(v)}$. \bigskip
+    \item Posledním případem je kdy vrchol $v$ má oba syny. V tomto případě nemůžeme vrchol $v$ odstranit jinak by jsme strukturu rozbili. Pomůžeme si trikem a to pomocí nahrazení vrcholu $v$ za jeho následníka nebo předchůdce (ti musí existovat, jelikož má vrchol $v$ oba syny a zároveň to jsou minima/maxima pravých/levých podstromů) a následným odevráním klíče v $T(v)$. Také jsme nemohli rozbít definici BVS, jelikož jsme nahradili bezprostředním následníkem/předchůdcem a stále jsou vlevo menší klíče a vpravo větší. Zároveň následník vždy nemá levého syna, tedy při dalším volání už je oprava struktury BVS opět jednoduchá (Analogicky předchůdce nemá pravého syna).
+\end{itemize}
+Hledáme vrchol jako při BVSFind, k tomu hledáme minimum podstromu pomocí BVSMin, opět v každé hladině provedeme konstantě mnoho operací tedy celkem $\bigO{h(T(v)}$. \bigskip
 
 \noindent \textbf{Vstup}: Ukazatel na kořen libovolného BVS $T(v)$ a klíč $x$. \newline
 \noindent \textbf{Výstup}: Ukazatel na kořen BVS, ze kterého byl odstraněn vrchol s
@@ -154,9 +162,9 @@ klíčem $x$, existoval-li. \newline
 \begin{pseudocode}
     \item Pokud $v = \emptyset$: return $\emptyset$
     \item Pokud $k(v) > x$: 
-    \item \tab $l(v) := $ \textcolor{blue}{BVSDelete}($\ell(v)$)
+    \item \tab $l(v) := $ \textcolor{blue}{BVSDelete}($\ell(v), x$)
     \item Pokud $k(v) < x$:
-    \item \tab $r(v) := $ \textcolor{blue}{BVSDelete}($r(v)$)
+    \item \tab $r(v) := $ \textcolor{blue}{BVSDelete}($r(v), x$)
     \item Pokud $k(v) = x$:
     \item \tab Pokud $\ell(v) = r(v) = \emptyset$: return $\emptyset$ \textcolor{gray}{//Vrchol $v$ je listem, mazání je triviální}
     \item \tab Pokud $\ell(v) = \emptyset$: return $r(v)$ \textcolor{gray}{//Vrchol v má pouze jednoho syna, mazání je triviální}
@@ -188,7 +196,7 @@ Dokonale vyvážený BVS o velikosti $n$ má $1 + \floor{\log n}$ hladin. Operac
 \noindent Dokonalé vyvážení nám krásně zajišťuje logaritmicou hloubku BVS. Bohužel se ukazuje, že udržet tuto strukturu stromu současně s přidáváním a mazáním prvků, je příliš nákladné. Alespoň jedna z operací BVSInsert a BVSDelete zdegradují na lineární složitost $\bigO{n}$. \medskip
 
 \begin{theorem}[O složitosti operací nad dokonale vyváženým BVS]
-Pokud má BVS zůstávat po provedení operací BVSInsert a BVSDelete dokonale vyvážený, potom ať použijeme jakoukoli implementaci zmíněných operací, bude časová složitost aspoň jedné z nich $\bigOmega{n}$ pro nekonečně mnoho různých $n$.
+Pokud má BVS zůstávat po provedení operací BVSInsert a BVSDelete dokonale vyvážený, potom ať použijeme jakoukoli implementaci zmíněných operací, bude časová složitost aspoň jedné z nich $\bigOmega{n}$.
 \end{theorem} \bigskip
 
 \noindent\textbf{Myšlenka důkazu:} Stačí nám ukázat že existuje dokonale vyvážený BVS a nějaká posloupnost operací BVSInsert a BVSDelete kde alespoň jedna bude mít složitost $\bigOmega{n}$. \bigskip
