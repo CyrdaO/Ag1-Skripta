@@ -107,7 +107,7 @@ existuje, jinak $\emptyset$. \newline
     \item Ten lehčí je když vrchol $v$ má levého syna. V tom případě je předchůdce vrchol s maximálním klíčem z celého levého podstromu $L(v)$. To platí, jelikož jsou všechny klíče v $L(v)$ menší než $k(v)$ a maximum z $L(v)$ je ten největší menší.
     \item Druhý případ je když $v$ nemá levého syna v tom případě se musíme vynořit nahoru (doprava jít nemůžeme tam jsou všechny klíče větší). Takto cestujeme směrem ke kořeni až do doby než se vrátíme do rodiče $p$ z pravého syna. Tj. $v = r(p(v))$. Předchůdce je poté vrchol $p$. Zprava se chceme vrátit jelikož my potřebujeme najít první menší klíč. Pokud by jsme přišli z levého syna, tak je rodič větší než celý náš podstrom.
 \end{itemize}
-Pokud náš prvek je minimálním v celém stromě vrátíme nic.\newline
+Pokud náš prvek je minimálním v celém stromě vrátíme nic. Alternativně lze dodefinovat vrcholy s klíčy $\pm\infty$.\newline
 Analogicky platí i pro následovníka. Stačí prohodit slova levý a pravý.
 buďto využijeme BVSMax nebo procházíme po rodičích a případně do kořene. celkem tedy za $\bigO{h(T(v))}$. \bigskip
 
