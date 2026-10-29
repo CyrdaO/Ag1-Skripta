@@ -217,7 +217,7 @@ Pokud má BVS zůstávat po provedení operací BVSInsert a BVSDelete dokonale v
 
 \subsection{AVL strom}
 
-\noindent U úplně vyváženého BVS jsme kvůli přílišnému omezení narazili na degradaci rychlostí operací BVSInsert a BVSDelete. Proto musíme zvolit jinou cestu a to pomocí hloubkového vyvážení. \bigskip
+\noindent U úplně vyváženého BVS jsme kvůli přílišnému omezení narazili na degradaci rychlostí operací BVSInsert a BVSDelete. Proto, pokud chceme vytvořit efektivní strukturu na vyhledávání, musíme omezení zmírnit. Toho dosáhneme pomocí tzv. hloubkového vyvážení. \bigskip
 
 \begin{definition}
     BVS je \textbf{hloubkově vyvážený}, pokud pro každý jeho vrchol $v$ platí 
@@ -225,6 +225,11 @@ Pokud má BVS zůstávat po provedení operací BVSInsert a BVSDelete dokonale v
 \end{definition} \bigskip
 
 \noindent Řešení jak toto provést je více (např. Červeno-Černé stromy viz. BI-DAS). Zde v AG1 si představíme AVL stromy. Prvně ale musíme ukázat, že opravdu toto řešení dosáhne logaritmické hloubky stromu, jinak by nemělo smysl používat. \bigskip
+
+\begin{definition}[AVL strom]
+  \label{def:avl}
+  \textbf{AVL strom} je hloubkově vyvážený BVS.
+\end{definition}
 
 \subsubsection{Důkaz hloubky AVL}
 
@@ -273,7 +278,7 @@ Pokud má BVS zůstávat po provedení operací BVSInsert a BVSDelete dokonale v
 \subsection{Rotace AVL}
 
 \begin{definition}
-    AVL strom je hloubkově vyvážený BVS. Pro každý jeho vrchol $v$ definujeme \textbf{znaménko vrcholu} $\delta(v)$ jako rozdíl hloubek jeho pravého a levého podstromu:
+    Pro každý vrchol AVL stromu $v$ definujeme \textbf{znaménko vrcholu} $\delta(v)$ jako rozdíl hloubek jeho pravého a levého podstromu:
     $$\delta(v) = h(R(v)) - h(L(v))$$
 \end{definition} \medskip
 
@@ -293,7 +298,7 @@ V platném AVL stromu musí pro každý vrchol $v$ platit, že $\delta(v) \in \{
 
 \noindent Obrázek může prvně vypadat matoucí, ale je to kompletní návod jak je provést. Vrcholy $x$ a $y$ chceme pomocí rotace opravit. Trojuhelníky $A,B,C$ jsou jejich podstromy. \\
 
-\noindent Rotací provádíme vždy když $|\delta(v)| \geq 2$. Kdy, ale máme zvolit levou a kdy pravou nebo dokonce dvojnou? Na tuto otázku si ihned odpovíme. \bigskip
+\noindent Rotací provádíme vždy když $|\delta(v)| \geq 2$. Kdy, ale máme zvolit levou a kdy pravou nebo dokonce dvojitou? Na tuto otázku si ihned odpovíme. \bigskip
 
 %---------------------------------------------------------------
 %-----------------------ROTACe----------------------------------
@@ -369,6 +374,8 @@ Dvojitá rotace se provede jakožto dvě souvislé jednoduché rotace. První pr
 \end{pseudocode} \bigskip
 
 
+\noindent Pravá rotace by se pak implementovala naprosto analogicky, akorát opět zaměníte pravou a levou stranu. Stejně tak implementaci dvojitých rotací necháme jako cvičení pro čtenáře.
+
 % ============================================================ %
 \subsection{Operace nad AVL Stromem}
 % ============================================================ %
@@ -382,7 +389,7 @@ Jak ale naložíme s operacemi které přidávají či mažou prvky? Ty mohou sv
 \subsubsection{Operace AVLInsert}
 % ------------------------------------------------------------ %
 
-\noindent Při vkládání budeme postupovat úplně stejně jako u BVSInsert. Při návratu z rekurze budeme muset přepočítat $\delta(v)$ pro všechny vrcholy $v$ od vloženého až do kořene. V případě pokud porušíme hloubkové vyvážení ($\delta(v) \geq 2$), poté musíme opravit strom pomocí rotací.
+\noindent Při vkládání budeme postupovat úplně stejně jako u BVSInsert. Při návratu z rekurze budeme muset přepočítat $\delta(v)$ pro všechny vrcholy $v$ od vloženého až do kořene. V případě pokud porušíme hloubkové vyvážení ($|\delta(v)| \geq 2$), poté musíme opravit strom pomocí rotací.
 
 \bigskip
 
@@ -432,6 +439,8 @@ Vrchol mažeme úplně stejně jako v BVS. Stejně tak při návratu z rekurze m
 
 \subsection{Časová složitost operací nad AVL stromem}
 
+Teď, když známe všechny operace nad AVL stromy nám už jen zbývá ověřit, zda nám vyvažování nepřekazí logaritmickou rychlost AVLInsert/AVLDelete.
+
 \begin{theorem}
     AVLInsert a AVLDelete trvají $\bigO{log(n)}$.
 \end{theorem}
@@ -440,8 +449,8 @@ Vrchol mažeme úplně stejně jako v BVS. Stejně tak při návratu z rekurze m
     Důkaz provedeme přímo
     \begin{enumerate}
         \item Již víme že hloubka AVL stromu je vždy $\bigTheta{log(n)}$.
-        \item Operace na BVS byli závislé na hloubce. Tedy určitě nebudou pracovat v lepším čase než logaritmickém tedy $\bigOmega{log(n)}$.
-        \item Zároveň ale samotná rotace provede $\bigTheta{1}$ operací v každém vrcholu a to nejhůře na celé cestě do kořene. Což je celkem $\bigO{log(n)}$.
-        \item Tedy celkem $\bigTheta{log(n)}$.
+        \item Operace na BVS byly závislé na hloubce. Tedy určitě nebudou pracovat v lepším čase než logaritmickém tedy $\bigOmega{log(n)}$.
+        \item Zároveň samotné přepočítávání znaménka a rotace zaberou na každém vrcholu konstantní množství času. Na celé cestě do kořene je to nejhůře právě hloubka stromu. To je celkem $\bigO{log(n)}$.
+        \item Tedy $\bigTheta{log(n)}$.
     \end{enumerate}
 \end{proof}
